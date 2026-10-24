@@ -1,0 +1,59 @@
+# Publication sur GitHub Pages.
+# Déclenchement manuel uniquement (onglet Actions → « Publier sur GitHub Pages » → Run workflow) :
+# rien n'est publié tant que le propriétaire du dépôt ne le décide pas.
+# Pour publier à chaque push sur main, ajouter sous « on: » :
+#   push:
+#     branches: [main]
+name: Publier sur GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # Fournit le chemin de base : « /<dépôt> » pour un site de projet, vide pour un site
+      # utilisateur (<compte>.github.io) ou un domaine personnalisé.
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      - run: npm ci
+
+      # Typecheck, lint, tests et build : une seule commande, la même qu'en local.
+      - run: npm run check
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Identifiant public du formulaire Formspree (variable de dépôt, pas un secret).
+          # Absent : le site propose le courriel direct et l'indique honnêtement.
+          VITE_FORMSPREE_ID: ${{ vars.VITE_FORMSPREE_ID }}
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

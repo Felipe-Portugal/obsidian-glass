@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Felipe Portugal · Développeur logiciel polyvalent</title>
+    <meta
+      name="description"
+      content="Portfolio de Felipe Portugal, étudiant en génie logiciel à l’ÉTS, à Montréal : applications mobiles, backend, données et robotique."
+    />
+    <meta name="author" content="Felipe Portugal" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0d10" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Felipe Portugal · Développeur logiciel polyvalent" />
+    <meta
+      property="og:description"
+      content="Portfolio de Felipe Portugal, étudiant en génie logiciel à l’ÉTS, à Montréal : applications mobiles, backend, données et robotique."
+    />
+    <meta property="og:locale" content="fr_CA" />
+    <meta property="og:locale:alternate" content="en_CA" />
+    <meta property="profile:first_name" content="Felipe" />
+    <meta property="profile:last_name" content="Portugal" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (function () {
+        var root = document.documentElement
+        var get = function (key) {
+          try {
+            return window.localStorage.getItem(key)
+          } catch (error) {
+            return null
+          }
+        }
+        var theme = get('og-theme')
+        var dark =
+          theme === 'dark' ||
+          (theme !== 'light' && !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        root.setAttribute('data-theme', dark ? 'dark' : 'light')
+        root.style.colorScheme = dark ? 'dark' : 'light'
+        var lang = get('og-lang')
+        if (lang !== 'fr' && lang !== 'en') {
+          lang = 'fr'
+          var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']
+          for (var i = 0; i < prefs.length; i++) {
+            var code = String(prefs[i]).toLowerCase()
+            if (code.indexOf('fr') === 0) break
+            if (code.indexOf('en') === 0) {
+              lang = 'en'
+              break
+            }
+          }
+        }
+        root.setAttribute('lang', lang)
+      })()
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <div class="noscript">
+        <p><strong>Felipe Portugal</strong> · Développeur logiciel polyvalent · Montréal, Québec</p>
+        <p>
+          Ce site requiert JavaScript. Pour me joindre :
+          <a href="mailto:felipe-alberto.padilla-portugal.1@ens.etsmtl.ca">felipe-alberto.padilla-portugal.1@ens.etsmtl.ca</a>
+          · <a href="https://www.linkedin.com/in/felipe-portugal-151a75225/">LinkedIn</a>
+        </p>
+        <p lang="en">This site requires JavaScript. You can reach me by email or on LinkedIn (links above).</p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

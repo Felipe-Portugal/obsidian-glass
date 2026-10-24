@@ -1,0 +1,120 @@
+/* Obsidian Glass : jetons de design. Le thème sombre est la référence ; le clair en est l'équivalent. */
+
+:root {
+  /* Typographie */
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fs-xs: 0.8125rem; /* 13 px : plus petit texte autorisé */
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-title: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --fs-window: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+  --fs-role: clamp(1.375rem, 1.05rem + 1.35vw, 2.125rem);
+  --fs-display: clamp(3rem, 1.2rem + 6.6vw, 6rem);
+
+  /* Espacements (base 4 px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Mise en page */
+  --page-max: 1160px;
+  --gutter: clamp(1rem, 3.6vw, 2rem);
+  --gap: clamp(0.75rem, 1.3vw, 1rem);
+  --section-gap: clamp(3.5rem, 2.6rem + 3vw, 5.5rem);
+  --dock-clearance: calc(7rem + env(safe-area-inset-bottom, 0px));
+
+  /* Rayons */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 26px;
+  --r-pill: 999px;
+
+  /* Mouvement */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --dur-fast: 180ms;
+  --dur: 240ms;
+  --dur-slow: 280ms;
+}
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0d10;
+  --bg-glow: rgba(199, 205, 213, 0.075);
+  --surface: #171a1f;
+  --surface-top: #1a1d23;
+  --surface-2: #1e2228;
+  --surface-3: #262b32;
+  --line: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.12);
+  --line-3: rgba(255, 255, 255, 0.22);
+  --text: #f5f6f8;
+  --text-2: #c7cdd5;
+  --text-3: #979ea8;
+  --accent: #a9c7f5;
+  --accent-ink: #0b0d10;
+  --ok: #84d2a8;
+  --danger: #ff9a8f;
+  --danger-surface: rgba(255, 120, 105, 0.08);
+  --highlight: rgba(255, 255, 255, 0.055);
+  --sheen: rgba(255, 255, 255, 0.07);
+  --glass: rgba(26, 29, 35, 0.6);
+  --glass-strong: rgba(23, 26, 31, 0.82);
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-inner: rgba(255, 255, 255, 0.1);
+  --backdrop: rgba(5, 6, 8, 0.62);
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.035) inset, 0 1px 2px rgba(0, 0, 0, 0.45),
+    0 14px 36px -18px rgba(0, 0, 0, 0.8);
+  --shadow-lift: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset, 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 22px 48px -20px rgba(0, 0, 0, 0.85);
+  --shadow-float: 0 1px 0 0 var(--glass-inner) inset, 0 -1px 0 0 rgba(0, 0, 0, 0.35) inset,
+    0 18px 44px -14px rgba(0, 0, 0, 0.8), 0 3px 10px rgba(0, 0, 0, 0.35);
+  --selection: rgba(169, 199, 245, 0.3);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f2f3f5;
+  --bg-glow: rgba(255, 255, 255, 0.95);
+  --surface: #fbfbfc;
+  --surface-top: #ffffff;
+  --surface-2: #eef0f3;
+  --surface-3: #e5e8ec;
+  --line: rgba(17, 20, 25, 0.08);
+  --line-2: rgba(17, 20, 25, 0.13);
+  --line-3: rgba(17, 20, 25, 0.24);
+  --text: #111419;
+  --text-2: #3a4049;
+  --text-3: #5b626c;
+  --accent: #2753c2;
+  --accent-ink: #ffffff;
+  --ok: #1d7f4e;
+  --danger: #b4291c;
+  --danger-surface: rgba(180, 41, 28, 0.06);
+  --highlight: rgba(255, 255, 255, 0.9);
+  --sheen: rgba(255, 255, 255, 0.75);
+  --glass: rgba(251, 251, 252, 0.62);
+  --glass-strong: rgba(251, 251, 252, 0.86);
+  --glass-edge: rgba(17, 20, 25, 0.1);
+  --glass-inner: rgba(255, 255, 255, 0.9);
+  --backdrop: rgba(28, 32, 38, 0.34);
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.9) inset, 0 1px 2px rgba(17, 20, 25, 0.05),
+    0 12px 30px -20px rgba(17, 20, 25, 0.22);
+  --shadow-lift: 0 1px 0 0 rgba(255, 255, 255, 0.9) inset, 0 2px 4px rgba(17, 20, 25, 0.05),
+    0 20px 44px -22px rgba(17, 20, 25, 0.3);
+  --shadow-float: 0 1px 0 0 var(--glass-inner) inset, 0 -1px 0 0 rgba(17, 20, 25, 0.04) inset,
+    0 16px 40px -14px rgba(17, 20, 25, 0.28), 0 2px 8px rgba(17, 20, 25, 0.08);
+  --selection: rgba(39, 83, 194, 0.18);
+}

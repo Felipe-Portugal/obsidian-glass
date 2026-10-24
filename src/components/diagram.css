@@ -1,0 +1,330 @@
+/* Schémas d'architecture : composantes en HTML (texte net, traduisible), liaisons en masques SVG.
+   En colonne par défaut ; en ligne dès que le conteneur est assez large pour le nombre de nœuds. */
+
+.arch {
+  --arrow-r: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12'%3E%3Cpath d='M1.5 6h24M20.5 1.75 25.5 6l-5 4.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --arrow-rr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12'%3E%3Cpath d='M2.5 6h23M7.5 1.75 2.5 6l5 4.25M20.5 1.75 25.5 6l-5 4.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --arrow-d: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 28'%3E%3Cpath d='M6 1.5v24M1.75 20.5 6 25.5l4.25-5' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --arrow-dd: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 28'%3E%3Cpath d='M6 2.5v23M1.75 7.5 6 2.5l4.25 5M1.75 20.5 6 25.5l4.25-5' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+  container-type: inline-size;
+}
+
+.arch__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-5);
+}
+
+.arch__title {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.arch__desc {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.arch__canvas {
+  display: grid;
+  gap: var(--space-6);
+  padding: clamp(1rem, 3cqi, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at 1px 1px, var(--line-2) 1px, transparent 1.4px);
+  background-size: 18px 18px;
+}
+
+.arch__flow {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.arch__flow + .arch__flow {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.arch__flow-title,
+.arch__group-title {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.arch__nodes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 30px;
+}
+
+.arch__flow[data-link='none'] .arch__nodes {
+  gap: var(--space-3);
+}
+
+.arch__node {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  min-width: 0;
+  padding: 12px 14px 13px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 8px 18px -12px rgba(0, 0, 0, 0.55);
+}
+
+.arch__node--store {
+  border-bottom-width: 2px;
+}
+
+.arch__node--result {
+  background: var(--surface-2);
+}
+
+.arch__node[data-contributed] {
+  border-color: var(--line-3);
+}
+
+.arch__mark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text);
+}
+
+.arch__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  padding-right: 12px;
+}
+
+.arch__label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.arch__detail {
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  color: var(--text-3);
+}
+
+.arch__logos {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.arch__logo .glyph {
+  width: 15px;
+  height: 15px;
+  color: var(--brand-d, var(--text-2));
+}
+
+:root[data-theme='light'] .arch__logo .glyph {
+  color: var(--brand-l, var(--text-2));
+}
+
+.arch__logo .glyph--mono {
+  width: auto;
+  height: auto;
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+/* Liaisons, disposition en colonne */
+.arch__flow[data-link='sequence'] .arch__node:not(:last-child)::after,
+.arch__flow[data-link='exchange'] .arch__node:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 2px);
+  width: 12px;
+  height: 26px;
+  transform: translateX(-50%);
+  background: var(--text-3);
+  -webkit-mask: var(--arrow-d) center / contain no-repeat;
+  mask: var(--arrow-d) center / contain no-repeat;
+}
+
+.arch__flow[data-link='exchange'] .arch__node:not(:last-child)::after {
+  -webkit-mask-image: var(--arrow-dd);
+  mask-image: var(--arrow-dd);
+}
+
+/* Disposition en ligne selon la largeur disponible */
+@container (min-width: 520px) {
+  .arch__flow[data-count='3'] .arch__nodes,
+  .arch__flow[data-count='4'] .arch__nodes {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: none;
+  }
+
+  .arch__flow[data-count='3'] .arch__node:not(:last-child)::after,
+  .arch__flow[data-count='4'] .arch__node:not(:last-child)::after {
+    left: calc(100% + 2px);
+    top: 50%;
+    width: 26px;
+    height: 12px;
+    transform: translateY(-50%);
+    -webkit-mask-image: var(--arrow-r);
+    mask-image: var(--arrow-r);
+  }
+
+  .arch__flow[data-link='exchange'][data-count='3'] .arch__node:not(:last-child)::after,
+  .arch__flow[data-link='exchange'][data-count='4'] .arch__node:not(:last-child)::after {
+    -webkit-mask-image: var(--arrow-rr);
+    mask-image: var(--arrow-rr);
+  }
+}
+
+@container (min-width: 780px) {
+  .arch__flow[data-count='6'] .arch__nodes {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: none;
+    gap: 26px;
+  }
+
+  .arch__flow[data-count='6'] .arch__node {
+    padding-inline: 11px;
+  }
+
+  .arch__flow[data-count='6'] .arch__node:not(:last-child)::after {
+    left: calc(100% + 2px);
+    top: 50%;
+    width: 22px;
+    height: 12px;
+    transform: translateY(-50%);
+    -webkit-mask-image: var(--arrow-r);
+    mask-image: var(--arrow-r);
+  }
+}
+
+/* Groupes : services tiers (tirets) et capacités communes (pastilles) */
+.arch__group {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px dashed var(--line-2);
+}
+
+.arch__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.arch__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 6px 13px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+  color: var(--text-2);
+}
+
+.arch__group--service .arch__chip {
+  border: 1px dashed var(--line-3);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+}
+
+.arch__group--band .arch__chip {
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+}
+
+/* Légende : la forme et le trait portent le sens, pas la couleur seule */
+.arch__foot {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.arch__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend__swatch {
+  position: relative;
+  flex: none;
+  width: 24px;
+  height: 14px;
+}
+
+.legend--contributed .legend__swatch {
+  border: 1px solid var(--line-3);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.legend--contributed .legend__swatch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text);
+}
+
+.legend--service .legend__swatch {
+  border: 1px dashed var(--line-3);
+  border-radius: 4px;
+}
+
+.legend--exchange .legend__swatch,
+.legend--sequence .legend__swatch {
+  background: var(--text-3);
+  -webkit-mask: var(--arrow-rr) center / contain no-repeat;
+  mask: var(--arrow-rr) center / contain no-repeat;
+}
+
+.legend--sequence .legend__swatch {
+  -webkit-mask-image: var(--arrow-r);
+  mask-image: var(--arrow-r);
+}
+
+.legend--band .legend__swatch {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+}
+
+.arch__note {
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--text-3);
+}

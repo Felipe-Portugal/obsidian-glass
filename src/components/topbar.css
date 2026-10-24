@@ -1,0 +1,105 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: max(var(--space-5), env(safe-area-inset-top, 0px));
+}
+
+.monogram {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-decoration: none;
+  padding: var(--space-2) var(--space-1);
+  margin-left: calc(-1 * var(--space-1));
+}
+
+.monogram span {
+  color: var(--text-3);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.monogram:hover span {
+  color: var(--text);
+}
+
+.topbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: inset 0 1px 0 var(--glass-inner);
+}
+
+.segmented__item {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 var(--space-2);
+  border-radius: var(--r-pill);
+  color: var(--text-3);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.segmented__item:hover {
+  color: var(--text);
+}
+
+.segmented__item[aria-pressed='true'] {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.segmented__item--text {
+  min-width: 38px;
+  font-size: var(--fs-xs);
+  font-weight: 620;
+  letter-spacing: 0.03em;
+}
+
+/* Les infobulles du coin droit s'alignent à droite pour rester dans l'écran. */
+.topbar .tip--below {
+  left: auto;
+  right: -4px;
+  transform: translateY(-4px);
+}
+
+.topbar .has-tip:focus-visible > .tip--below {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .topbar .has-tip:hover > .tip--below {
+    transform: none;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .segmented {
+    background: var(--surface);
+  }
+}
+
+fieldset.segmented {
+  margin: 0;
+  min-inline-size: 0;
+}

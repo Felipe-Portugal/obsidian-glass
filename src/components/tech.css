@@ -1,0 +1,129 @@
+/* Logos de technologies : teinte argentée au repos, couleur de marque au survol, focus ou toucher. */
+
+.glyph {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+.glyph--mono {
+  width: auto;
+  height: auto;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.glyph--mono[data-len='5'],
+.glyph--mono[data-len='6'] {
+  font-size: 10.5px;
+  letter-spacing: -0.01em;
+}
+
+.techbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tech {
+  --tone: var(--brand-rest-d, var(--text-2));
+  --tone-hot: var(--brand-d, var(--text));
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  box-shadow: inset 0 1px 0 var(--highlight);
+  color: var(--tone);
+  transition:
+    color var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+:root[data-theme='light'] .tech {
+  --tone: var(--brand-rest-l, var(--text-2));
+  --tone-hot: var(--brand-l, var(--text));
+}
+
+.tech[data-visible='true'] {
+  color: var(--tone-hot);
+  border-color: var(--line-2);
+  background: var(--surface-3);
+  transform: translateY(-1px);
+}
+
+.tech:active {
+  transform: scale(0.95);
+}
+
+.techbar--sm {
+  gap: 6px;
+}
+
+.techbar--sm .tech {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+}
+
+.techbar--sm .glyph {
+  width: 18px;
+  height: 18px;
+}
+
+.techbar--sm .glyph--mono {
+  width: auto;
+  height: auto;
+  font-size: 10.5px;
+}
+
+/* Pastilles logo + nom (fiches projets) : la couleur de marque aide à reconnaître le logo. */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 34px;
+  padding: 4px 12px 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  line-height: 1.25;
+}
+
+.chip .glyph {
+  width: 16px;
+  height: 16px;
+  color: var(--brand-d, var(--text-2));
+}
+
+:root[data-theme='light'] .chip .glyph {
+  color: var(--brand-l, var(--text-2));
+}
+
+.chip .glyph--mono {
+  width: auto;
+  height: auto;
+  min-width: 16px;
+  font-size: 10px;
+  color: var(--text-3);
+  text-align: center;
+}

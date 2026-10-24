@@ -1,0 +1,314 @@
+/* Fenêtres modales : panneau net, barre de titre en verre, ouverture depuis l'élément d'origine. */
+
+.window {
+  width: min(920px, calc(100vw - 2 * var(--gutter)));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  overflow: visible;
+}
+
+.window--md {
+  width: min(780px, calc(100vw - 2 * var(--gutter)));
+}
+
+.window::backdrop {
+  background: var(--backdrop);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.window__frame {
+  max-height: calc(100dvh - 3rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    0 40px 90px -30px rgba(0, 0, 0, 0.75);
+}
+
+.window__bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 58px;
+  padding: 0 var(--space-3) 0 clamp(1.25rem, 3.4vw, 2.5rem);
+  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--surface) 74%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  transition: border-color var(--dur) var(--ease-out);
+}
+
+.window__bar:has(.window__bar-title[data-visible='true']) {
+  border-bottom-color: var(--line);
+}
+
+.window__bar-title {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+.window__bar-title[data-visible='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+.window__close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  margin-left: auto;
+  padding: 0 7px 0 11px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 560;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.window__close:hover {
+  border-color: var(--line-3);
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.window__esc {
+  padding: 2px 6px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  color: var(--text-3);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+@media (hover: none) {
+  .window__esc {
+    display: none;
+  }
+
+  .window__close {
+    padding-right: 12px;
+  }
+}
+
+.window__body {
+  padding: var(--space-2) clamp(1.25rem, 3.4vw, 2.5rem) clamp(1.75rem, 3.4vw, 2.5rem);
+}
+
+.window[data-state='open'] {
+  animation: window-in var(--dur-slow) var(--ease-out) both;
+}
+
+.window[data-state='open']::backdrop {
+  animation: backdrop-in var(--dur) var(--ease-out) both;
+}
+
+.window[data-state='closing'] {
+  animation: window-out 170ms var(--ease-in) both;
+}
+
+.window[data-state='closing']::backdrop {
+  animation: backdrop-out 170ms var(--ease-in) both;
+}
+
+@keyframes window-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+  }
+}
+
+@keyframes window-out {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Mobile : feuille ancrée en bas, au-dessus de la zone de sécurité. */
+@media (max-width: 640px) {
+  .window,
+  .window--md {
+    width: 100%;
+    margin: auto 0 0;
+    transform-origin: 50% 100% !important;
+  }
+
+  .window__frame {
+    max-height: calc(100dvh - max(1rem, env(safe-area-inset-top, 0px)));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-bottom: 0;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .window[data-state='open'] {
+    animation-name: sheet-in;
+  }
+
+  .window[data-state='closing'] {
+    animation-name: sheet-out;
+  }
+
+  @keyframes sheet-in {
+    from {
+      opacity: 0.4;
+      transform: translateY(48px);
+    }
+  }
+
+  @keyframes sheet-out {
+    to {
+      opacity: 0;
+      transform: translateY(48px);
+    }
+  }
+}
+
+/* Contenu des fiches projets */
+
+.pw__head {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  padding-bottom: var(--space-8);
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--line);
+}
+
+.pw__context {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.pw__title {
+  font-size: var(--fs-window);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.pw__summary {
+  max-width: 44em;
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.pw__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-10);
+}
+
+.pw__section h3,
+.pw__limits h3 {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-md);
+  letter-spacing: -0.01em;
+}
+
+.pw__section p,
+.pw__list {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-2);
+}
+
+.pw__section p + p {
+  margin-top: var(--space-3);
+}
+
+.pw__list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.pw__challenge p {
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.pw__tech {
+  margin-top: var(--space-10);
+}
+
+.pw__tech-groups {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.pw__tech-group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.pw__tech-title {
+  font-size: var(--fs-xs);
+  font-weight: 550;
+  color: var(--text-3);
+}
+
+.pw__limits {
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+}
+
+.pw__limits .pw__list {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+@media (max-width: 760px) {
+  .pw__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .pw__head {
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+}
