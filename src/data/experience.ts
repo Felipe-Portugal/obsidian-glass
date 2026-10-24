@@ -43,6 +43,7 @@ export const experience: readonly ExperienceEntry[] = [
         'Agile/Scrum, Azure DevOps Boards tickets, pull requests and code reviews in Gitea; maintenance of production applications, user training and client communication.',
       ],
     },
+    tech: ['reactnative', 'expo', 'typescript', 'php', 'rest', 'postgresql', 'sqlserver', 'grafana', 'azuredevops', 'gitea'],
   },
   {
     id: 'embedded',
@@ -69,6 +70,7 @@ export const experience: readonly ExperienceEntry[] = [
         'Automated client and server tests with pytest, including load tests; technical documentation and staff training.',
       ],
     },
+    tech: ['python', 'spotsdk', 'linux', 'opencv', 'pillow', 'numpy', 'rust', 'grafana', 'pytest'],
   },
   {
     id: 'research',
@@ -88,5 +90,6 @@ export const experience: readonly ExperienceEntry[] = [
         'Testing and validation with sensors and payloads; exploration of C++.',
       ],
     },
+    tech: ['python', 'spotsdk', 'cplusplus'],
   },
 ]

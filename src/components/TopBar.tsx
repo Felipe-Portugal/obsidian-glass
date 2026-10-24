@@ -3,6 +3,7 @@ import type { Lang } from '../data/types'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { useTheme } from '../theme/ThemeProvider'
 import type { ThemePreference } from '../theme/theme'
+import { Tip } from './Tip'
 import './topbar.css'
 
 const LANGS: readonly Lang[] = ['fr', 'en']
@@ -15,7 +16,7 @@ const THEMES: readonly { value: ThemePreference; Icon: typeof Sun }[] = [
 function LanguageSwitch() {
   const { lang, setLang, t } = useLanguage()
   return (
-    <fieldset className="segmented">
+    <fieldset className="segmented glass">
       <legend className="sr-only">{t.topbar.language}</legend>
       {LANGS.map((code) => (
         <button
@@ -38,22 +39,20 @@ function ThemeSwitch() {
   const { preference, setPreference } = useTheme()
   const { t } = useLanguage()
   return (
-    <fieldset className="segmented">
+    <fieldset className="segmented glass">
       <legend className="sr-only">{t.topbar.theme}</legend>
       {THEMES.map(({ value, Icon }) => (
-        <button
-          key={value}
-          type="button"
-          className="segmented__item has-tip"
-          aria-pressed={preference === value}
-          aria-label={t.topbar.themes[value]}
-          onClick={() => setPreference(value)}
-        >
-          <Icon aria-hidden="true" size={15} strokeWidth={1.75} />
-          <span className="tip tip--below" aria-hidden="true">
-            {t.topbar.themes[value]}
-          </span>
-        </button>
+        <Tip key={value} label={t.topbar.themes[value]} side="bottom">
+          <button
+            type="button"
+            className="segmented__item"
+            aria-pressed={preference === value}
+            aria-label={t.topbar.themes[value]}
+            onClick={() => setPreference(value)}
+          >
+            <Icon aria-hidden="true" size={16} strokeWidth={1.75} />
+          </button>
+        </Tip>
       ))}
     </fieldset>
   )

@@ -1,7 +1,11 @@
-/* Dock flottant en verre : flou mesuré, liseré lumineux et reflet qui suit le pointeur. */
+/*
+ * Dock flottant : une capsule de verre liquide (glass.css) au-dessus du contenu qui défile. Les
+ * libellés sont sur le verre, à l'encre du verre ; la lentille est un verre plus clair dans le
+ * même verre, jamais une seconde surface posée dessus, avec une lueur à peine perceptible. Un
+ * filet sépare les liens du retour en haut.
+ */
 
 .dock {
-  --dock-hover: rgba(255, 255, 255, 0.075);
   position: fixed;
   left: 0;
   right: 0;
@@ -10,50 +14,32 @@
   width: max-content;
   max-width: calc(100vw - 2 * var(--space-3));
   margin-inline: auto;
-  padding: 5px;
-  border: 1px solid var(--glass-edge);
-  border-radius: 22px;
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
-  backdrop-filter: blur(22px) saturate(180%);
-  box-shadow: var(--shadow-float);
-  isolation: isolate;
+  padding: 6px;
+  border-radius: var(--r-pill);
 }
 
 .intro .dock {
   animation: dock-in 640ms var(--ease-out) 420ms backwards;
 }
 
-:root[data-theme='light'] .dock {
-  --dock-hover: rgba(17, 20, 25, 0.055);
-}
-
-/* Liseré supérieur, comme un bord de verre qui accroche la lumière. */
-.dock::after {
-  content: '';
+.dock__lens {
   position: absolute;
-  inset: 0 18% auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--glass-inner), transparent);
-  pointer-events: none;
-}
-
-.dock::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(160px circle at var(--mx, 50%) var(--my, 0%), var(--sheen), transparent 72%);
+  top: 6px;
+  left: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-pill);
+  background:
+    radial-gradient(80% 90% at 50% 120%, var(--glass-glow), transparent 70%),
+    linear-gradient(180deg, var(--glass-spec), transparent 75%),
+    var(--glass-lens);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-hairline),
+    0 4px 14px -6px rgba(0, 0, 0, 0.35),
+    0 0 22px -6px var(--plate-glow);
   opacity: 0;
-  transition: opacity var(--dur) var(--ease-out);
   pointer-events: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .dock:hover::before {
-    opacity: 1;
-  }
 }
 
 .dock__list {
@@ -65,43 +51,43 @@
 .dock__item {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  height: 44px;
-  padding: 0 var(--space-4) 0 14px;
-  border-radius: 17px;
-  color: var(--text-2);
+  gap: 9px;
+  height: 46px;
+  padding: 0 17px 0 15px;
+  border-radius: var(--r-pill);
+  color: var(--glass-ink-2);
   font-size: var(--fs-sm);
-  font-weight: 560;
+  font-weight: 540;
   text-decoration: none;
   white-space: nowrap;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
-.dock__item:hover {
-  background: var(--dock-hover);
-  color: var(--text);
+.dock__item:hover,
+.dock__item:focus-visible {
+  color: var(--glass-ink);
 }
 
-.dock__item:active {
-  transform: scale(0.96);
+.dock__item:focus-visible {
+  outline: 2px solid var(--glass-light);
+  outline-offset: -2px;
+  border-radius: var(--r-pill);
 }
 
-.dock__item svg {
+.dock__item > svg,
+.dock__label {
   transition: transform var(--dur) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .dock__item:hover svg {
-    transform: translateY(-1px) scale(1.07);
+  .dock__item:hover > svg {
+    transform: translateY(-1px);
   }
 }
 
-.dock__item:focus-visible {
-  outline-offset: 1px;
-  border-radius: 17px;
+.dock__item:active > svg,
+.dock__item:active .dock__label {
+  transform: scale(0.95);
 }
 
 .dock__brand {
@@ -109,16 +95,36 @@
   height: 17px;
 }
 
+.dock__item > svg {
+  opacity: 0.86;
+}
+
+.dock__item:hover > svg,
+.dock__item:focus-visible > svg {
+  opacity: 1;
+}
+
 .dock__item--icon {
-  width: 44px;
+  width: 46px;
   padding: 0;
   justify-content: center;
 }
 
+/* Le retour en haut se tient à l'écart des liens, derrière un filet qui s'efface aux extrémités. */
 .dock__end {
-  margin-left: 3px;
-  padding-left: 5px;
-  border-left: 1px solid var(--line-2);
+  position: relative;
+  margin-left: 5px;
+  padding-left: 6px;
+}
+
+.dock__end::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  bottom: 11px;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--hairline) 25%, var(--hairline) 75%, transparent);
 }
 
 .dock .tip {
@@ -128,12 +134,24 @@
 @media (max-width: 420px) {
   .dock__item {
     gap: 6px;
-    padding: 0 10px;
+    padding: 0 11px;
   }
 
   .dock__item--icon {
-    width: 42px;
+    width: 46px;
     padding: 0;
+  }
+
+  .dock__end {
+    margin-left: 2px;
+    padding-left: 3px;
+  }
+}
+
+/* Très petits écrans : les libellés suffisent, les pictogrammes cèdent la place au retour en haut. */
+@media (max-width: 360px) {
+  .dock__item:not(.dock__item--icon) > svg {
+    display: none;
   }
 }
 
@@ -141,11 +159,5 @@
   from {
     opacity: 0;
     transform: translateY(16px) scale(0.98);
-  }
-}
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .dock {
-    background: var(--surface);
   }
 }

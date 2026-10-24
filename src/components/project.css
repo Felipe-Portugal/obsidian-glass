@@ -1,83 +1,59 @@
-/* Cartes projets : profondeur au survol (2 px), reflet de surface sous le pointeur. */
+/*
+ * Tuiles de projet : une plaque de verre fumé, à peine éclairée dans l'angle par la lumière du
+ * projet. Le titre et la flèche en haut, le besoin et la contribution au milieu, les technologies
+ * et la maturité en pied. Toute la tuile ouvre l'étude de cas (bouton étiré).
+ */
 
 .project {
+  cursor: pointer;
+  background:
+    radial-gradient(70% 55% at 100% 0%, color-mix(in srgb, var(--light) var(--light-wash), transparent), transparent 70%),
+    linear-gradient(135deg, var(--plate-spec) 0%, transparent 42%),
+    var(--plate);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+/* Pendant que l'étude de cas est ouverte, c'est elle : la tuile laisse sa place vide. */
+.project[data-lifted] {
+  visibility: hidden;
+}
+
+.project__top {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  min-width: 0;
-  padding: clamp(1.25rem, 0.9rem + 1.2vw, 1.75rem);
-  container-type: inline-size;
-  transition:
-    transform var(--dur) var(--ease-out),
-    border-color var(--dur) var(--ease-out),
-    box-shadow var(--dur) var(--ease-out);
-}
-
-.project::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, -30%), var(--sheen), transparent 46%);
-  opacity: 0;
-  transition: opacity var(--dur-slow) var(--ease-out);
-  pointer-events: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .project:hover {
-    transform: translateY(-2px);
-    border-color: var(--line-2);
-    box-shadow: var(--shadow-lift);
-  }
-
-  .project:hover::before {
-    opacity: 1;
-  }
-
-  .project:hover .project__open {
-    border-color: transparent;
-    background: var(--text);
-    color: var(--bg);
-  }
-
-  .project:hover .project__open svg {
-    transform: translate(1px, -1px);
-  }
-}
-
-.project:has(.project__open:active) {
-  transform: translateY(0) scale(0.996);
-}
-
-.project:has(.project__open:focus-visible) {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-
-.project__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-2) var(--space-3);
-}
-
-.project__context {
-  font-size: var(--fs-xs);
-  font-weight: 500;
-  color: var(--text-3);
+  gap: var(--space-3);
 }
 
 .project__title {
-  margin-top: var(--space-2);
-  font-size: var(--fs-title);
+  font-size: clamp(1.125rem, 1.02rem + 0.4vw, 1.3125rem);
+  font-weight: 590;
+  line-height: 1.22;
   letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.project__arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: -4px -4px 0 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, var(--node-spec), transparent 60%), var(--node);
+  box-shadow:
+    inset 0 0 0 1px var(--node-edge),
+    inset 0 1px 0 var(--node-rim);
+  color: var(--text-2);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur) var(--ease-out);
 }
 
 .project__summary {
-  max-width: 54ch;
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
   line-height: 1.55;
   color: var(--text-2);
 }
@@ -85,276 +61,69 @@
 .project__contribution {
   display: grid;
   gap: 2px;
-  max-width: 54ch;
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
   line-height: 1.5;
+  color: var(--text-2);
 }
 
 .project__label {
   font-size: var(--fs-xs);
-  font-weight: 500;
+  font-weight: 540;
   color: var(--text-3);
 }
 
-.project__foot {
+.project__tech {
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.project__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-1) var(--space-3);
   margin-top: auto;
-  padding-top: var(--space-5);
+  padding-top: var(--space-4);
+  background: var(--rule) top / 100% 1px no-repeat;
 }
 
+.project__context {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+/* Les logos restent au-dessus du bouton étiré : leurs infobulles répondent au survol, au focus et au toucher. */
+.project .techbar {
+  z-index: 2;
+}
+
+/* Le bouton couvre toute la tuile ; son focus dessine le contour de la tuile. */
 .project__open {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 12px 0 14px;
-  border: 1px solid var(--line-2);
-  border-radius: var(--r-pill);
-  background: var(--surface-2);
-  color: var(--text);
-  font-size: var(--fs-sm);
-  font-weight: 560;
-  white-space: nowrap;
-  transition:
-    background-color var(--dur) var(--ease-out),
-    color var(--dur) var(--ease-out),
-    border-color var(--dur) var(--ease-out);
-}
-
-.project__open svg {
-  transition: transform var(--dur) var(--ease-out);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .project__open:focus-visible {
-  outline: none;
+  outline-offset: 3px;
+  border-radius: var(--r-xl);
 }
 
-/* Bouton étiré : toute la carte est cliquable ; la rangée de logos reste au-dessus. */
-.project__open::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-}
+@media (hover: hover) and (pointer: fine) {
+  .project:hover {
+    transform: translateY(-2px);
+  }
 
-/* Aperçu de schéma sur les cartes */
-
-.mini {
-  display: grid;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
-  font-size: var(--fs-xs);
-  color: var(--text-2);
-}
-
-.mini__line {
-  display: grid;
-  align-content: start;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.mini__caption {
-  font-size: var(--fs-xs);
-  font-weight: 550;
-  color: var(--text-3);
-}
-
-.mini[data-orientation='row'] .mini__caption {
-  display: none;
-}
-
-.mini__chain {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 26px;
-}
-
-.mini__chain[data-link='none'] {
-  gap: var(--space-2);
-}
-
-.mini__node,
-.mini__chip {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid var(--line-2);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--surface-2) 80%, transparent);
-  white-space: nowrap;
-}
-
-.mini__node[data-kind='store'] {
-  border-radius: 10px 10px 14px 14px / 10px 10px 16px 16px;
-}
-
-.mini .arch__logo .glyph {
-  width: 14px;
-  height: 14px;
-}
-
-/* Connecteurs de la chaîne horizontale */
-.mini__chain[data-link='exchange'] .mini__node:not(:last-child)::after,
-.mini__chain[data-link='sequence'] .mini__node:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: calc(100% + 4px);
-  top: 50%;
-  width: 18px;
-  height: 10px;
-  transform: translateY(-50%);
-  background: var(--text-3);
-  -webkit-mask: var(--arrow-h) center / contain no-repeat;
-  mask: var(--arrow-h) center / contain no-repeat;
-}
-
-.mini__chain[data-link='exchange'] {
-  --arrow-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10'%3E%3Cpath d='M1.5 5h15M5 1.5 1.5 5 5 8.5M13 1.5 16.5 5 13 8.5' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
-.mini__chain[data-link='sequence'] {
-  --arrow-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10'%3E%3Cpath d='M1.5 5h15M13 1.5 16.5 5 13 8.5' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
-.mini__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.mini__chips--service .mini__chip {
-  border-style: dashed;
-  border-color: var(--line-3);
-  background: transparent;
-}
-
-.mini__chips--band {
-  display: none;
-}
-
-/* Carte haute : deux lignes de « métro », une par chaîne de traitement */
-.mini[data-orientation='column'] {
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: var(--space-4);
-  margin-top: var(--space-5);
-  padding-top: var(--space-5);
-  border-top: 1px solid var(--line);
-}
-
-/* Sur grand écran, la carte haute est étirée par la grille : les lignes occupent la hauteur libre. */
-.project--tall .mini[data-orientation='column'] {
-  flex: 1 1 auto;
-  max-height: 21rem;
-}
-
-.mini[data-orientation='column'] .mini__line {
-  grid-template-rows: auto minmax(0, 1fr);
-}
-
-.mini[data-orientation='column'] .mini__chain {
-  position: relative;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 2px;
-}
-
-/* Rail continu du premier au dernier arrêt. */
-.mini[data-orientation='column'] .mini__chain::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 16px;
-  bottom: 16px;
-  width: 1px;
-  background: var(--line-3);
-}
-
-.mini[data-orientation='column'] .mini__node {
-  display: flex;
-  min-height: 32px;
-  padding: 0 0 0 22px;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  font-size: var(--fs-sm);
-  line-height: 1.3;
-}
-
-.mini[data-orientation='column'] .mini__chain--secondary .mini__node {
-  color: var(--text-3);
-}
-
-.mini[data-orientation='column'] .arch__logos {
-  display: none;
-}
-
-.mini[data-orientation='column'] .mini__node::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  top: 50%;
-  z-index: 1;
-  width: 9px;
-  height: 9px;
-  margin-top: -4.5px;
-  border: 1.5px solid var(--text-3);
-  border-radius: 50%;
-  background: var(--surface);
-}
-
-.mini[data-orientation='column'] .mini__node[data-kind='result']::before {
-  border-color: var(--text-2);
-  background: var(--text-2);
-}
-
-.mini[data-orientation='column'] .mini__node::after {
-  display: none;
-}
-
-@container (max-width: 380px) {
-  .mini[data-orientation='column'] .mini__node {
-    font-size: var(--fs-xs);
+  .project:hover .project__arrow {
+    background: var(--text);
+    box-shadow: none;
+    color: var(--bg);
+    transform: translate(1px, -1px);
   }
 }
 
-/* Cartes étroites : la chaîne horizontale passe en colonne */
-@container (max-width: 520px) {
-  .mini[data-orientation='row'] .mini__chain:not([data-link='none']) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-  }
-
-  .mini[data-orientation='row'] .mini__chain:not([data-link='none']) .mini__node:not(:last-child)::after {
-    left: 18px;
-    top: calc(100% + 4px);
-    width: 10px;
-    height: 14px;
-    transform: none;
-    -webkit-mask: var(--arrow-v) center / contain no-repeat;
-    mask: var(--arrow-v) center / contain no-repeat;
-  }
-
-  .mini__chain[data-link='exchange'] {
-    --arrow-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14'%3E%3Cpath d='M5 1.5v11M1.5 4.5 5 1.5l3.5 3M1.5 9.5 5 12.5l3.5-3' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  }
-
-  .mini__chain[data-link='sequence'] {
-    --arrow-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14'%3E%3Cpath d='M5 1.5v11M1.5 9.5 5 12.5l3.5-3' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  }
-
-  .project__foot {
-    align-items: flex-end;
-  }
+.project:active {
+  transform: scale(0.99);
 }

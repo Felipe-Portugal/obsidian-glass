@@ -1,14 +1,16 @@
 /* Schémas d'architecture : composantes en HTML (texte net, traduisible), liaisons en masques SVG.
-   En colonne par défaut ; en ligne dès que le conteneur est assez large pour le nombre de nœuds. */
+   En colonne par défaut ; en ligne dès que le conteneur est assez large pour le nombre de nœuds.
+   Le schéma est posé dans un creux de la plaque, sur une trame de points ; ses nœuds sont en
+   micro-verre et ses liaisons prennent la lumière du projet. */
 
 .arch {
   --arrow-r: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12'%3E%3Cpath d='M1.5 6h24M20.5 1.75 25.5 6l-5 4.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --arrow-rr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12'%3E%3Cpath d='M2.5 6h23M7.5 1.75 2.5 6l5 4.25M20.5 1.75 25.5 6l-5 4.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --arrow-d: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 28'%3E%3Cpath d='M6 1.5v24M1.75 20.5 6 25.5l4.25-5' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --arrow-dd: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 28'%3E%3Cpath d='M6 2.5v23M1.75 7.5 6 2.5l4.25 5M1.75 20.5 6 25.5l4.25-5' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --flow: color-mix(in srgb, var(--light, var(--glass-light)) 45%, var(--text-3));
   display: grid;
   gap: var(--space-4);
-  margin-top: var(--space-10);
   container-type: inline-size;
 }
 
@@ -22,8 +24,8 @@
 
 .arch__title {
   font-size: var(--fs-md);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 590;
+  letter-spacing: -0.012em;
 }
 
 .arch__desc {
@@ -35,11 +37,11 @@
   display: grid;
   gap: var(--space-6);
   padding: clamp(1rem, 3cqi, 1.75rem);
-  border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  background-color: var(--bg);
-  background-image: radial-gradient(circle at 1px 1px, var(--line-2) 1px, transparent 1.4px);
-  background-size: 18px 18px;
+  background:
+    radial-gradient(circle at 1px 1px, var(--hairline) 1px, transparent 1.4px) 0 0 / 18px 18px,
+    var(--well);
+  box-shadow: var(--well-shadow);
 }
 
 .arch__flow {
@@ -49,13 +51,14 @@
 
 .arch__flow + .arch__flow {
   padding-top: var(--space-5);
-  border-top: 1px solid var(--line);
+  background: var(--rule) top / 100% 1px no-repeat;
 }
 
 .arch__flow-title,
 .arch__group-title {
   font-size: var(--fs-xs);
-  font-weight: 600;
+  font-weight: 540;
+  letter-spacing: 0.01em;
   color: var(--text-3);
 }
 
@@ -76,24 +79,49 @@
   gap: 3px;
   min-width: 0;
   padding: 12px 14px 13px;
-  border: 1px solid var(--line-2);
   border-radius: var(--r-md);
-  background: var(--surface);
+  background: linear-gradient(180deg, var(--node-spec), transparent 60%), var(--node);
   box-shadow:
-    inset 0 1px 0 var(--highlight),
-    0 8px 18px -12px rgba(0, 0, 0, 0.55);
+    inset 0 0 0 1px var(--node-edge),
+    inset 0 1px 0 var(--node-rim),
+    var(--node-shadow);
 }
 
+/* Stockage : une base plus épaisse. */
 .arch__node--store {
-  border-bottom-width: 2px;
+  box-shadow:
+    inset 0 0 0 1px var(--node-edge),
+    inset 0 1px 0 var(--node-rim),
+    inset 0 -2px 0 var(--line-3),
+    var(--node-shadow);
 }
 
+/* Résultat : teinté de la lumière du projet. */
 .arch__node--result {
-  background: var(--surface-2);
+  background:
+    linear-gradient(180deg, var(--node-spec), transparent 60%),
+    color-mix(in srgb, var(--light, var(--glass-light)) 12%, var(--node));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--light, var(--glass-light)) 34%, transparent),
+    inset 0 1px 0 var(--node-rim),
+    var(--node-shadow),
+    0 0 22px -8px color-mix(in srgb, var(--light, var(--glass-light)) 50%, transparent);
 }
 
+/* Contribution de Felipe : liseré plus net et une marque lumineuse. */
 .arch__node[data-contributed] {
-  border-color: var(--line-3);
+  box-shadow:
+    inset 0 0 0 1px var(--line-3),
+    inset 0 1px 0 var(--node-rim),
+    var(--node-shadow);
+}
+
+.arch__node--store[data-contributed] {
+  box-shadow:
+    inset 0 0 0 1px var(--line-3),
+    inset 0 1px 0 var(--node-rim),
+    inset 0 -2px 0 var(--line-3),
+    var(--node-shadow);
 }
 
 .arch__mark {
@@ -104,6 +132,7 @@
   height: 7px;
   border-radius: 50%;
   background: var(--text);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 12%, transparent);
 }
 
 .arch__head {
@@ -116,7 +145,7 @@
 
 .arch__label {
   font-size: var(--fs-sm);
-  font-weight: 600;
+  font-weight: 570;
   line-height: 1.3;
 }
 
@@ -159,7 +188,7 @@
   width: 12px;
   height: 26px;
   transform: translateX(-50%);
-  background: var(--text-3);
+  background: var(--flow);
   -webkit-mask: var(--arrow-d) center / contain no-repeat;
   mask: var(--arrow-d) center / contain no-repeat;
 }
@@ -224,7 +253,7 @@
   display: grid;
   gap: var(--space-3);
   padding-top: var(--space-5);
-  border-top: 1px dashed var(--line-2);
+  background: linear-gradient(90deg, var(--line-2) 50%, transparent 0) top / 8px 1px repeat-x;
 }
 
 .arch__chips {
@@ -247,13 +276,14 @@
 
 .arch__group--service .arch__chip {
   border: 1px dashed var(--line-3);
-  background: color-mix(in srgb, var(--surface) 60%, transparent);
 }
 
 .arch__group--band .arch__chip {
-  border: 1px solid var(--line);
   border-radius: var(--r-pill);
-  background: var(--surface-2);
+  background: linear-gradient(180deg, var(--node-spec), transparent 60%), var(--node);
+  box-shadow:
+    inset 0 0 0 1px var(--node-edge),
+    inset 0 1px 0 var(--node-rim);
 }
 
 /* Légende : la forme et le trait portent le sens, pas la couleur seule */
@@ -286,7 +316,7 @@
 .legend--contributed .legend__swatch {
   border: 1px solid var(--line-3);
   border-radius: 4px;
-  background: var(--surface);
+  background: var(--node);
 }
 
 .legend--contributed .legend__swatch::after {
@@ -307,7 +337,7 @@
 
 .legend--exchange .legend__swatch,
 .legend--sequence .legend__swatch {
-  background: var(--text-3);
+  background: var(--flow);
   -webkit-mask: var(--arrow-rr) center / contain no-repeat;
   mask: var(--arrow-rr) center / contain no-repeat;
 }
@@ -318,9 +348,9 @@
 }
 
 .legend--band .legend__swatch {
-  border: 1px solid var(--line-2);
   border-radius: var(--r-pill);
-  background: var(--surface-2);
+  background: var(--node);
+  box-shadow: inset 0 0 0 1px var(--node-edge);
 }
 
 .arch__note {

@@ -87,6 +87,8 @@ export interface ExperienceEntry {
   /** Précision affichée sous les rôles (p. ex. réalisations communes à deux périodes). */
   note?: Localized
   points: Localized<readonly string[]>
+  /** Technologies et outils nommés dans les réalisations, et rien d'autre. */
+  tech: readonly TechId[]
 }
 
 export interface SkillGroup {

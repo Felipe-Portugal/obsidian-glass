@@ -9,23 +9,23 @@ export const skillGroups: readonly SkillGroup[] = [
   },
   {
     id: 'mobile-web',
-    label: { fr: 'Mobile / Web', en: 'Mobile / Web' },
-    items: ['reactnative', 'expo', 'android', 'html5', 'css', 'aspnetcore', 'blazor', 'javafx'],
+    label: { fr: 'Interfaces', en: 'Interfaces' },
+    items: ['reactnative', 'expo', 'android', 'html5', 'css', 'blazor', 'javafx'],
   },
   {
     id: 'backend-data',
     label: { fr: 'Backend / Données', en: 'Backend / Data' },
-    items: ['postgresql', 'sqlserver', 'oracle', 'mysql', 'efcore', 'rest', 'grafana'],
+    items: ['aspnetcore', 'efcore', 'rest', 'postgresql', 'sqlserver', 'oracle', 'mysql', 'grafana'],
   },
   {
     id: 'devops',
-    label: { fr: 'Dev / DevOps', en: 'Dev / DevOps' },
-    items: ['docker', 'git', 'gitea', 'azuredevops', 'linux', 'pytest', 'maven'],
+    label: { fr: 'Outils / DevOps', en: 'Tools / DevOps' },
+    items: ['git', 'gitea', 'azuredevops', 'docker', 'linux', 'maven', 'pytest'],
   },
   {
     id: 'robotics',
     label: { fr: 'Robotique / Embarqué', en: 'Robotics / Embedded' },
-    items: ['spotsdk', 'raspberrypi', 'arduino', 'opencv', 'numpy', 'pillow', 'mqtt', 'buses'],
+    items: ['spotsdk', 'raspberrypi', 'arduino', 'mqtt', 'buses', 'opencv', 'numpy', 'pillow'],
   },
 ]
 

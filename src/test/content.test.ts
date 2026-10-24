@@ -85,9 +85,21 @@ describe('fidélité à facts_felipe.md', () => {
     expect(JSON.stringify(experience)).not.toMatch(/CISSS|CAPRA/)
   })
 
+  it('ne montre pour une période que des technologies nommées dans ses réalisations', () => {
+    for (const entry of experience) {
+      const text = entry.points.fr.join(' ')
+      for (const id of entry.tech) {
+        const { name } = technologies[id]
+        const label = (typeof name === 'string' ? name : name.fr).replace(/\s*\(.*\)$/, '')
+        expect(text, `${entry.id} : ${label}`).toContain(label)
+      }
+    }
+  })
+
   it('n’emploie que des technologies du catalogue, avec des logos existants', () => {
     const ids = [
       ...skillGroups.flatMap((group) => group.items),
+      ...experience.flatMap((entry) => entry.tech),
       ...projects.flatMap((project) => [
         ...project.cardTech,
         ...project.detail.tech.flatMap((group) => group.items),

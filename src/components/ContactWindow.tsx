@@ -1,51 +1,23 @@
-import { Check, Copy, Mail, MapPin } from 'lucide-react'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { Mail, MapPin } from 'lucide-react'
+import { lazy, Suspense } from 'react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { formspreeId } from '../lib/contact'
+import { mailto } from '../lib/mailto'
+import { CopyButton } from './ContactLinks'
+import { Sheet } from './Sheet'
 import { BrandSvg } from './TechGlyph'
-import { Window } from './Window'
 import './contact.css'
 
 // Le formulaire et @formspree/core ne sont chargés qu'à l'ouverture de la fenêtre.
 const ContactForm = lazy(() => import('./ContactForm'))
 
-function mailto(subject?: string) {
-  return `mailto:${profile.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`
-}
-
-function CopyButton({ value }: { value: string }) {
-  const { t } = useLanguage()
-  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
-  const timer = useRef<number | undefined>(undefined)
-  useEffect(() => () => window.clearTimeout(timer.current), [])
-
-  const copy = async () => {
-    window.clearTimeout(timer.current)
-    try {
-      await navigator.clipboard.writeText(value)
-      setState('copied')
-    } catch {
-      setState('failed')
-    }
-    timer.current = window.setTimeout(() => setState('idle'), 2400)
-  }
-
-  const message = state === 'copied' ? t.contact.copied : state === 'failed' ? t.contact.copyFailed : ''
-  return (
-    <span className="copy">
-      <button type="button" className="icon-button" onClick={copy} aria-label={t.contact.copy} data-state={state}>
-        {state === 'copied' ? (
-          <Check aria-hidden="true" size={16} strokeWidth={2} />
-        ) : (
-          <Copy aria-hidden="true" size={16} strokeWidth={1.75} />
-        )}
-      </button>
-      <output className="copy__status" data-visible={state !== 'idle'}>
-        {message}
-      </output>
-    </span>
-  )
+interface Props {
+  onClose: () => void
+  /** Bouton qui a ouvert la fenêtre : elle en naît et s'y repose. */
+  source: HTMLElement | null
+  /** Sujet prérempli, p. ex. « Demande de CV » depuis le dock. */
+  subject?: string
 }
 
 function ContactUnavailable({ subject }: { subject?: string }) {
@@ -63,26 +35,12 @@ function ContactUnavailable({ subject }: { subject?: string }) {
   )
 }
 
-interface Props {
-  onClose: () => void
-  origin: DOMRect | null
-  /** Sujet prérempli, p. ex. « Demande de CV » depuis le dock. */
-  subject?: string
-}
-
-export function ContactWindow({ onClose, origin, subject }: Props) {
+export function ContactWindow({ onClose, source, subject }: Props) {
   const { t } = useLanguage()
   const formId = formspreeId()
 
   return (
-    <Window labelledBy="contact-title" title={t.contact.title} size="md" origin={origin} onClose={onClose}>
-      <header className="cw__head">
-        <h2 id="contact-title" className="pw__title" tabIndex={-1}>
-          {t.contact.title}
-        </h2>
-        <p className="cw__intro">{t.contact.intro}</p>
-      </header>
-
+    <Sheet title={t.contact.title} size="md" source={source} onClose={onClose} header={<p className="cw__intro">{t.contact.intro}</p>}>
       <div className="cw__grid">
         <section className="cw__form" aria-labelledby="contact-form-title">
           <h3 id="contact-form-title" className="sr-only">
@@ -132,6 +90,6 @@ export function ContactWindow({ onClose, origin, subject }: Props) {
           </ul>
         </aside>
       </div>
-    </Window>
+    </Sheet>
   )
 }

@@ -1,0 +1,113 @@
+/*
+ * Deux verres. Les plaques (cartes, panneaux, fenêtres) : un verre fumé qui laisse passer les
+ * halos du fond, à double bordure (un bord externe sombre et discret, un liseré interne
+ * lumineux plus vif sur l'arête haute), un reflet spéculaire en biais et une ombre profonde et
+ * douce. Le verre liquide des contrôles (dock, boutons, sélecteurs) : plus clair, flouté, avec la
+ * réfraction des bords là où le navigateur la dessine (lib/refraction.ts).
+ *
+ * Les plaques ne floutent pas l'arrière-plan : derrière elles il n'y a que les halos, déjà
+ * diffus (l'écart mesuré avec flou ne dépasse pas 6 niveaux sur 255), et ce flou se recalcule à
+ * chaque image du défilement. Il est gardé là où du contenu passe derrière le verre.
+ */
+
+.plate {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--r-xl);
+  background:
+    linear-gradient(135deg, var(--plate-spec) 0%, transparent 42%),
+    var(--plate);
+  box-shadow:
+    0 0 0 1px var(--plate-edge),
+    inset 0 0 0 1px var(--plate-liseret),
+    inset 0 1px 0 var(--plate-rim),
+    var(--plate-shadow);
+}
+
+/* Couche en retrait dans une plaque : un creux sombre, éclairé par le bas. */
+.well {
+  border-radius: var(--r-lg);
+  background: var(--well);
+  box-shadow: var(--well-shadow);
+}
+
+.glass {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, var(--glass-spec) 0%, transparent 46%),
+    radial-gradient(120% 140% at 50% 120%, var(--glass-glow), transparent 60%),
+    var(--glass-smoke);
+  -webkit-backdrop-filter: blur(18px) saturate(175%) brightness(1.05);
+  backdrop-filter: var(--refraction,) blur(18px) saturate(175%) brightness(1.05);
+  box-shadow:
+    0 0 0 1px var(--glass-edge-out),
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 -1px 0 var(--glass-rim-low),
+    inset 0 0 0 1px var(--glass-hairline),
+    var(--glass-shadow);
+  color: var(--glass-ink);
+}
+
+/* Lumière accrochée là où se trouve le pointeur (--mx et --my, usePointerGlow). */
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(180px circle at var(--mx, 50%) var(--my, 0%), var(--glass-catch), transparent 70%);
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glass:hover::after {
+    opacity: 1;
+  }
+}
+
+/*
+ * Moins de transparence demandée, contraste renforcé ou flou indisponible : les mêmes surfaces,
+ * opaques (et bordées nettement pour le contraste). Les jetons suivent, donc tout ce qui est
+ * construit dessus aussi ; le flou est retiré partout où il est posé.
+ */
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme] {
+    --plate: var(--glass-solid);
+    --plate-deep: var(--glass-solid);
+    --glass-smoke: var(--glass-solid);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root[data-theme] {
+    --plate: var(--glass-solid);
+    --plate-deep: var(--glass-solid);
+    --glass-smoke: var(--glass-solid);
+    --plate-edge: var(--text-3);
+    --glass-edge-out: var(--text-3);
+    --node-edge: var(--line-3);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .glass,
+  .window__bar::before,
+  .window-overlay,
+  .tabs__list,
+  .tip,
+  .tooltip {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root[data-theme] {
+    --plate: var(--glass-solid);
+    --plate-deep: var(--glass-solid);
+    --glass-smoke: var(--glass-solid);
+  }
+}

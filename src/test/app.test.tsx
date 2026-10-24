@@ -26,14 +26,14 @@ describe('page', () => {
     renderApp('fr')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Felipe Portugal.')
     expect(screen.getByText('Développeur logiciel polyvalent')).toBeTruthy()
-    expect(headings(2)).toEqual(['Projets', 'Expérience', 'Compétences', 'Formation'])
+    expect(headings(2)).toEqual(['Projets', 'Expérience', 'Formation', 'Compétences', 'Contact'])
     expect(document.documentElement.lang).toBe('fr')
   })
 
   it('bascule en anglais sans rechargement et mémorise le choix', () => {
     renderApp('fr')
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(headings(2)).toEqual(['Projects', 'Experience', 'Skills', 'Education'])
+    expect(headings(2)).toEqual(['Projects', 'Experience', 'Education', 'Skills', 'Contact'])
     expect(document.documentElement.lang).toBe('en')
     expect(window.localStorage.getItem('og-lang')).toBe('en')
     expect(document.title).toMatch(/Versatile software developer/)
@@ -65,6 +65,12 @@ describe('page', () => {
       expect(name.trim(), button.outerHTML.slice(0, 80)).not.toBe('')
     }
   })
+
+  it('propose le CV sur demande par courriel, sans faux téléchargement', () => {
+    renderApp('fr')
+    const cv = screen.getByRole('link', { name: 'Demander le CV' })
+    expect(cv.getAttribute('href')).toBe('mailto:felipe-alberto.padilla-portugal.1@ens.etsmtl.ca?subject=Demande%20de%20CV')
+  })
 })
 
 describe('logos des compétences', () => {
@@ -90,34 +96,80 @@ describe('logos des compétences', () => {
     expect(tile.dataset.visible).toBe('true')
     expect(tile.querySelector('.tip')?.textContent).toBe('Rust')
   })
+
+  it('restent sur les tuiles de projet, sans ouvrir l’étude de cas', () => {
+    renderApp('fr')
+    const toolbar = screen.getByRole('toolbar', { name: 'Technologies principales, Gestion des stationnements' })
+    fireEvent.click(within(toolbar).getByRole('button', { name: 'PostgreSQL' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
 })
 
 describe('fenêtres', () => {
-  it('ouvrent une fiche projet nommée, puis rendent le focus à la fermeture', async () => {
+  it('ouvrent une étude de cas nommée, à onglets, puis rendent le focus à la fermeture', async () => {
     renderApp('fr')
-    const opener = screen.getByRole('button', { name: /Voir la fiche\s*: Gestion des stationnements/ })
+    const opener = screen.getByRole('button', { name: /Ouvrir l’étude de cas\s*: Gestion des stationnements/ })
     opener.focus()
     fireEvent.click(opener)
 
     const dialog = await screen.findByRole('dialog', { name: 'Gestion des stationnements' })
     expect(within(dialog).getByRole('heading', { name: 'Défi technique' })).toBeTruthy()
+    expect(document.activeElement).toBe(within(dialog).getByRole('heading', { level: 2, name: 'Gestion des stationnements' }))
+    // Les onglets : l'architecture n'est rendue qu'une fois son onglet choisi.
+    expect(within(dialog).queryByRole('figure')).toBeNull()
+    fireEvent.mouseDown(within(dialog).getByRole('tab', { name: 'Architecture' }))
     expect(within(dialog).getByRole('figure', { name: 'Architecture conceptuelle' })).toBeTruthy()
-    expect(document.activeElement?.id).toBe('parking-window-title')
+    // La tuile a pris la forme de la fiche : sa place reste vide tant que la fiche est ouverte.
+    const card = opener.closest('article')
+    expect(card?.dataset.lifted).toBe('true')
 
-    // L'événement close différé du double montage ne doit pas refermer la fenêtre.
+    // Le double montage de StrictMode ne doit pas refermer la fenêtre.
     await new Promise((resolve) => setTimeout(resolve, 20))
     expect(screen.getByRole('dialog', { name: 'Gestion des stationnements' })).toBeTruthy()
 
     fireEvent.click(within(dialog).getByRole('button', { name: /Fermer/ }))
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
-    expect(document.activeElement).toBe(opener)
+    expect(card?.dataset.lifted).toBeUndefined()
+    await waitFor(() => expect(document.activeElement).toBe(opener))
+  })
+
+  it('détaillent une période d’expérience dans la même structure, onglets et logos compris', async () => {
+    renderApp('fr')
+    const row = screen.getByRole('button', { name: /Conseiller technique – Systèmes embarqués/ })
+    expect(row.getAttribute('aria-haspopup')).toBe('dialog')
+    fireEvent.click(row)
+
+    const dialog = await screen.findByRole('dialog', { name: 'Conseiller technique – Systèmes embarqués' })
+    expect(within(dialog).getByRole('tablist', { name: 'Sections de la période' })).toBeTruthy()
+    expect(within(dialog).getByText(/pytest, incluant des tests de charge/)).toBeTruthy()
+    expect(row.dataset.lifted).toBe('true')
+
+    fireEvent.mouseDown(within(dialog).getByRole('tab', { name: 'Technologies' }))
+    const chips = within(dialog).getByRole('list', { name: 'Technologies et outils nommés dans ces réalisations.' })
+    expect(within(chips).getByText('Rust')).toBeTruthy()
+    expect(within(chips).getByText('pytest')).toBeTruthy()
+
+    // Ouverte d'un clic, sans focus préalable : le focus revient quand même à la rangée.
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(row.dataset.lifted).toBeUndefined()
+    await waitFor(() => expect(document.activeElement).toBe(row))
+  })
+
+  it('situent les deux rôles d’une même période dans l’en-tête', async () => {
+    renderApp('en')
+    fireEvent.click(screen.getByRole('button', { name: /Industrial Data Visualization Assistant Developer/ }))
+    const dialog = await screen.findByRole('dialog', { name: 'Industrial Data Visualization Assistant Developer' })
+    expect(within(dialog).getByText('Work across the whole period, from January to September 2025.')).toBeTruthy()
+    expect(within(dialog).getByText('Industrial Data Visualization Developer Intern')).toBeTruthy()
+    expect(within(dialog).getByText('Jan. – May 2025')).toBeTruthy()
   })
 
   it('se ferment avec Échap', async () => {
     renderApp('en')
-    fireEvent.click(screen.getByRole('button', { name: /Open case study\s*: Boston Dynamics Spot robotics/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Open the case study\s*: Boston Dynamics Spot robotics/ }))
     const dialog = await screen.findByRole('dialog', { name: 'Boston Dynamics Spot robotics' })
-    fireEvent(dialog, new Event('cancel', { cancelable: true }))
+    fireEvent.keyDown(dialog, { key: 'Escape' })
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
   })
 

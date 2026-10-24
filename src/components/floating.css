@@ -1,0 +1,134 @@
+/*
+ * Surfaces flottantes : feuilles du bas sur mobile (Vaul), infobulles (Radix Tooltip) et
+ * confirmations (Sonner). Un verre dense, presque opaque derrière le texte, à double bordure ;
+ * les infobulles naissent de leur déclencheur (transform-origin de Radix).
+ */
+
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+
+@keyframes float-out {
+  to {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.98);
+  }
+}
+
+/* Feuilles du bas (mobile) : la même matière, opaque, ancrée au bord de l'écran. */
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--backdrop);
+}
+
+.drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  border-radius: 22px 22px 0 0;
+  background:
+    linear-gradient(180deg, var(--plate-spec), transparent 30%),
+    var(--glass-solid);
+  box-shadow:
+    0 0 0 1px var(--plate-edge),
+    inset 0 1px 0 var(--plate-rim),
+    0 -18px 50px -20px rgba(0, 0, 0, 0.5);
+  color: var(--text);
+  outline: none;
+}
+
+.drawer--sheet {
+  height: 94dvh;
+  max-height: 94dvh;
+}
+
+.drawer[data-project] {
+  background:
+    radial-gradient(80% 160px at 100% 0%, color-mix(in srgb, var(--light, var(--glass-light)) var(--light-wash), transparent), transparent 75%),
+    linear-gradient(180deg, var(--plate-spec), transparent 30%),
+    var(--glass-solid);
+}
+
+.drawer .drawer__handle {
+  flex: none;
+  width: 38px;
+  height: 5px;
+  margin: 8px auto 4px;
+  background: var(--line-3);
+  opacity: 1;
+}
+
+.drawer__bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 12px 4px;
+}
+
+.drawer__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 20px 28px;
+}
+
+/* Infobulles */
+
+.tooltip {
+  z-index: 80;
+  max-width: min(18rem, calc(100vw - 2rem));
+  padding: 6px 10px;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, var(--glass-spec), transparent 60%),
+    var(--glass-smoke);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow:
+    0 0 0 1px var(--glass-edge-out),
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-hairline),
+    var(--glass-shadow);
+  color: var(--glass-ink);
+  font-size: var(--fs-xs);
+  font-weight: 520;
+  line-height: 1.3;
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+  animation: float-in 130ms var(--ease-out);
+}
+
+.tooltip[data-state='closed'] {
+  animation: float-out 90ms var(--ease-in) forwards;
+}
+
+/* Confirmations (Sonner) : une pastille de verre au-dessus du dock. */
+
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: fit-content;
+  min-height: 40px;
+  margin-inline: auto;
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+  font-weight: 540;
+}
+
+[data-sonner-toaster] [data-sonner-toast].toast {
+  left: 0;
+  right: 0;
+}

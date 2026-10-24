@@ -21,9 +21,15 @@
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
     "@formspree/core": "^4.0.0",
+    "@radix-ui/react-dialog": "1.1.23",
+    "@radix-ui/react-tabs": "1.1.21",
+    "@radix-ui/react-tooltip": "1.2.16",
     "lucide-react": "^1.61.0",
+    "motion": "^14.6.0",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "sonner": "2.0.8",
+    "vaul": "1.1.2"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.2",

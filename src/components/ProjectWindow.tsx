@@ -1,109 +1,133 @@
+import * as Tabs from '@radix-ui/react-tabs'
+import type { ReactNode } from 'react'
 import type { Project } from '../data/types'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { ArchitectureDiagram } from './ArchitectureDiagram'
+import { Sheet } from './Sheet'
 import { TechChip } from './TechGlyph'
-import { Window } from './Window'
 
 interface Props {
   project: Project
-  origin: DOMRect | null
+  /** Tuile du projet : l'étude de cas en naît et s'y repose. */
+  card: HTMLElement | null
   onClose: () => void
 }
 
-/** Fiche détaillée d'un projet : contexte, rôle, défi, approche, architecture, technologies, limites. */
-export function ProjectWindow({ project, origin, onClose }: Props) {
+function Part({ id, title, className, children }: { id: string; title: string; className?: string; children: ReactNode }) {
+  return (
+    <section className={`pw__section${className ? ` ${className}` : ''}`} aria-labelledby={id}>
+      <h3 id={id}>{title}</h3>
+      {children}
+    </section>
+  )
+}
+
+function List({ items }: { items: readonly string[] }) {
+  return (
+    <ul className="pw__list">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  )
+}
+
+/**
+ * Étude de cas en trois onglets : la contribution et le défi d'abord, puis l'architecture, puis
+ * le contexte, la méthode, les technologies et les limites. La fenêtre garde sa hauteur d'un
+ * onglet à l'autre.
+ */
+export function ProjectWindow({ project, card, onClose }: Props) {
   const { pick, t } = useLanguage()
   const { detail } = project
   const title = pick(project.title)
-  const titleId = `${project.id}-window-title`
   const section = (key: string) => `${project.id}-${key}`
 
   return (
-    <Window labelledBy={titleId} title={title} origin={origin} onClose={onClose}>
-      <header className="pw__head">
-        <p className="pw__context">{pick(project.context)}</p>
-        <h2 id={titleId} className="pw__title" tabIndex={-1}>
-          {title}
-        </h2>
-        <p className="pw__summary">{pick(project.summary)}</p>
-        <span className={`badge badge--${project.maturity.kind}`}>{pick(project.maturity.label)}</span>
-      </header>
+    <Sheet
+      title={title}
+      source={card}
+      tone={project.id}
+      onClose={onClose}
+      header={
+        <>
+          <p className="pw__summary">{pick(project.summary)}</p>
+          <p className="pw__meta">
+            <span className={`maturity maturity--${project.maturity.kind}`}>{pick(project.maturity.label)}</span>
+            <span className="pw__context">{pick(project.context)}</span>
+          </p>
+        </>
+      }
+    >
+      <Tabs.Root className="tabs" defaultValue="contribution">
+        <Tabs.List className="tabs__list" aria-label={t.window.tabs.label}>
+          <Tabs.Trigger className="tabs__tab" value="contribution">
+            {t.window.tabs.contribution}
+          </Tabs.Trigger>
+          <Tabs.Trigger className="tabs__tab" value="architecture">
+            {t.window.tabs.architecture}
+          </Tabs.Trigger>
+          <Tabs.Trigger className="tabs__tab" value="details">
+            {t.window.tabs.details}
+          </Tabs.Trigger>
+        </Tabs.List>
 
-      <div className="pw__grid">
-        <section className="pw__section" aria-labelledby={section('context')}>
-          <h3 id={section('context')}>{t.window.context}</h3>
-          {pick(detail.context).map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </section>
+        <Tabs.Content className="tabs__panel" value="contribution">
+          <Part id={section('role')} title={t.window.role}>
+            <List items={pick(detail.role)} />
+          </Part>
+          {detail.challenge && (
+            <Part id={section('challenge')} title={t.window.challenge} className="pw__challenge">
+              <p>{pick(detail.challenge)}</p>
+            </Part>
+          )}
+          {detail.approach && (
+            <Part id={section('approach')} title={t.window.approach}>
+              {pick(detail.approach).map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </Part>
+          )}
+        </Tabs.Content>
 
-        <section className="pw__section" aria-labelledby={section('role')}>
-          <h3 id={section('role')}>{t.window.role}</h3>
-          <ul className="pw__list">
-            {pick(detail.role).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
+        <Tabs.Content className="tabs__panel" value="architecture">
+          <ArchitectureDiagram spec={detail.diagram} id={project.id} />
+        </Tabs.Content>
 
-        {detail.challenge && (
-          <section className="pw__section pw__challenge" aria-labelledby={section('challenge')}>
-            <h3 id={section('challenge')}>{t.window.challenge}</h3>
-            <p>{pick(detail.challenge)}</p>
-          </section>
-        )}
-
-        {detail.approach && (
-          <section className="pw__section" aria-labelledby={section('approach')}>
-            <h3 id={section('approach')}>{t.window.approach}</h3>
-            {pick(detail.approach).map((paragraph) => (
+        <Tabs.Content className="tabs__panel" value="details">
+          <Part id={section('context')} title={t.window.context}>
+            {pick(detail.context).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-          </section>
-        )}
-
-        {detail.practices && (
-          <section className="pw__section" aria-labelledby={section('practices')}>
-            <h3 id={section('practices')}>{t.window.practices}</h3>
-            <ul className="pw__list">
-              {pick(detail.practices).map((item) => (
-                <li key={item}>{item}</li>
+          </Part>
+          {detail.practices && (
+            <Part id={section('practices')} title={t.window.practices}>
+              <List items={pick(detail.practices)} />
+            </Part>
+          )}
+          <Part id={section('tech')} title={t.window.technologies}>
+            <div className="pw__tech-groups">
+              {detail.tech.map((group, index) => (
+                <div key={pick(group.title)} className="pw__tech-group">
+                  <p className="pw__tech-title" id={section(`tech-${index}`)}>
+                    {pick(group.title)}
+                  </p>
+                  <ul className="chips" aria-labelledby={section(`tech-${index}`)}>
+                    {group.items.map((id) => (
+                      <TechChip key={id} id={id} />
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
-          </section>
-        )}
-      </div>
-
-      <ArchitectureDiagram spec={detail.diagram} id={project.id} />
-
-      <section className="pw__section pw__tech" aria-labelledby={section('tech')}>
-        <h3 id={section('tech')}>{t.window.technologies}</h3>
-        <div className="pw__tech-groups">
-          {detail.tech.map((group, index) => (
-            <div key={pick(group.title)} className="pw__tech-group">
-              <p className="pw__tech-title" id={section(`tech-${index}`)}>
-                {pick(group.title)}
-              </p>
-              <ul className="chips" aria-labelledby={section(`tech-${index}`)}>
-                {group.items.map((id) => (
-                  <TechChip key={id} id={id} />
-                ))}
-              </ul>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {detail.limits && (
-        <aside className="pw__limits" aria-labelledby={section('limits')}>
-          <h3 id={section('limits')}>{t.window.limits}</h3>
-          <ul className="pw__list">
-            {pick(detail.limits).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </aside>
-      )}
-    </Window>
+          </Part>
+          {detail.limits && (
+            <Part id={section('limits')} title={t.window.limits} className="pw__limits">
+              <List items={pick(detail.limits)} />
+            </Part>
+          )}
+        </Tabs.Content>
+      </Tabs.Root>
+    </Sheet>
   )
 }

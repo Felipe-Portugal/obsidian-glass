@@ -1,22 +1,34 @@
 import { ArrowUp, FileText, Mail } from 'lucide-react'
-import type { MouseEvent } from 'react'
+import { spring } from 'motion'
+import { animate } from 'motion/mini'
+import { useRef, type FocusEvent, type PointerEvent } from 'react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
+import { useRefraction } from '../lib/refraction'
 import { prefersReducedMotion } from '../lib/storage'
 import { usePointerGlow } from '../lib/usePointerGlow'
 import { BrandSvg } from './TechGlyph'
+import { Tip } from './Tip'
 import './dock.css'
 
 interface Props {
-  onContact: (origin: DOMRect, subject?: string) => void
+  /** Ouvre la fenêtre de contact depuis ce bouton du dock. */
+  onContact: (source: HTMLElement, subject?: string) => void
 }
 
-const rectOf = (event: MouseEvent<HTMLElement>) => event.currentTarget.getBoundingClientRect()
+/** Vive et posée : la lentille suit le pointeur sans dépasser l'élément suivant. */
+const LENS = { type: spring, stiffness: 560, damping: 42, mass: 0.7 }
 
-/** Dock flottant : CV, LinkedIn, contact et retour en haut. Aucun lien fictif. */
+/**
+ * Dock flottant en verre : CV, LinkedIn, contact et retour en haut. Aucun lien fictif. Une
+ * lentille de verre plus clair glisse sous l'élément pointé ou atteint au clavier.
+ */
 export function Dock({ onContact }: Props) {
   const { lang, pick, t } = useLanguage()
   const glowRef = usePointerGlow<HTMLElement>()
+  const refract = useRefraction<HTMLElement>({ bezel: 14, scale: 18, delay: 1200 })
+  const lensRef = useRef<HTMLSpanElement>(null)
+  const lensShown = useRef(false)
   const resume = profile.resume ? `${import.meta.env.BASE_URL}${pick(profile.resume)}` : null
 
   const toTop = () => {
@@ -24,68 +36,112 @@ export function Dock({ onContact }: Props) {
     document.getElementById('top')?.focus({ preventScroll: true })
   }
 
+  // La lentille apparaît sur place, puis glisse d'un élément à l'autre.
+  const moveLens = (item: HTMLElement | null) => {
+    const lens = lensRef.current
+    if (!lens) return
+    if (!item) {
+      lensShown.current = false
+      animate(lens, { opacity: 0 }, { duration: 0.18 })
+      return
+    }
+    // Mesurée par rapport au dock : le retour en haut est dans un élément positionné.
+    const dock = item.closest('.dock')
+    const left = dock ? item.getBoundingClientRect().left - dock.getBoundingClientRect().left - dock.clientLeft : item.offsetLeft
+    const target = { transform: `translateX(${left}px)`, width: `${item.offsetWidth}px` }
+    if (lensShown.current && !prefersReducedMotion()) {
+      animate(lens, target, LENS)
+    } else {
+      animate(lens, target, { duration: 0 })
+      animate(lens, { opacity: 1 }, { duration: 0.16 })
+    }
+    lensShown.current = true
+  }
+
+  const lensProps = {
+    onPointerEnter: (event: PointerEvent<HTMLElement>) => {
+      if (event.pointerType !== 'touch') moveLens(event.currentTarget)
+    },
+    onFocus: (event: FocusEvent<HTMLElement>) => moveLens(event.currentTarget),
+    onBlur: () => moveLens(null),
+  }
+
   return (
-    <nav className="dock" aria-label={t.dock.label} ref={glowRef}>
+    <nav
+      className="dock glass"
+      aria-label={t.dock.label}
+      ref={(element) => {
+        glowRef(element)
+        refract(element)
+      }}
+      onPointerLeave={() => moveLens(null)}
+    >
+      <span className="dock__lens" ref={lensRef} aria-hidden="true" />
       <ul className="dock__list">
         <li>
           {resume ? (
-            <a className="dock__item has-tip" href={resume} target="_blank" rel="noopener" type="application/pdf" hrefLang={lang}>
-              <FileText aria-hidden="true" size={18} strokeWidth={1.75} />
-              <span className="dock__label">{t.dock.cv}</span>
-              <span className="sr-only"> {t.dock.cvPdf} {t.a11y.newTab}</span>
-              <span className="tip" aria-hidden="true">
-                {t.dock.cvPdf}
-              </span>
-            </a>
+            <Tip label={t.dock.cvPdf}>
+              <a
+                className="dock__item"
+                href={resume}
+                target="_blank"
+                rel="noopener"
+                type="application/pdf"
+                hrefLang={lang}
+                {...lensProps}
+              >
+                <FileText aria-hidden="true" size={18} strokeWidth={1.75} />
+                <span className="dock__label">{t.dock.cv}</span>
+                <span className="sr-only"> {t.dock.cvPdf} {t.a11y.newTab}</span>
+              </a>
+            </Tip>
           ) : (
-            <button
-              type="button"
-              className="dock__item has-tip"
-              aria-label={t.dock.cvOnRequest}
-              aria-haspopup="dialog"
-              onClick={(event) => onContact(rectOf(event), t.contact.cvSubject)}
-            >
-              <FileText aria-hidden="true" size={18} strokeWidth={1.75} />
-              <span className="dock__label" aria-hidden="true">
-                {t.dock.cv}
-              </span>
-              <span className="tip" aria-hidden="true">
-                {t.dock.cvOnRequestShort}
-              </span>
-            </button>
+            <Tip label={t.dock.cvOnRequestShort}>
+              <button
+                type="button"
+                className="dock__item"
+                aria-label={t.dock.cvOnRequest}
+                aria-haspopup="dialog"
+                onClick={(event) => onContact(event.currentTarget, t.contact.cvSubject)}
+                {...lensProps}
+              >
+                <FileText aria-hidden="true" size={18} strokeWidth={1.75} />
+                <span className="dock__label" aria-hidden="true">
+                  {t.dock.cv}
+                </span>
+              </button>
+            </Tip>
           )}
         </li>
         <li>
-          <a className="dock__item has-tip" href={profile.linkedin} target="_blank" rel="noopener noreferrer">
-            <BrandSvg icon="linkedin" className="dock__brand" />
-            <span className="dock__label">{t.dock.linkedin}</span>
-            <span className="sr-only"> {t.a11y.newTab}</span>
-            <span className="tip" aria-hidden="true">
-              {t.contact.linkedin} {t.a11y.newTab}
-            </span>
-          </a>
+          <Tip label={`${t.contact.linkedin} ${t.a11y.newTab}`}>
+            <a className="dock__item" href={profile.linkedin} target="_blank" rel="noopener noreferrer" {...lensProps}>
+              <BrandSvg icon="linkedin" className="dock__brand" />
+              <span className="dock__label">{t.dock.linkedin}</span>
+              <span className="sr-only"> {t.a11y.newTab}</span>
+            </a>
+          </Tip>
         </li>
         <li>
-          <button
-            type="button"
-            className="dock__item has-tip"
-            aria-haspopup="dialog"
-            onClick={(event) => onContact(rectOf(event))}
-          >
-            <Mail aria-hidden="true" size={18} strokeWidth={1.75} />
-            <span className="dock__label">{t.dock.contact}</span>
-            <span className="tip" aria-hidden="true">
-              {t.dock.contactHint}
-            </span>
-          </button>
+          <Tip label={t.dock.contactHint}>
+            <button
+              type="button"
+              className="dock__item"
+              aria-haspopup="dialog"
+              onClick={(event) => onContact(event.currentTarget)}
+              {...lensProps}
+            >
+              <Mail aria-hidden="true" size={18} strokeWidth={1.75} />
+              <span className="dock__label">{t.dock.contact}</span>
+            </button>
+          </Tip>
         </li>
         <li className="dock__end">
-          <button type="button" className="dock__item dock__item--icon has-tip" aria-label={t.dock.top} onClick={toTop}>
-            <ArrowUp aria-hidden="true" size={18} strokeWidth={1.75} />
-            <span className="tip" aria-hidden="true">
-              {t.dock.top}
-            </span>
-          </button>
+          <Tip label={t.dock.top}>
+            <button type="button" className="dock__item dock__item--icon" aria-label={t.dock.top} onClick={toTop} {...lensProps}>
+              <ArrowUp aria-hidden="true" size={18} strokeWidth={1.75} />
+            </button>
+          </Tip>
         </li>
       </ul>
     </nav>

@@ -20,12 +20,9 @@ html.is-locked {
 }
 
 body {
+  position: relative;
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(1100px 560px at 50% -180px, var(--bg-glow), transparent 72%),
-    var(--bg);
-  background-repeat: no-repeat;
   color: var(--text);
   font-family: var(--font-sans);
   font-size: var(--fs-md);
@@ -34,6 +31,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * Ambiance : des halos diffus semés le long de la page, que les plaques de verre laissent
+ * passer, et un grain très léger. Ils défilent avec la page : fixés, ils obligeraient certains
+ * navigateurs à repeindre tout l'écran à chaque image du défilement.
+ */
+body::before,
+body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  background:
+    radial-gradient(max(62vw, 30rem) max(46vw, 26rem) at 6% 0%, var(--halo-1), transparent 70%),
+    radial-gradient(max(46vw, 24rem) max(40vw, 24rem) at 102% 16%, var(--halo-2), transparent 70%),
+    radial-gradient(max(52vw, 26rem) max(40vw, 24rem) at 4% 50%, var(--halo-4), transparent 70%),
+    radial-gradient(max(64vw, 30rem) max(46vw, 26rem) at 92% 84%, var(--halo-3), transparent 70%),
+    linear-gradient(180deg, var(--bg-top), var(--bg) 100vh);
+}
+
+body::after {
+  background: var(--grain) 0 0 / 160px 160px;
+  opacity: var(--grain-opacity);
 }
 
 h1,

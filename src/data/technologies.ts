@@ -23,7 +23,7 @@ export const technologies = {
   sql: { name: 'SQL', short: 'SQL' },
   bash: { name: 'Bash', icon: 'bash' },
 
-  // Mobile / Web
+  // Interfaces
   reactnative: { name: 'React Native', icon: 'react' },
   expo: { name: 'Expo', icon: 'expo' },
   android: { name: 'Android', icon: 'android' },
@@ -45,7 +45,7 @@ export const technologies = {
   grafana: { name: 'Grafana', icon: 'grafana' },
   influxdb: { name: 'InfluxDB', icon: 'influxdb' },
 
-  // Dev / DevOps
+  // Outils / DevOps
   docker: { name: 'Docker', icon: 'docker' },
   git: { name: 'Git', icon: 'git' },
   gitea: { name: 'Gitea', icon: 'gitea' },

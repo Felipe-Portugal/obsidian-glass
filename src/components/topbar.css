@@ -31,26 +31,23 @@
   gap: var(--space-2);
 }
 
+/* Sélecteurs en verre liquide (glass.css) ; l'option active est une lentille plus claire. */
 .segmented {
   display: inline-flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid var(--glass-edge);
+  border: 0;
   border-radius: var(--r-pill);
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
-  box-shadow: inset 0 1px 0 var(--glass-inner);
 }
 
 .segmented__item {
   display: grid;
   place-items: center;
-  min-width: 32px;
-  height: 32px;
+  min-width: 36px;
+  height: 36px;
   padding: 0 var(--space-2);
   border-radius: var(--r-pill);
-  color: var(--text-3);
+  color: var(--glass-ink-2);
   transition:
     color var(--dur-fast) var(--ease-out),
     background-color var(--dur-fast) var(--ease-out),
@@ -58,45 +55,23 @@
 }
 
 .segmented__item:hover {
-  color: var(--text);
+  color: var(--glass-ink);
 }
 
 .segmented__item[aria-pressed='true'] {
-  background: var(--surface-3);
-  color: var(--text);
+  background: linear-gradient(180deg, var(--glass-spec), transparent 75%), var(--glass-lens);
+  color: var(--glass-ink);
   box-shadow:
-    inset 0 1px 0 var(--highlight),
-    0 1px 2px rgba(0, 0, 0, 0.25);
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-hairline),
+    0 2px 6px -2px rgba(0, 0, 0, 0.3);
 }
 
 .segmented__item--text {
-  min-width: 38px;
+  min-width: 40px;
   font-size: var(--fs-xs);
-  font-weight: 620;
-  letter-spacing: 0.03em;
-}
-
-/* Les infobulles du coin droit s'alignent à droite pour rester dans l'écran. */
-.topbar .tip--below {
-  left: auto;
-  right: -4px;
-  transform: translateY(-4px);
-}
-
-.topbar .has-tip:focus-visible > .tip--below {
-  transform: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .topbar .has-tip:hover > .tip--below {
-    transform: none;
-  }
-}
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .segmented {
-    background: var(--surface);
-  }
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 fieldset.segmented {

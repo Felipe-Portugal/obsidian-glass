@@ -2,7 +2,7 @@
 
 ePortfolio de Felipe Portugal, développeur logiciel polyvalent : une seule page, bilingue (français et anglais), avec mode clair, mode sombre et mode automatique.
 
-React 19, Vite et TypeScript strict. Aucune dépendance d'interface lourde, aucun suivi, aucun cookie.
+React 19, Vite et TypeScript strict. Les comportements d'interface reposent sur des primitives accessibles et sans style ([Radix UI](https://www.radix-ui.com/primitives) pour les fenêtres, onglets et infobulles, [Vaul](https://vaul.emilkowal.ski) pour les feuilles du bas sur mobile, [Sonner](https://sonner.emilkowal.ski) pour les confirmations) ; tout le style reste en CSS maison, sur les jetons du projet. Aucun suivi, aucun cookie.
 
 ## Démarrage
 
@@ -37,8 +37,8 @@ src/
   data/          contenu : profil, projets, expérience, compétences, technologies
   i18n/          libellés d'interface FR/EN, détection et mémorisation de la langue
   theme/         thème auto / clair / sombre
-  sections/      sections de la page (accueil, projets, expérience, compétences et formation)
-  components/    fenêtres, schémas d'architecture, logos, dock, formulaire de contact
+  sections/      tuiles de la page (accueil, projets, expérience, formation, compétences, contact)
+  components/    fenêtres de détail à onglets (projets, expérience, contact), schémas, logos, dock
   styles/        jetons de design, base, mise en page
   lib/           utilitaires (stockage local, validation du contact, reflet au pointeur)
   test/          tests Vitest
@@ -110,13 +110,21 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
 
 - **Couleurs, typographie, rayons, ombres, durées** : `src/styles/tokens.css`. Le thème sombre est la référence ; le bloc `[data-theme='light']` en est l'équivalent clair.
 - **Police** : Geist (variable, auto-hébergée via `@fontsource-variable/geist`).
-- **Mise en page** : `src/styles/layout.css` (grille de 12 colonnes, largeur maximale, sections).
-- **Logos** : ajouter une entrée dans `SOURCES` de `scripts/extract-icons.mjs`, lancer `npm run icons`, puis référencer la technologie dans `src/data/technologies.ts`. Le script corrige au besoin la couleur de marque pour garder un contraste d'au moins 3:1 sur les pastilles, dans les deux thèmes. Si les fonds de pastilles changent dans `tokens.css`, mettre à jour `TILE_DARK` et `TILE_LIGHT` dans le script.
-- **Mouvement** : toutes les animations respectent `prefers-reduced-motion`.
+- **Mise en page** : `src/styles/layout.css`. Un en-tête court, puis une grille bento de 12 colonnes : les trois projets, l'expérience et la formation côte à côte, les compétences (une colonne par famille) et le contact en bandes pleines. Le détail s'ouvre à la demande, toujours dans la même fenêtre (`Sheet.tsx`, `window.css`) : titre, résumé, repères, puis onglets. Études de cas (`ProjectWindow.tsx`), périodes d'expérience (`ExperienceWindow.tsx`) et contact naissent de la tuile, de la rangée ou du bouton qui les ouvre ; sur mobile, ce sont des feuilles du bas (`floating.css`).
+- **Logos** : ajouter une entrée dans `SOURCES` de `scripts/extract-icons.mjs`, lancer `npm run icons`, puis référencer la technologie dans `src/data/technologies.ts`. Le script corrige au besoin la couleur de marque pour garder un contraste d'au moins 3:1 sur les pastilles, dans les deux thèmes. Les pastilles sont en micro-verre (`--node` posé sur `--plate`) : si ces jetons changent dans `tokens.css`, mettre à jour `TILE_DARK` et `TILE_LIGHT` dans le script avec la teinte obtenue.
+- **Matières** : `src/styles/glass.css`.
+  - Plaques de verre fumé (cartes, panneaux, fenêtres) : jetons `--plate-*`, double bordure.
+  - Creux (schémas, encadrés, champs) : `--well*`.
+  - Micro-verre des nœuds et pastilles : `--node-*`.
+  - Verre liquide des contrôles (dock, sélecteurs, boutons) : `--glass-*`, avec la réfraction des bords dans `src/lib/refraction.ts` (Chromium seulement, verre dépoli ailleurs).
+  - Chaque projet a sa lumière (`--light-*`).
+  - Le fond (halos diffus et grain très léger) est dans `src/styles/base.css`, jetons `--halo-*` et `--grain`.
+  - Transparence réduite, contraste renforcé ou flou indisponible : les mêmes surfaces deviennent opaques.
+- **Mouvement** : ressorts de [Motion](https://motion.dev) (`motion/mini`, joués par le navigateur) pour la lentille du dock et pour les fenêtres, qui naissent de la carte ou du bouton qui les ouvre. Toutes les animations respectent `prefers-reduced-motion`.
 
 ## Accessibilité et vie privée
 
-- Fenêtres sur `<dialog>` natif : fond inerte, touche Échap, focus déplacé à l'ouverture et rendu à la fermeture, défilement de la page bloqué.
+- Fenêtres et onglets sur les primitives Radix : fond inerte, touche Échap, focus déplacé à l'ouverture et rendu à la fermeture, défilement de la page bloqué, onglets parcourables aux flèches. Sur mobile, les mêmes contenus s'ouvrent en feuilles du bas qui se ferment d'un glissement.
 - Rangées de logos navigables aux flèches (une seule tabulation par rangée), avec infobulle au survol, au focus et au toucher.
 - Lien d'évitement, contrastes vérifiés dans les deux thèmes, schémas lisibles sans la couleur.
 - Aucun outil d'analyse, aucun cookie, aucune requête vers un tiers hormis Formspree à l'envoi du formulaire. Seules les préférences de langue (`og-lang`) et de thème (`og-theme`) sont gardées dans le navigateur.

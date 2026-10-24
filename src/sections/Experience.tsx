@@ -1,38 +1,48 @@
+import { ChevronRight } from 'lucide-react'
 import { experience } from '../data/experience'
 import { useLanguage } from '../i18n/LanguageProvider'
 
-export function Experience() {
+interface Props {
+  /** Période dont la fenêtre est ouverte : elle est née de sa rangée. */
+  open: string | null
+  onOpen: (id: string, row: HTMLElement) => void
+}
+
+/** Tuile d'expérience : une rangée par période ; ses réalisations et technologies dans une fenêtre. */
+export function Experience({ open, onOpen }: Props) {
   const { pick, t } = useLanguage()
   return (
-    <section className="section" id="experience" aria-labelledby="experience-title">
-      <div className="section__head">
-        <h2 id="experience-title" className="section__title">
+    <section className="plate tile tile--xp" id="experience" aria-labelledby="experience-title">
+      <div className="tile__head">
+        <h2 id="experience-title" className="tile__label">
           {t.experience.title}
         </h2>
-        <p className="section__aside">{t.experience.org}</p>
+        <p className="tile__aside">{t.experience.org}</p>
       </div>
-      <div className="panel">
-        <ol className="timeline">
-          {experience.map((entry) => (
-            <li key={entry.id} className="timeline__entry">
-              <div className="timeline__roles">
+      <ol className="rows">
+        {experience.map((entry) => (
+          <li key={entry.id}>
+            <button
+              type="button"
+              className="row"
+              aria-haspopup="dialog"
+              data-lifted={open === entry.id || undefined}
+              onClick={(event) => onOpen(entry.id, event.currentTarget)}
+            >
+              <span className="row__main">
                 {entry.roles.map((role) => (
-                  <div key={pick(role.title)} className="timeline__role">
-                    <h3 className="timeline__title">{pick(role.title)}</h3>
-                    <p className="timeline__period">{pick(role.period)}</p>
-                  </div>
+                  <span key={pick(role.title)} className="row__line">
+                    <span className="row__title">{pick(role.title)}</span>
+                    <span className="row__period">{pick(role.period)}</span>
+                  </span>
                 ))}
-                {entry.note && <p className="timeline__note">{pick(entry.note)}</p>}
-              </div>
-              <ul className="timeline__points">
-                {pick(entry.points).map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
-      </div>
+              </span>
+              <ChevronRight className="row__chevron" aria-hidden="true" size={18} strokeWidth={1.75} />
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p className="tile__foot">{t.experience.hint}</p>
     </section>
   )
 }

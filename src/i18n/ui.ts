@@ -28,14 +28,14 @@ const fr = {
     factsLabel: 'En bref',
     study: 'Étudiant en génie logiciel, ÉTS',
     languages: 'Français, anglais, espagnol',
-    status: 'Ouvert aux opportunités en développement logiciel',
+    status: 'Recherche un stage de 4\u00a0mois à l’hiver 2027 · ouvert à 8\u00a0mois',
   },
   projects: {
     title: 'Projets',
-    hint: 'Chaque fiche détaille le rôle, le défi et l’architecture.',
+    hint: 'Chaque étude de cas détaille ma contribution, l’architecture et les limites.',
     contribution: 'Ma contribution',
-    open: 'Voir la fiche',
-    techLabel: (project: string) => `Technologies principales, ${project}`,
+    open: 'Ouvrir l’étude de cas',
+    techLabel: 'Technologies principales',
   },
   window: {
     close: 'Fermer',
@@ -48,6 +48,12 @@ const fr = {
     practices: 'Méthode de travail',
     technologies: 'Technologies',
     limits: 'Limites et maturité',
+    tabs: {
+      label: 'Sections de l’étude de cas',
+      contribution: 'Contribution',
+      architecture: 'Architecture',
+      details: 'Détails',
+    },
   },
   diagram: {
     legendTitle: 'Légende',
@@ -63,11 +69,17 @@ const fr = {
   experience: {
     title: 'Expérience',
     org: 'ITMI',
+    hint: 'Chaque période s’ouvre sur ses réalisations.',
+    tabs: {
+      label: 'Sections de la période',
+      work: 'Réalisations',
+      tech: 'Technologies',
+    },
+    techIntro: 'Technologies et outils nommés dans ces réalisations.',
   },
   skills: {
     title: 'Compétences',
     note: 'Technologies utilisées dans mes projets, emplois et cours\u00a0: elles ne figurent pas toutes dans chaque projet.',
-    toolbarHint: 'Flèches pour parcourir',
   },
   education: {
     title: 'Formation',
@@ -83,6 +95,12 @@ const fr = {
     contact: 'Contact',
     contactHint: 'Ouvrir le formulaire de contact',
     top: 'Haut de la page',
+  },
+  contactTile: {
+    title: 'Contact',
+    lead: 'Pour un stage ou une question, écrivez-moi directement.',
+    write: 'Écrire un courriel',
+    cv: 'Demander le CV',
   },
   contact: {
     title: 'Me contacter',
@@ -173,14 +191,14 @@ const en: UiStrings = {
     factsLabel: 'At a glance',
     study: 'Software engineering student, ÉTS',
     languages: 'French, English, Spanish',
-    status: 'Open to software development opportunities',
+    status: 'Looking for a 4-month internship in winter 2027 · open to 8 months',
   },
   projects: {
     title: 'Projects',
-    hint: 'Each case study covers the role, the challenge and the architecture.',
+    hint: 'Each case study details my contribution, the architecture and the limits.',
     contribution: 'My contribution',
-    open: 'Open case study',
-    techLabel: (project: string) => `Main technologies, ${project}`,
+    open: 'Open the case study',
+    techLabel: 'Main technologies',
   },
   window: {
     close: 'Close',
@@ -193,6 +211,12 @@ const en: UiStrings = {
     practices: 'How we worked',
     technologies: 'Technologies',
     limits: 'Limits and maturity',
+    tabs: {
+      label: 'Case study sections',
+      contribution: 'Contribution',
+      architecture: 'Architecture',
+      details: 'Details',
+    },
   },
   diagram: {
     legendTitle: 'Legend',
@@ -208,11 +232,17 @@ const en: UiStrings = {
   experience: {
     title: 'Experience',
     org: 'ITMI',
+    hint: 'Open a period to see what I did.',
+    tabs: {
+      label: 'Sections of this role',
+      work: 'What I did',
+      tech: 'Technologies',
+    },
+    techIntro: 'Technologies and tools named in this work.',
   },
   skills: {
     title: 'Skills',
     note: 'Technologies used across my projects, jobs and courses: not every one appears in every project.',
-    toolbarHint: 'Use arrow keys to browse',
   },
   education: {
     title: 'Education',
@@ -228,6 +258,12 @@ const en: UiStrings = {
     contact: 'Contact',
     contactHint: 'Open the contact form',
     top: 'Back to top',
+  },
+  contactTile: {
+    title: 'Contact',
+    lead: 'For an internship or a question, write to me directly.',
+    write: 'Write an email',
+    cv: 'Request my résumé',
   },
   contact: {
     title: 'Get in touch',

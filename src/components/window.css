@@ -1,66 +1,129 @@
-/* Fenêtres modales : panneau net, barre de titre en verre, ouverture depuis l'élément d'origine. */
+/*
+ * Fenêtres de détail (Sheet.tsx) : une plaque de verre profond, à double bordure et à ombre
+ * longue, née de la tuile ou de la rangée qui l'ouvre. La lumière du projet se pose dans l'angle
+ * haut ; la barre de titre ne prend son verre qu'une fois le contenu passé dessous. Sur mobile,
+ * la même matière en feuille du bas (floating.css).
+ */
 
-.window {
-  width: min(920px, calc(100vw - 2 * var(--gutter)));
-  max-width: none;
-  max-height: none;
-  margin: auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--text);
-  overflow: visible;
-}
-
-.window--md {
-  width: min(780px, calc(100vw - 2 * var(--gutter)));
-}
-
-.window::backdrop {
+.window-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
   background: var(--backdrop);
   -webkit-backdrop-filter: blur(6px) saturate(120%);
   backdrop-filter: blur(6px) saturate(120%);
+  animation: fade-in var(--dur) var(--ease-out);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.window {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  width: min(880px, calc(100vw - 2 * var(--gutter)));
+  height: fit-content;
+  max-height: calc(100dvh - 3rem);
+  margin: auto;
+  color: var(--text);
+  outline: none;
+}
+
+.window--md {
+  width: min(760px, calc(100vw - 2 * var(--gutter)));
+}
+
+/* La plaque : c'est elle qui se métamorphose ; le contenu, posé dessus, paraît sur la fin. */
+.window__paper {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-xl);
+  background:
+    linear-gradient(90deg, transparent 8%, var(--plate-rim) 50%, transparent 92%) top / 100% 1px no-repeat,
+    radial-gradient(70% 55% at 100% 0%, color-mix(in srgb, var(--light, var(--glass-light)) var(--light-wash), transparent), transparent 70%),
+    linear-gradient(135deg, var(--plate-spec), transparent 36%),
+    var(--plate-deep);
+  box-shadow:
+    0 0 0 1px var(--plate-edge),
+    inset 0 0 0 1px var(--plate-liseret),
+    inset 0 1px 0 var(--plate-rim),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+  transform-origin: 0 0;
+}
+
+/* L'ombre longue paraît une fois la fenêtre posée : repeinte à chaque image de la métamorphose,
+   elle la ralentirait sans qu'on la voie bouger. */
+.window__paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--window-shadow);
+  opacity: 0;
+  transition: opacity 120ms var(--ease-out);
+  pointer-events: none;
+}
+
+.window[data-settled] .window__paper::after {
+  opacity: 1;
+  transition-duration: 240ms;
 }
 
 .window__frame {
+  position: relative;
   max-height: calc(100dvh - 3rem);
   overflow-y: auto;
   overscroll-behavior: contain;
-  border: 1px solid var(--line-2);
   border-radius: var(--r-xl);
-  background: var(--surface);
-  box-shadow:
-    inset 0 1px 0 var(--highlight),
-    0 2px 6px rgba(0, 0, 0, 0.2),
-    0 40px 90px -30px rgba(0, 0, 0, 0.75);
+}
+
+/* Étude de cas : hauteur fixe, les onglets changent le contenu sans faire sauter la fenêtre. */
+.window--lg .window__frame {
+  height: min(46rem, calc(100dvh - 3rem));
 }
 
 .window__bar {
   position: sticky;
   top: 0;
   z-index: 5;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr minmax(0, max-content) 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-4);
-  height: 58px;
-  padding: 0 var(--space-3) 0 clamp(1.25rem, 3.4vw, 2.5rem);
-  border-bottom: 1px solid transparent;
-  background: color-mix(in srgb, var(--surface) 74%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(170%);
-  backdrop-filter: blur(18px) saturate(170%);
-  transition: border-color var(--dur) var(--ease-out);
+  height: 60px;
+  padding: 0 var(--space-3);
 }
 
-.window__bar:has(.window__bar-title[data-visible='true']) {
-  border-bottom-color: var(--line);
+.window__bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, var(--plate-spec), transparent),
+    var(--plate-deep);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: 0 1px 0 var(--hairline);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+  pointer-events: none;
+}
+
+.window__bar[data-scrolled='true']::before {
+  opacity: 1;
 }
 
 .window__bar-title {
+  grid-column: 2;
   min-width: 0;
   overflow: hidden;
   font-size: var(--fs-sm);
-  font-weight: 600;
+  font-weight: 580;
   white-space: nowrap;
   text-overflow: ellipsis;
   opacity: 0;
@@ -70,42 +133,44 @@
     transform var(--dur) var(--ease-out);
 }
 
-.window__bar-title[data-visible='true'] {
+.window__bar[data-scrolled='true'] .window__bar-title {
   opacity: 1;
   transform: none;
 }
 
 .window__close {
+  grid-column: 3;
+  justify-self: end;
   display: inline-flex;
-  flex: none;
   align-items: center;
   gap: 6px;
   height: 36px;
-  margin-left: auto;
-  padding: 0 7px 0 11px;
-  border: 1px solid var(--line-2);
+  padding: 0 6px 0 12px;
   border-radius: var(--r-pill);
-  background: var(--surface-2);
-  color: var(--text-2);
+  color: var(--glass-ink-2);
   font-size: var(--fs-xs);
-  font-weight: 560;
-  transition:
-    color var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+  font-weight: 540;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.window__close svg {
+  flex: none;
+  max-width: none;
 }
 
 .window__close:hover {
-  border-color: var(--line-3);
-  background: var(--surface-3);
-  color: var(--text);
+  color: var(--glass-ink);
+}
+
+.window__close:active {
+  transform: scale(0.97);
 }
 
 .window__esc {
   padding: 2px 6px;
-  border: 1px solid var(--line-2);
   border-radius: 6px;
-  color: var(--text-3);
+  box-shadow: inset 0 0 0 1px var(--glass-hairline), inset 0 0 0 1px var(--line);
+  color: var(--glass-ink-2);
   font-size: 11px;
   line-height: 1.2;
 }
@@ -116,141 +181,227 @@
   }
 
   .window__close {
-    padding-right: 12px;
+    height: 44px;
+    padding-right: 14px;
   }
 }
 
 .window__body {
-  padding: var(--space-2) clamp(1.25rem, 3.4vw, 2.5rem) clamp(1.75rem, 3.4vw, 2.5rem);
+  padding: 0 clamp(1.25rem, 4vw, 2.75rem) clamp(1.5rem, 4vw, 2.5rem);
 }
 
-.window[data-state='open'] {
-  animation: window-in var(--dur-slow) var(--ease-out) both;
-}
+/* En-tête : titre, usage, maturité. */
 
-.window[data-state='open']::backdrop {
-  animation: backdrop-in var(--dur) var(--ease-out) both;
-}
-
-.window[data-state='closing'] {
-  animation: window-out 170ms var(--ease-in) both;
-}
-
-.window[data-state='closing']::backdrop {
-  animation: backdrop-out 170ms var(--ease-in) both;
-}
-
-@keyframes window-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px) scale(0.94);
-  }
-}
-
-@keyframes window-out {
-  to {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-}
-
-@keyframes backdrop-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes backdrop-out {
-  to {
-    opacity: 0;
-  }
-}
-
-/* Mobile : feuille ancrée en bas, au-dessus de la zone de sécurité. */
-@media (max-width: 640px) {
-  .window,
-  .window--md {
-    width: 100%;
-    margin: auto 0 0;
-    transform-origin: 50% 100% !important;
-  }
-
-  .window__frame {
-    max-height: calc(100dvh - max(1rem, env(safe-area-inset-top, 0px)));
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    border-bottom: 0;
-    border-radius: 22px 22px 0 0;
-  }
-
-  .window[data-state='open'] {
-    animation-name: sheet-in;
-  }
-
-  .window[data-state='closing'] {
-    animation-name: sheet-out;
-  }
-
-  @keyframes sheet-in {
-    from {
-      opacity: 0.4;
-      transform: translateY(48px);
-    }
-  }
-
-  @keyframes sheet-out {
-    to {
-      opacity: 0;
-      transform: translateY(48px);
-    }
-  }
-}
-
-/* Contenu des fiches projets */
-
-.pw__head {
+.sheet__head {
   display: grid;
   justify-items: start;
   gap: var(--space-3);
-  padding-bottom: var(--space-8);
-  margin-bottom: var(--space-8);
-  border-bottom: 1px solid var(--line);
+  max-width: 44rem;
+  padding-bottom: var(--space-6);
 }
 
-.pw__context {
-  font-size: var(--fs-sm);
-  color: var(--text-3);
-}
-
-.pw__title {
-  font-size: var(--fs-window);
-  line-height: 1.08;
-  letter-spacing: -0.03em;
+.sheet__title {
+  max-width: 18em;
+  font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  font-weight: 580;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
 }
 
 .pw__summary {
-  max-width: 44em;
-  font-size: var(--fs-lg);
-  line-height: 1.5;
+  max-width: 38em;
+  font-size: var(--fs-md);
+  line-height: 1.55;
   color: var(--text-2);
 }
 
-.pw__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-8) var(--space-10);
+.pw__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-1);
 }
 
-.pw__section h3,
-.pw__limits h3 {
+.pw__context {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+/* Onglets : un sélecteur de verre qui reste sous la barre au défilement. */
+
+.tabs__list {
+  position: sticky;
+  top: 64px;
+  z-index: 4;
+  display: inline-flex;
+  max-width: 100%;
+  gap: 2px;
+  margin-bottom: var(--space-6);
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background:
+    linear-gradient(180deg, var(--glass-spec) 0%, transparent 46%),
+    var(--glass-smoke);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    0 0 0 1px var(--glass-edge-out),
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-hairline),
+    0 8px 20px -12px rgba(0, 0, 0, 0.5);
+}
+
+.drawer__body .tabs__list {
+  top: 0;
+}
+
+.tabs__tab {
+  min-height: 38px;
+  padding: 0 var(--space-4);
+  border-radius: var(--r-pill);
+  color: var(--glass-ink-2);
+  font-size: var(--fs-sm);
+  font-weight: 540;
+  white-space: nowrap;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.tabs__tab:hover {
+  color: var(--glass-ink);
+}
+
+.tabs__tab[data-state='active'] {
+  background: linear-gradient(180deg, var(--glass-spec), transparent 75%), var(--glass-lens);
+  color: var(--glass-ink);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-hairline),
+    0 2px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+.tabs__tab:focus-visible {
+  outline-offset: -2px;
+  border-radius: var(--r-pill);
+}
+
+.tabs__panel {
+  display: grid;
+  gap: var(--space-8);
+  animation: panel-in 200ms var(--ease-out);
+}
+
+.tabs__panel:focus-visible {
+  outline-offset: 6px;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Panneaux superposés : la pile prend la hauteur du plus long, seul l'onglet choisi se voit. */
+.tabs__stack {
+  display: grid;
+}
+
+.tabs__stack > .tabs__panel {
+  grid-area: 1 / 1;
+  align-content: start;
+  animation: none;
+}
+
+.tabs__stack .pw__tech-group,
+.tabs__stack .chips {
+  align-content: start;
+}
+
+.tabs__stack > .tabs__panel[data-state='active'] {
+  animation: panel-in 200ms var(--ease-out);
+}
+
+.tabs__stack > .tabs__panel[data-state='inactive'] {
+  visibility: hidden;
+}
+
+/* Période d'expérience : une frise des rôles, le plus récent marqué d'un point plein. */
+.xw__timeline {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.xw__stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  position: relative;
+  padding-left: 16px;
+}
+
+.xw__stage::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--text-3);
+}
+
+.xw__stage[data-current]::before {
+  background: var(--text);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 12%, transparent);
+}
+
+.xw__stage + .xw__stage::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  bottom: calc(100% - 0.42em + 1px);
+  width: 1px;
+  height: calc(var(--space-2) + 0.6em);
+  background: var(--line-2);
+}
+
+.xw__period {
+  font-size: var(--fs-sm);
+  font-weight: 580;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.xw__stage:not([data-current]) .xw__period {
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.xw__points {
+  gap: var(--space-3);
+}
+
+/* Sections de l'étude de cas */
+
+.pw__section h3 {
   margin-bottom: var(--space-3);
   font-size: var(--fs-md);
-  letter-spacing: -0.01em;
+  font-weight: 590;
+  letter-spacing: -0.012em;
 }
 
 .pw__section p,
 .pw__list {
+  max-width: 42em;
   font-size: 0.9375rem;
-  line-height: 1.65;
+  line-height: 1.68;
   color: var(--text-2);
 }
 
@@ -263,6 +414,37 @@
   gap: var(--space-2);
 }
 
+.pw__list li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.pw__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 7px;
+  height: 1px;
+  background: var(--text-3);
+}
+
+/* Le défi : un creux éclairé par la lumière du projet, le seul passage en grand corps. */
+.pw__challenge {
+  padding: var(--space-6);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--light, var(--glass-light)) 10%, transparent), transparent 70%),
+    var(--well);
+  box-shadow:
+    var(--well-shadow),
+    inset 0 0 0 1px color-mix(in srgb, var(--light, var(--glass-light)) 16%, transparent);
+}
+
+.pw__challenge h3 {
+  color: color-mix(in srgb, var(--light, var(--text)) 82%, var(--text));
+}
+
 .pw__challenge p {
   font-size: var(--fs-lg);
   line-height: 1.5;
@@ -270,13 +452,9 @@
   color: var(--text);
 }
 
-.pw__tech {
-  margin-top: var(--space-10);
-}
-
 .pw__tech-groups {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .pw__tech-group {
@@ -286,29 +464,33 @@
 
 .pw__tech-title {
   font-size: var(--fs-xs);
-  font-weight: 550;
+  font-weight: 540;
   color: var(--text-3);
 }
 
 .pw__limits {
-  margin-top: var(--space-10);
   padding-top: var(--space-6);
-  border-top: 1px solid var(--line);
+  background: var(--rule) top / 100% 1px no-repeat;
 }
 
 .pw__limits .pw__list {
-  font-size: var(--fs-sm);
   color: var(--text-3);
 }
 
-@media (max-width: 760px) {
-  .pw__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-6);
+@media (max-width: 640px) {
+  .pw__challenge {
+    padding: var(--space-5);
   }
 
-  .pw__head {
-    padding-bottom: var(--space-6);
-    margin-bottom: var(--space-6);
+  /* Sur téléphone, le sélecteur occupe toute la largeur et ses onglets se la partagent. */
+  .tabs__list {
+    display: flex;
+    width: 100%;
+  }
+
+  .tabs__tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 var(--space-2);
   }
 }

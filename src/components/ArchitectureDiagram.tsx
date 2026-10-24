@@ -98,34 +98,3 @@ export function ArchitectureDiagram({ spec, id }: { spec: DiagramSpec; id: strin
   )
 }
 
-/** Aperçu décoratif du schéma sur les cartes : la version complète et accessible est dans la fiche. */
-export function MiniDiagram({ spec, orientation }: { spec: DiagramSpec; orientation: 'row' | 'column' }) {
-  const { pick } = useLanguage()
-  return (
-    <div className="mini" data-orientation={orientation} aria-hidden="true">
-      {spec.flows.slice(0, 2).map((flow, index) => (
-        <div key={flow.id} className="mini__line">
-          {flow.title && <p className="mini__caption">{pick(flow.title)}</p>}
-          <ol className={`mini__chain${index > 0 ? ' mini__chain--secondary' : ''}`} data-link={flow.link}>
-            {flow.nodes.map((node) => (
-              <li key={node.id} className="mini__node" data-kind={node.kind ?? 'component'}>
-                <NodeLogos node={node} />
-                <span>{pick(node.label)}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      ))}
-      {spec.groups?.map((group) => (
-        <ul key={group.id} className={`mini__chips mini__chips--${group.variant}`}>
-          {group.nodes.map((node) => (
-            <li key={node.id} className="mini__chip">
-              <NodeLogos node={node} />
-              <span>{pick(node.label)}</span>
-            </li>
-          ))}
-        </ul>
-      ))}
-    </div>
-  )
-}
