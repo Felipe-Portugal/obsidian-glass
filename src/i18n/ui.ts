@@ -84,6 +84,17 @@ const fr = {
   education: {
     title: 'Formation',
     languages: 'Langues',
+    tabs: {
+      label: 'Sections de la formation',
+      projects: 'Projets de cours',
+      tech: 'Technologies',
+    },
+    techIntro: 'Technologies et outils nommés dans ces projets.',
+  },
+  timeline: {
+    title: 'Parcours',
+    hint: 'Chaque étape s’ouvre sur ses détails.',
+    lanes: { experience: 'Expérience', education: 'Formation' },
   },
   dock: {
     label: 'Raccourcis',
@@ -246,6 +257,17 @@ const en: UiStrings = {
   education: {
     title: 'Education',
     languages: 'Languages',
+    tabs: {
+      label: 'Sections of this program',
+      projects: 'Course projects',
+      tech: 'Technologies',
+    },
+    techIntro: 'Technologies and tools named in these projects.',
+  },
+  timeline: {
+    title: 'Background',
+    hint: 'Open any step for its details.',
+    lanes: { experience: 'Experience', education: 'Education' },
   },
   dock: {
     label: 'Shortcuts',

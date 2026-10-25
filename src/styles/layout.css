@@ -251,25 +251,11 @@ main:focus {
   color: var(--text-3);
 }
 
-/* Le parcours (expérience, formation) côte à côte ; les compétences puis le contact en bandes pleines. */
-.tile--xp {
-  grid-column: span 7;
-}
-
-.tile--edu {
-  grid-column: span 5;
-}
-
+/* Le parcours, les compétences puis le contact : des bandes pleines sous les projets. */
+.tile--path,
 .tile--skills,
 .tile--contact {
   grid-column: 1 / -1;
-}
-
-@media (max-width: 860px) {
-  .tile--xp,
-  .tile--edu {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (max-width: 680px) {
@@ -341,84 +327,247 @@ main:focus {
   transform: rotate(45deg) scale(0.85);
 }
 
-/* Rangées à détail (expérience, compétences) : toute la rangée ouvre sa bulle. */
+/*
+ * Parcours : une ligne du temps. Mobile : le rail à gauche, la plus récente étape en haut.
+ * Grand écran : une frise horizontale, de la plus ancienne étape à gauche à la plus récente à
+ * droite, l'expérience au-dessus du rail, la formation en dessous, en quinconce : chaque étape
+ * couvre deux pistes et commence une piste après la précédente. L'année se pose sur le rail à
+ * la première étape de chaque année.
+ */
 
-.rows {
-  display: grid;
-  margin-inline: calc(-1 * var(--space-3));
-}
-
-.rows > li + li {
-  background: var(--rule) top / 100% 1px no-repeat;
-}
-
-.row {
+.path__legend {
   display: flex;
+  gap: var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.path__key,
+.path__lane {
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  width: 100%;
-  min-height: 56px;
-  padding: var(--space-3);
-  border-radius: var(--r-md);
-  text-align: left;
-  transition: background-color var(--dur-fast) var(--ease-out);
+  gap: 7px;
 }
 
-.row:hover {
-  background: color-mix(in srgb, var(--text) 5%, transparent);
+.path__key::before,
+.path__lane::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
 }
 
-.row:focus-visible {
-  outline-offset: -2px;
-  border-radius: var(--r-md);
+/* La forme double la couleur : un point plein pour l'expérience, un anneau pour la formation. */
+.path__key--experience::before,
+.path__step--experience .path__lane::before {
+  background: var(--light-xp);
 }
 
-.row__main {
-  flex: 1;
-  min-width: 0;
+.path__key--education::before,
+.path__step--education .path__lane::before {
+  box-shadow: inset 0 0 0 1.5px var(--light-edu);
+}
+
+.path {
+  --rail: 64px;
+  --axis: 56px;
+  position: relative;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
-.row__line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2px var(--space-4);
+.path::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--rail) / 2);
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line-3) 8%, var(--line-3) 92%, transparent);
+  transform: translateX(-0.5px);
 }
 
-.row__title {
+.path__step {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  align-items: center;
+}
+
+.path__year,
+.path__dot {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  position: relative;
+  z-index: 1;
+}
+
+.path__year {
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--dot-fill);
+  box-shadow:
+    inset 0 0 0 1px var(--line-2),
+    0 0 0 4px var(--dot-fill);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.path__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--dot-fill);
+  box-shadow: inset 0 0 0 1.5px var(--text-3);
+}
+
+.path__item {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  width: 100%;
+  padding: var(--space-3) calc(var(--space-4) + 22px) var(--space-3) var(--space-4);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, var(--node-spec), transparent 60%), var(--node);
+  box-shadow:
+    inset 0 0 0 1px var(--node-edge),
+    inset 0 1px 0 var(--node-rim),
+    var(--node-shadow);
+  text-align: left;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+/* Un trait relie chaque étape au rail. */
+.path__item::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: calc(var(--rail) / 2 - 8px);
+  height: 1px;
+  background: var(--line-2);
+}
+
+.path__item:focus-visible {
+  outline-offset: 2px;
+  border-radius: var(--r-lg);
+}
+
+.path__lane {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.path__title {
   font-size: var(--fs-sm);
-  font-weight: 560;
-  line-height: 1.4;
+  font-weight: 580;
+  line-height: 1.35;
   color: var(--text);
 }
 
-.row__line + .row__line .row__title {
-  font-weight: 450;
+.path__sub {
+  font-size: var(--fs-xs);
   color: var(--text-2);
 }
 
-.row__period {
+.path__period {
   font-size: var(--fs-xs);
   color: var(--text-3);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 
-.row__chevron {
-  flex: none;
+.path__chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
   color: var(--text-3);
+  transform: translateY(-50%);
   transition:
     transform var(--dur) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .row:hover .row__chevron {
+  .path__item:hover {
+    background: linear-gradient(180deg, var(--node-spec), transparent 60%), color-mix(in srgb, var(--text) 7%, var(--node));
+  }
+
+  .path__item:hover .path__chevron {
     color: var(--text);
-    transform: translateX(2px);
+    transform: translate(2px, -50%);
+  }
+}
+
+.path__item:active {
+  transform: scale(0.99);
+}
+
+/* Frise horizontale : trois rangées (expérience, rail, formation) partagées par toutes les étapes. */
+@media (min-width: 861px) {
+  .path {
+    grid-template-columns: repeat(var(--tracks), minmax(0, 1fr));
+    grid-template-rows: auto var(--axis) auto;
+    gap: 0 var(--space-3);
+  }
+
+  .path::before {
+    position: static;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-self: center;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-3) 4%, var(--line-3) 96%, transparent);
+    transform: none;
+  }
+
+  /* Les étapes se chevauchent d'une piste : seules leurs cartes captent le pointeur. */
+  .path__step {
+    grid-column: var(--at) / span 2;
+    grid-row: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    pointer-events: none;
+  }
+
+  .path__year,
+  .path__dot {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .path__item {
+    grid-column: 1;
+    align-self: stretch;
+    pointer-events: auto;
+  }
+
+  .path__step--education .path__item {
+    grid-row: 3;
+  }
+
+  .path__item::before {
+    top: auto;
+    right: auto;
+    left: 50%;
+    width: 1px;
+    height: calc(var(--axis) / 2 - 10px);
+  }
+
+  .path__step--experience .path__item::before {
+    top: 100%;
+  }
+
+  .path__step--education .path__item::before {
+    bottom: 100%;
   }
 }
 
@@ -460,57 +609,6 @@ main:focus {
   font-size: var(--fs-sm);
   font-weight: 580;
   color: var(--text-2);
-}
-
-/* Formation */
-
-.edu {
-  display: grid;
-}
-
-.edu__entry {
-  display: grid;
-  gap: 2px;
-  padding-block: var(--space-3);
-}
-
-.edu__entry:first-child {
-  padding-top: 0;
-}
-
-.edu__entry + .edu__entry {
-  background: var(--rule) top / 100% 1px no-repeat;
-}
-
-.edu__degree {
-  font-size: var(--fs-md);
-  font-weight: 580;
-  line-height: 1.35;
-  letter-spacing: -0.012em;
-}
-
-.edu__school {
-  font-size: var(--fs-sm);
-  color: var(--text-2);
-}
-
-.edu__period {
-  margin-top: 2px;
-  font-size: var(--fs-xs);
-  color: var(--text-3);
-  font-variant-numeric: tabular-nums;
-}
-
-.edu__languages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
-  font-size: var(--fs-sm);
-  color: var(--text-2);
-}
-
-.edu__languages span {
-  color: var(--text-3);
 }
 
 /* Contact */

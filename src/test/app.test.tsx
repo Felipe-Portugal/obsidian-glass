@@ -26,14 +26,14 @@ describe('page', () => {
     renderApp('fr')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Felipe Portugal.')
     expect(screen.getByText('Développeur logiciel polyvalent')).toBeTruthy()
-    expect(headings(2)).toEqual(['Projets', 'Expérience', 'Formation', 'Compétences', 'Contact'])
+    expect(headings(2)).toEqual(['Projets', 'Parcours', 'Compétences', 'Contact'])
     expect(document.documentElement.lang).toBe('fr')
   })
 
   it('bascule en anglais sans rechargement et mémorise le choix', () => {
     renderApp('fr')
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(headings(2)).toEqual(['Projects', 'Experience', 'Education', 'Skills', 'Contact'])
+    expect(headings(2)).toEqual(['Projects', 'Background', 'Skills', 'Contact'])
     expect(document.documentElement.lang).toBe('en')
     expect(window.localStorage.getItem('og-lang')).toBe('en')
     expect(document.title).toMatch(/Versatile software developer/)
@@ -160,6 +160,25 @@ describe('fenêtres', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     expect(row.getAttribute('aria-expanded')).toBe('false')
     await waitFor(() => expect(document.activeElement).toBe(row))
+  })
+
+  it('ouvrent une formation depuis la ligne du temps, projets de cours et logos compris', async () => {
+    renderApp('fr')
+    const step = screen.getByRole('button', { name: /Baccalauréat en génie logiciel/ })
+    expect(step.getAttribute('aria-haspopup')).toBe('dialog')
+    fireEvent.click(step)
+
+    const dialog = await screen.findByRole('dialog', { name: 'Baccalauréat en génie logiciel' })
+    expect(within(dialog).getByRole('tablist', { name: 'Sections de la formation' })).toBeTruthy()
+    expect(within(dialog).getByText(/couverture de 99 %, JaCoCo/)).toBeTruthy()
+
+    fireEvent.mouseDown(within(dialog).getByRole('tab', { name: 'Technologies' }))
+    const chips = within(dialog).getByRole('list', { name: 'Technologies et outils nommés dans ces projets.' })
+    expect(within(chips).getByText('Java')).toBeTruthy()
+
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    await waitFor(() => expect(document.activeElement).toBe(step))
   })
 
   it('situent les deux rôles d’une même période dans l’en-tête', async () => {

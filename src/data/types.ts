@@ -102,4 +102,8 @@ export interface EducationEntry {
   degree: Localized
   school: Localized
   period: Localized
+  /** Projets et travaux de cours, repris du CV publié (public/cv). */
+  projects: Localized<readonly string[]>
+  /** Technologies nommées dans ces projets, et rien d'autre. */
+  tech: readonly TechId[]
 }

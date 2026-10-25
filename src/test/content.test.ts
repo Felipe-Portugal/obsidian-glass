@@ -50,7 +50,12 @@ describe('fidélité à facts_felipe.md', () => {
     ['TorchServe', /TorchServe/i],
     ['pourcentages et métriques', /\d+\s?%|\b\d+\s+(images|utilisateurs|users|requêtes|requests)\b/i],
   ])('aucune mention : %s', (_label, pattern) => {
-    expect(published).not.toMatch(pattern)
+    // Seule métrique publiable : la couverture de 99 % du projet LOG240.
+    expect(published.replace(/couverture de 99\s?%|99% coverage/g, '')).not.toMatch(pattern)
+  })
+
+  it('ne cite la couverture de 99 % qu’au projet LOG240', () => {
+    for (const line of published.split('\n').filter((text) => /99\s?%/.test(text))) expect(line).toMatch(/LOG240/)
   })
 
   it.runIf(privateTerms.length > 0)('aucun terme privé de .content-guard.local', () => {
@@ -100,6 +105,7 @@ describe('fidélité à facts_felipe.md', () => {
     const ids = [
       ...skillGroups.flatMap((group) => group.items),
       ...experience.flatMap((entry) => entry.tech),
+      ...education.flatMap((entry) => entry.tech),
       ...projects.flatMap((project) => [
         ...project.cardTech,
         ...project.detail.tech.flatMap((group) => group.items),

@@ -41,6 +41,19 @@ export const education: readonly EducationEntry[] = [
       fr: 'Depuis 2024 · Diplomation prévue en mai 2029',
       en: 'Since 2024 · Expected graduation: May 2029',
     },
+    projects: {
+      fr: [
+        'Tests et qualité logicielle, application Java (2025, en équipe, LOG240) : rétro-ingénierie, analyse d’impact d’une demande de changement, tests boîte noire, tests unitaires et d’intégration de la couche d’accès aux données (couverture de 99 %, JaCoCo), suivi des défauts dans GitLab.',
+        'Conception orientée objet, application JavaFX (2025, en équipe, LOG121) : manipulation d’images (zoom, translation, annulation, sauvegarde) selon l’architecture MVC et des patrons de conception.',
+        'Analyse et conception logicielle (2026, LOG210) : modèles du domaine UML, contrats d’opération et réalisations de cas d’utilisation avec les patrons GRASP.',
+      ],
+      en: [
+        'Software testing and quality, Java application (2025, team, LOG240): reverse engineering, impact analysis of a change request, black-box tests, unit and integration tests of the data access layer (99% coverage, JaCoCo), defect tracking in GitLab.',
+        'Object-oriented design, JavaFX application (2025, team, LOG121): image manipulation (zoom, pan, undo, save) following the MVC architecture and design patterns.',
+        'Software analysis and design (2026, LOG210): UML domain models, operation contracts and use case realizations with GRASP patterns.',
+      ],
+    },
+    tech: ['java', 'javafx'],
   },
   {
     id: 'dec',
@@ -50,5 +63,28 @@ export const education: readonly EducationEntry[] = [
     },
     school: { fr: 'Cégep de Sept-Îles', en: 'Cégep de Sept-Îles' },
     period: { fr: 'Diplômé en 2024', en: 'Graduated in 2024' },
+    projects: {
+      fr: [
+        'Applications web ASP.NET Core (2023–2024) : applications MVC avec Entity Framework et SQL Server ; application Blazor de gestion des étudiants, des cours et des inscriptions ; API REST Web API consommée par un client Blazor et déployée sur IIS.',
+        'Sites web avec authentification en PHP et MySQL (2024) : mots de passe hachés, sessions, rôles, requêtes préparées PDO, protection contre le XSS, OAuth et double authentification.',
+        'Plateforme robotique Spot connectée (2023, équipe de deux) : mission Autowalk guidée par la caméra thermique ; collecte d’audio, d’images et de données de capteurs ; conteneur Docker lancé par SSH sur Spot.',
+        'Système de surveillance sous Android (2024, individuel) : application Android en Java, Raspberry Pi en Python et Arduino ; cahier des charges, échéancier et validation des livrables avec le client.',
+        'Objets connectés (2023–2024) : détection de mouvement avec Android, Raspberry Pi et MQTT, panneau de DEL programmables sur Arduino, laboratoires Bluetooth LE et LoRaWAN.',
+        'Bases de données Oracle (2023) : PL/SQL, procédures et fonctions stockées, curseurs, modélisation et normalisation.',
+        'Infrastructure et réseaux (2022–2023) : VMware ESXi, Ubuntu Server, Windows Server (Active Directory, GPO, IIS) et supervision avec Zabbix ; cours de réseautique Cisco.',
+        'Bataille navale (2023) : jeu en Java avec JavaFX, structuré et compilé avec Maven.',
+      ],
+      en: [
+        'ASP.NET Core web applications (2023–2024): MVC applications with Entity Framework and SQL Server; a Blazor app managing students, courses and enrolments; a Web API REST service consumed by a Blazor client and deployed on IIS.',
+        'Websites with authentication in PHP and MySQL (2024): hashed passwords, sessions, roles, PDO prepared statements, XSS protection, OAuth and two-factor authentication.',
+        'Connected Spot robotics platform (2023, team of two): an Autowalk mission guided by the thermal camera; audio, image and sensor data collection; a Docker container launched over SSH on Spot.',
+        'Android monitoring system (2024, individual): an Android app in Java, a Raspberry Pi in Python and an Arduino; requirements, schedule and deliverable validation with the client.',
+        'Connected devices (2023–2024): motion detection with Android, Raspberry Pi and MQTT, a programmable LED panel on Arduino, Bluetooth LE and LoRaWAN labs.',
+        'Oracle databases (2023): PL/SQL, stored procedures and functions, cursors, modelling and normalization.',
+        'Infrastructure and networks (2022–2023): VMware ESXi, Ubuntu Server, Windows Server (Active Directory, GPO, IIS) and monitoring with Zabbix; Cisco networking courses.',
+        'Battleship (2023): a Java game with JavaFX, structured and built with Maven.',
+      ],
+    },
+    tech: ['aspnetcore', 'blazor', 'efcore', 'sqlserver', 'php', 'mysql', 'spotsdk', 'docker', 'android', 'java', 'python', 'raspberrypi', 'arduino', 'mqtt', 'oracle', 'linux', 'javafx', 'maven'],
   },
 ]

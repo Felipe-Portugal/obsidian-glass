@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import type { ContactWindow } from './components/ContactWindow'
 import { Dock } from './components/Dock'
-import type { ExperienceWindow } from './components/ExperienceWindow'
+import type { EducationWindow, ExperienceWindow } from './components/ExperienceWindow'
 import type { ProjectWindow } from './components/ProjectWindow'
 import { TipProvider } from './components/Tip'
 import { TopBar } from './components/TopBar'
@@ -9,13 +9,14 @@ import { onFirstNotify } from './lib/notify'
 import { usePointerGlowWithin } from './lib/usePointerGlow'
 import { experience } from './data/experience'
 import { projects } from './data/projects'
+import { education } from './data/skills'
 import type { Project } from './data/types'
 import { useLanguage } from './i18n/LanguageProvider'
 import { Contact } from './sections/Contact'
-import { Experience } from './sections/Experience'
 import { Hero } from './sections/Hero'
 import { Projects } from './sections/Projects'
-import { Education, Skills } from './sections/SkillsAndEducation'
+import { Skills } from './sections/SkillsAndEducation'
+import { Timeline } from './sections/Timeline'
 import { useTheme } from './theme/ThemeProvider'
 import './styles/layout.css'
 
@@ -24,6 +25,7 @@ const YEAR = new Date().getFullYear()
 interface Windows {
   ProjectWindow: typeof ProjectWindow
   ExperienceWindow: typeof ExperienceWindow
+  EducationWindow: typeof EducationWindow
   ContactWindow: typeof ContactWindow
 }
 
@@ -46,6 +48,7 @@ function loadWindows() {
     ([project, period, contact]) => ({
       ProjectWindow: project.ProjectWindow,
       ExperienceWindow: period.ExperienceWindow,
+      EducationWindow: period.EducationWindow,
       ContactWindow: contact.ContactWindow,
     }),
     (error: unknown) => {
@@ -58,14 +61,14 @@ function loadWindows() {
 
 type ActiveWindow =
   | { kind: 'project'; id: Project['id']; card: HTMLElement | null }
-  | { kind: 'experience'; id: string; source: HTMLElement | null }
+  | { kind: 'experience' | 'education'; id: string; source: HTMLElement | null }
   | { kind: 'contact'; source: HTMLElement | null; subject?: string }
   | null
 
 /**
- * Une page compacte : un en-tête court, puis une grille de tuiles (projets, expérience,
- * formation, compétences, contact). Le détail s'ouvre à la demande, toujours dans la même
- * structure de fenêtre (études de cas, périodes d'expérience, contact), en feuille du bas sur mobile.
+ * Une page compacte : un en-tête court, puis une grille de tuiles (projets, parcours,
+ * compétences, contact). Le détail s'ouvre à la demande, toujours dans la même structure de
+ * fenêtre (études de cas, étapes du parcours, contact), en feuille du bas sur mobile.
  */
 export function App() {
   const { t } = useLanguage()
@@ -77,6 +80,7 @@ export function App() {
   const close = () => setActive(null)
   const project = active?.kind === 'project' ? projects.find((item) => item.id === active.id) : undefined
   const period = active?.kind === 'experience' ? experience.find((item) => item.id === active.id) : undefined
+  const program = active?.kind === 'education' ? education.find((item) => item.id === active.id) : undefined
 
   const openWindow = (next: NonNullable<ActiveWindow>) => {
     if (windows) {
@@ -120,11 +124,10 @@ export function App() {
                 open={active?.kind === 'project' ? active.id : null}
                 onOpen={(id, card) => openWindow({ kind: 'project', id, card })}
               />
-              <Experience
-                open={active?.kind === 'experience' ? active.id : null}
-                onOpen={(id, row) => openWindow({ kind: 'experience', id, source: row })}
+              <Timeline
+                open={active?.kind === 'experience' || active?.kind === 'education' ? active : null}
+                onOpen={(kind, id, item) => openWindow({ kind, id, source: item })}
               />
-              <Education />
               <Skills />
               <Contact onOpen={(source, subject) => openWindow({ kind: 'contact', source, ...(subject ? { subject } : {}) })} />
             </div>
@@ -144,6 +147,9 @@ export function App() {
         )}
         {windows && period && active?.kind === 'experience' && (
           <windows.ExperienceWindow key={period.id} entry={period} source={active.source} onClose={close} />
+        )}
+        {windows && program && active?.kind === 'education' && (
+          <windows.EducationWindow key={program.id} entry={program} source={active.source} onClose={close} />
         )}
         {windows && active?.kind === 'contact' && (
           <windows.ContactWindow
