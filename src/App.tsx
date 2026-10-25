@@ -6,6 +6,7 @@ import type { ExperienceWindow } from './components/ExperienceWindow'
 import type { ProjectWindow } from './components/ProjectWindow'
 import { TipProvider } from './components/Tip'
 import { TopBar } from './components/TopBar'
+import { usePointerGlowWithin } from './lib/usePointerGlow'
 import { experience } from './data/experience'
 import { projects } from './data/projects'
 import type { Project } from './data/types'
@@ -68,6 +69,7 @@ export function App() {
   const { resolved } = useTheme()
   const [active, setActive] = useState<ActiveWindow>(null)
   const [windows, setWindows] = useState<Windows | null>(null)
+  const glowRef = usePointerGlowWithin<HTMLDivElement>('.plate')
   const close = () => setActive(null)
   const project = active?.kind === 'project' ? projects.find((item) => item.id === active.id) : undefined
   const period = active?.kind === 'experience' ? experience.find((item) => item.id === active.id) : undefined
@@ -106,8 +108,8 @@ export function App() {
         <div className="page">
           <TopBar />
           <main id="contenu" tabIndex={-1}>
-            <Hero />
-            <div className="bento">
+            <Hero onContact={(source) => openWindow({ kind: 'contact', source })} />
+            <div className="bento" ref={glowRef}>
               <Projects
                 open={active?.kind === 'project' ? active.id : null}
                 onOpen={(id, card) => openWindow({ kind: 'project', id, card })}
@@ -118,7 +120,7 @@ export function App() {
               />
               <Education />
               <Skills />
-              <Contact />
+              <Contact onOpen={(source, subject) => openWindow({ kind: 'contact', source, ...(subject ? { subject } : {}) })} />
             </div>
           </main>
           <footer className="footer">

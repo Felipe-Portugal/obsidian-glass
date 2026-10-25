@@ -1,8 +1,9 @@
 import { createClient, isSubmissionError } from '@formspree/core'
-import { AlertCircle, CheckCircle2, LoaderCircle, Send } from 'lucide-react'
+import { AlertCircle, CheckCircle2, LoaderCircle, Mail, Send } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
+import { mailto } from '../lib/mailto'
 import {
   CONTACT_FIELDS,
   LIMITS,
@@ -48,18 +49,19 @@ function Field({ id, label, error, extra, children }: FieldProps) {
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
 /**
- * Formulaire de contact envoyé par Formspree (@formspree/core, sans module Stripe).
- * Le succès affiché est celui confirmé par le service ; aucun envoi n'est simulé.
+ * Formulaire de contact : Formspree envoie le message quand il est configuré ; sinon le
+ * navigateur ouvre un courriel prérempli. Le succès n'est affiché qu'après confirmation du service.
  */
-export default function ContactForm({ formId, initialSubject }: { formId: string; initialSubject?: string }) {
+export default function ContactForm({ formId, initialSubject }: { formId?: string; initialSubject?: string }) {
   const { t } = useLanguage()
-  const client = useMemo(() => createClient(), [])
+  const client = useMemo(() => (formId ? createClient() : null), [formId])
   const [values, setValues] = useState<ContactValues>({ email: '', subject: initialSubject ?? '', message: '' })
   const [issues, setIssues] = useState<FieldIssues>({})
   const [attempted, setAttempted] = useState(false)
   const [status, setStatus] = useState<Status>('idle')
   const [serviceError, setServiceError] = useState<MappedSubmissionError | null>(null)
   const honeypot = useRef<HTMLInputElement>(null)
+  const emailLink = useRef<HTMLAnchorElement>(null)
   const successRef = useRef<HTMLElement>(null)
   const fieldRefs = useRef<Partial<Record<ContactField, HTMLInputElement | HTMLTextAreaElement | null>>>({})
 
@@ -116,17 +118,26 @@ export default function ContactForm({ formId, initialSubject }: { formId: string
     setIssues((current) => ({ ...current, [field]: validateContact(values)[field] }))
   }
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (status === 'submitting') return
+  const validateFields = () => {
     setAttempted(true)
     const found = validateContact(values)
     setIssues(found)
     const firstInvalid = CONTACT_FIELDS.find((field) => found[field])
     if (firstInvalid) {
       fieldRefs.current[firstInvalid]?.focus()
+      return false
+    }
+    return true
+  }
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (status === 'submitting') return
+    if (!formId || !client) {
+      emailLink.current?.click()
       return
     }
+    if (!validateFields()) return
 
     setStatus('submitting')
     setServiceError(null)
@@ -179,9 +190,11 @@ export default function ContactForm({ formId, initialSubject }: { formId: string
     return ids.length ? ids.join(' ') : undefined
   }
   const submitting = status === 'submitting'
+  const emailDraft = mailto(values.subject.trim(), `${t.contact.form.replyTo}: ${values.email.trim()}\n\n${values.message.trim()}`)
 
   return (
     <form className="form" noValidate onSubmit={onSubmit} aria-describedby="contact-required">
+      {!formId && <p className="form__delivery">{t.contact.form.mailtoNotice}</p>}
       <p className="form__hint" id="contact-required">
         {t.contact.form.allRequired}
       </p>
@@ -280,16 +293,30 @@ export default function ContactForm({ formId, initialSubject }: { formId: string
       )}
 
       <div className="form__actions">
-        <button type="submit" className="button button--primary" aria-disabled={submitting || undefined}>
-          {submitting ? (
-            <LoaderCircle className="spin" aria-hidden="true" size={16} strokeWidth={2} />
-          ) : (
-            <Send aria-hidden="true" size={16} strokeWidth={2} />
-          )}
-          <span>{submitting ? t.contact.form.submitting : t.contact.form.submit}</span>
-        </button>
+        {formId ? (
+          <button type="submit" className="button button--primary" aria-disabled={submitting || undefined}>
+            {submitting ? (
+              <LoaderCircle className="spin" aria-hidden="true" size={16} strokeWidth={2} />
+            ) : (
+              <Send aria-hidden="true" size={16} strokeWidth={2} />
+            )}
+            <span>{submitting ? t.contact.form.submitting : t.contact.form.submit}</span>
+          </button>
+        ) : (
+          <a
+            ref={emailLink}
+            className="button button--primary"
+            href={emailDraft}
+            onClick={(event) => {
+              if (!validateFields()) event.preventDefault()
+            }}
+          >
+            <Mail aria-hidden="true" size={16} strokeWidth={2} />
+            <span>{t.contact.form.openEmail}</span>
+          </a>
+        )}
         <output className="sr-only">{submitting ? t.contact.form.submitting : ''}</output>
-        <p className="form__privacy">{t.contact.form.privacy}</p>
+        <p className="form__privacy">{formId ? t.contact.form.privacy : t.contact.form.mailtoPrivacy}</p>
       </div>
     </form>
   )

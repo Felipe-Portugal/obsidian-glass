@@ -65,7 +65,7 @@ Le contenu est volontairement factuel : aucune métrique, aucune capture d'écra
 
 ## CV en PDF
 
-Le CV n'est pas encore publié : `profile.resume` vaut `null`, et le dock propose alors « CV sur demande », qui ouvre la fenêtre de contact avec un objet prérempli.
+Le CV n'est pas encore publié : `profile.resume` vaut `null`. Le dock et la section Contact proposent « CV sur demande », qui ouvre la fenêtre de contact avec un objet prérempli.
 
 Pour publier le CV :
 
@@ -81,7 +81,7 @@ Un test vérifie que les fichiers déclarés existent bien dans `public/`.
 
 ## Formulaire de contact (Formspree)
 
-Le formulaire utilise [Formspree](https://formspree.io), compatible avec un site statique. Tant qu'aucun formulaire n'est configuré, la fenêtre de contact le dit clairement et propose le courriel direct ; aucun envoi n'est simulé.
+La fenêtre de contact propose toujours les champs courriel, sujet et message. Avec [Formspree](https://formspree.io) configuré, elle transmet le message depuis le site. Sans Formspree, elle prépare un courriel dans l'application de messagerie du visiteur : celui-ci doit encore le relire et l'envoyer. Aucun envoi n'est simulé.
 
 1. Créer un compte Formspree et un formulaire ; noter son identifiant (la partie finale de `https://formspree.io/f/<identifiant>`).
 2. En local : créer `.env.local` (non versionné) avec `VITE_FORMSPREE_ID=<identifiant>`.
@@ -110,7 +110,7 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
 
 - **Couleurs, typographie, rayons, ombres, durées** : `src/styles/tokens.css`. Le thème sombre est la référence ; le bloc `[data-theme='light']` en est l'équivalent clair.
 - **Police** : Geist (variable, auto-hébergée via `@fontsource-variable/geist`).
-- **Mise en page** : `src/styles/layout.css`. Un en-tête court, puis une grille bento de 12 colonnes : les trois projets, l'expérience et la formation côte à côte, les compétences (une colonne par famille) et le contact en bandes pleines. Le détail s'ouvre à la demande, toujours dans la même fenêtre (`Sheet.tsx`, `window.css`) : titre, résumé, repères, puis onglets. Études de cas (`ProjectWindow.tsx`), périodes d'expérience (`ExperienceWindow.tsx`) et contact naissent de la tuile, de la rangée ou du bouton qui les ouvre ; sur mobile, ce sont des feuilles du bas (`floating.css`).
+- **Mise en page** : `src/styles/layout.css`. Une présentation typographique mène aux projets : une étude de cas occupe toute la largeur, suivie de deux cartes côte à côte. L'expérience et la formation se répondent, puis viennent les compétences et le contact. Le dock flottant reste accessible sur ordinateur et mobile. Le détail s'ouvre à la demande, toujours dans la même fenêtre (`Sheet.tsx`, `window.css`) : titre, résumé, repères, puis onglets. Études de cas (`ProjectWindow.tsx`), périodes d'expérience (`ExperienceWindow.tsx`) et contact naissent de la tuile, de la rangée ou du bouton qui les ouvre ; sur mobile, ce sont des feuilles du bas (`floating.css`).
 - **Logos** : ajouter une entrée dans `SOURCES` de `scripts/extract-icons.mjs`, lancer `npm run icons`, puis référencer la technologie dans `src/data/technologies.ts`. Le script corrige au besoin la couleur de marque pour garder un contraste d'au moins 3:1 sur les pastilles, dans les deux thèmes. Les pastilles sont en micro-verre (`--node` posé sur `--plate`) : si ces jetons changent dans `tokens.css`, mettre à jour `TILE_DARK` et `TILE_LIGHT` dans le script avec la teinte obtenue.
 - **Matières** : `src/styles/glass.css`.
   - Plaques de verre fumé (cartes, panneaux, fenêtres) : jetons `--plate-*`, double bordure.

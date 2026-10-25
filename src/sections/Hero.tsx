@@ -2,11 +2,14 @@ import { GraduationCap, Languages, MapPin } from 'lucide-react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 
+interface Props {
+  onContact: (source: HTMLElement) => void
+}
+
 /**
- * En-tête compact : le nom, le métier et une phrase à gauche ; à droite, la disponibilité (une
- * information, pas un bouton) et l'essentiel en bref.
+ * Présentation et accès direct aux projets ou au contact ; les informations pratiques restent à droite.
  */
-export function Hero() {
+export function Hero({ onContact }: Props) {
   const { t } = useLanguage()
   return (
     <section className="hero" aria-labelledby="hero-title">
@@ -16,8 +19,14 @@ export function Hero() {
         </h1>
         <p className="hero__role">{t.hero.role}</p>
         <p className="hero__lede">{t.hero.lede}</p>
+        <div className="hero__actions">
+          <a className="button button--primary" href="#projets">{t.hero.seeProjects}</a>
+          <button type="button" className="hero__contact" aria-haspopup="dialog" onClick={(event) => onContact(event.currentTarget)}>
+            {t.hero.contact}
+          </button>
+        </div>
       </div>
-      <div className="hero__side">
+      <div className="hero__side glass">
         <p className="hero__status">
           <span className="status-dot" aria-hidden="true" />
           <span>{t.hero.status}</span>

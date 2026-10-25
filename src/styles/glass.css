@@ -15,13 +15,66 @@
   isolation: isolate;
   border-radius: var(--r-xl);
   background:
+    radial-gradient(70% 60% at 100% 0%, color-mix(in srgb, var(--light, transparent) calc(var(--light-wash) * var(--plate-tint)), transparent), transparent 70%),
+    radial-gradient(120% 70% at 0% 0%, var(--plate-sheen), transparent 60%),
     linear-gradient(135deg, var(--plate-spec) 0%, transparent 42%),
     var(--plate);
   box-shadow:
     0 0 0 1px var(--plate-edge),
     inset 0 0 0 1px var(--plate-liseret),
     inset 0 1px 0 var(--plate-rim),
+    inset 0 0 24px -8px var(--plate-edge-glow),
+    inset 0 -18px 30px -24px rgba(0, 0, 0, 0.35),
     var(--plate-shadow);
+}
+
+/*
+ * L'arête du verre liquide : un filet d'un pixel qui capte la lumière dans l'angle haut gauche,
+ * s'éteint sur les côtés et se rallume dans l'angle opposé (un dégradé masqué en anneau).
+ */
+.plate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    150deg,
+    var(--plate-rim-hi) 0%,
+    transparent 30%,
+    transparent 64%,
+    color-mix(in srgb, var(--light, var(--plate-rim-lo)) calc(55% * var(--plate-tint)), var(--plate-rim-lo)) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Reflet qui suit le pointeur sur la plaque survolée (--mx, --my : usePointerGlowWithin). */
+.plate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 0%),
+    var(--plate-catch),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 420ms var(--ease-out);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .plate:hover::after {
+    opacity: 1;
+  }
 }
 
 /* Couche en retrait dans une plaque : un creux sombre, éclairé par le bas. */
@@ -89,6 +142,13 @@
     --plate-edge: var(--text-3);
     --glass-edge-out: var(--text-3);
     --node-edge: var(--line-3);
+  }
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  .plate::before,
+  .plate::after {
+    display: none;
   }
 }
 

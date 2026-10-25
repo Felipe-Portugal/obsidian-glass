@@ -20,21 +20,6 @@ interface Props {
   subject?: string
 }
 
-function ContactUnavailable({ subject }: { subject?: string }) {
-  const { t } = useLanguage()
-  return (
-    <div className="cw__unavailable">
-      <p className="cw__unavailable-title">{t.contact.unavailable.title}</p>
-      <p>{t.contact.unavailable.body}</p>
-      <a className="button button--primary" href={mailto(subject)}>
-        <Mail aria-hidden="true" size={16} strokeWidth={1.75} />
-        <span>{t.contact.writeEmail}</span>
-      </a>
-      {import.meta.env.DEV && <p className="devnote">{t.contact.unavailable.dev}</p>}
-    </div>
-  )
-}
-
 export function ContactWindow({ onClose, source, subject }: Props) {
   const { t } = useLanguage()
   const formId = formspreeId()
@@ -46,13 +31,9 @@ export function ContactWindow({ onClose, source, subject }: Props) {
           <h3 id="contact-form-title" className="sr-only">
             {t.contact.form.title}
           </h3>
-          {formId ? (
-            <Suspense fallback={<p className="cw__loading">{t.contact.loading}</p>}>
-              <ContactForm formId={formId} {...(subject ? { initialSubject: subject } : {})} />
-            </Suspense>
-          ) : (
-            <ContactUnavailable {...(subject ? { subject } : {})} />
-          )}
+          <Suspense fallback={<p className="cw__loading">{t.contact.loading}</p>}>
+            <ContactForm {...(formId ? { formId } : {})} {...(subject ? { initialSubject: subject } : {})} />
+          </Suspense>
         </section>
 
         <aside className="cw__direct" aria-labelledby="contact-direct-title">

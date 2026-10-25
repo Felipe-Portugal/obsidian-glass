@@ -72,31 +72,6 @@
   overflow-wrap: anywhere;
 }
 
-.cw__unavailable {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-3);
-  color: var(--text-2);
-}
-
-.cw__unavailable-title {
-  font-weight: 600;
-  color: var(--text);
-}
-
-.cw__unavailable .button {
-  margin-top: var(--space-2);
-}
-
-.devnote {
-  padding: 6px 10px;
-  border: 1px dashed var(--line-3);
-  border-radius: 8px;
-  font-family: ui-monospace, 'SF Mono', Consolas, monospace;
-  font-size: var(--fs-xs);
-  color: var(--text-3);
-}
-
 .icon-button {
   display: grid;
   place-items: center;
@@ -132,6 +107,12 @@
   position: relative;
   display: grid;
   gap: var(--space-4);
+}
+
+.form__delivery {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-2);
 }
 
 .form__hint {

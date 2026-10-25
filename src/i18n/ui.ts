@@ -29,6 +29,8 @@ const fr = {
     study: 'Étudiant en génie logiciel, ÉTS',
     languages: 'Français, anglais, espagnol',
     status: 'Recherche un stage de 4\u00a0mois à l’hiver 2027 · ouvert à 8\u00a0mois',
+    seeProjects: 'Voir les projets',
+    contact: 'Me contacter',
   },
   projects: {
     title: 'Projets',
@@ -38,8 +40,6 @@ const fr = {
     techLabel: 'Technologies principales',
   },
   window: {
-    close: 'Fermer',
-    escKey: 'Échap',
     closeNamed: (name: string) => `Fermer\u00a0: ${name}`,
     context: 'Contexte',
     role: 'Mon rôle',
@@ -99,7 +99,7 @@ const fr = {
   contactTile: {
     title: 'Contact',
     lead: 'Pour un stage ou une question, écrivez-moi directement.',
-    write: 'Écrire un courriel',
+    write: 'Écrire un message',
     cv: 'Demander le CV',
   },
   contact: {
@@ -107,7 +107,6 @@ const fr = {
     intro: 'Pour une opportunité ou une question, écrivez-moi. Je réponds dès que possible.',
     direct: 'Coordonnées directes',
     emailLabel: 'Courriel',
-    writeEmail: 'Écrire un courriel',
     copy: 'Copier l’adresse',
     copied: 'Adresse copiée',
     copyFailed: 'Copie impossible\u00a0: sélectionnez l’adresse manuellement.',
@@ -124,6 +123,10 @@ const fr = {
       counter: (count: number, max: number) => `${count} / ${max} caractères`,
       submit: 'Envoyer le message',
       submitting: 'Envoi en cours…',
+      openEmail: 'Ouvrir mon application courriel',
+      mailtoNotice: 'Le formulaire prépare un courriel dans votre application de messagerie. Vous pourrez le relire et l’envoyer depuis celle-ci.',
+      mailtoPrivacy: 'Aucun message n’est envoyé depuis ce site dans ce mode.',
+      replyTo: 'Courriel de réponse',
       privacy:
         'Le message est transmis par Formspree, un service d’envoi de formulaires, puis me parvient par courriel.',
       honeypot: 'Ne pas remplir ce champ',
@@ -152,11 +155,6 @@ const fr = {
       title: 'Message envoyé',
       body: 'Merci, votre message m’a bien été transmis. Je vous réponds dès que possible.',
       again: 'Écrire un autre message',
-    },
-    unavailable: {
-      title: 'Le formulaire en ligne n’est pas encore activé.',
-      body: 'Écrivez-moi directement par courriel ou sur LinkedIn.',
-      dev: 'À CONFIGURER (visible en développement seulement)\u00a0: définir VITE_FORMSPREE_ID, voir le README.',
     },
   },
   footer: {
@@ -192,6 +190,8 @@ const en: UiStrings = {
     study: 'Software engineering student, ÉTS',
     languages: 'French, English, Spanish',
     status: 'Looking for a 4-month internship in winter 2027 · open to 8 months',
+    seeProjects: 'View projects',
+    contact: 'Contact me',
   },
   projects: {
     title: 'Projects',
@@ -201,8 +201,6 @@ const en: UiStrings = {
     techLabel: 'Main technologies',
   },
   window: {
-    close: 'Close',
-    escKey: 'Esc',
     closeNamed: (name: string) => `Close: ${name}`,
     context: 'Context',
     role: 'My role',
@@ -262,7 +260,7 @@ const en: UiStrings = {
   contactTile: {
     title: 'Contact',
     lead: 'For an internship or a question, write to me directly.',
-    write: 'Write an email',
+    write: 'Write a message',
     cv: 'Request my résumé',
   },
   contact: {
@@ -270,7 +268,6 @@ const en: UiStrings = {
     intro: 'For an opportunity or a question, write to me. I reply as soon as I can.',
     direct: 'Direct contact',
     emailLabel: 'Email',
-    writeEmail: 'Write an email',
     copy: 'Copy address',
     copied: 'Address copied',
     copyFailed: 'Could not copy: please select the address manually.',
@@ -287,6 +284,10 @@ const en: UiStrings = {
       counter: (count: number, max: number) => `${count} / ${max} characters`,
       submit: 'Send message',
       submitting: 'Sending…',
+      openEmail: 'Open my email app',
+      mailtoNotice: 'This form prepares an email in your mail app. You can review and send it from there.',
+      mailtoPrivacy: 'No message is sent from this website in this mode.',
+      replyTo: 'Reply-to email',
       privacy: 'Your message is delivered through Formspree, a form delivery service, and reaches me by email.',
       honeypot: 'Leave this field empty',
     },
@@ -312,11 +313,6 @@ const en: UiStrings = {
       title: 'Message sent',
       body: 'Thank you, your message has been delivered. I will reply as soon as I can.',
       again: 'Write another message',
-    },
-    unavailable: {
-      title: 'The online form is not active yet.',
-      body: 'Please write to me directly by email or on LinkedIn.',
-      dev: 'TO CONFIGURE (visible in development only): set VITE_FORMSPREE_ID, see the README.',
     },
   },
   footer: {

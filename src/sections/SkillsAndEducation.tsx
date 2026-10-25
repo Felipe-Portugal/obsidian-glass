@@ -6,7 +6,7 @@ import { useLanguage } from '../i18n/LanguageProvider'
 export function Skills() {
   const { pick, t } = useLanguage()
   return (
-    <section className="plate tile tile--skills" id="competences" aria-labelledby="skills-title">
+    <section className="plate tile tile--skills" data-tone="skills" id="competences" aria-labelledby="skills-title">
       <div className="tile__head">
         <h2 id="skills-title" className="tile__label">
           {t.skills.title}
@@ -31,7 +31,7 @@ export function Skills() {
 export function Education() {
   const { pick, t } = useLanguage()
   return (
-    <section className="plate tile tile--edu" id="formation" aria-labelledby="education-title">
+    <section className="plate tile tile--edu" data-tone="edu" id="formation" aria-labelledby="education-title">
       <div className="tile__head">
         <h2 id="education-title" className="tile__label">
           {t.education.title}

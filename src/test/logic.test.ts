@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { detectLanguage } from '../i18n/detect'
 import { ui } from '../i18n/ui'
 import { LIMITS, mapSubmissionError, validateContact, type SubmissionErrorLike } from '../lib/contact'
+import { mailto } from '../lib/mailto'
 import { resolveTheme } from '../theme/theme'
 
 function shape(value: unknown): unknown {
@@ -69,6 +70,15 @@ describe('validation du formulaire de contact', () => {
     expect(validateContact({ ...valid, subject: 'ok' }).subject).toBe('tooShort')
     expect(validateContact({ ...valid, message: 'Court' }).message).toBe('tooShort')
     expect(validateContact({ ...valid, message: 'x'.repeat(LIMITS.messageMax + 1) }).message).toBe('tooLong')
+  })
+})
+
+describe('courriel préparé sans service de formulaire', () => {
+  it('encode le sujet et le message dans un lien mailto', () => {
+    const url = new URL(mailto('Demande de CV', 'Courriel de réponse: recruteur@example.com\n\nBonjour Felipe.'))
+    expect(url.protocol).toBe('mailto:')
+    expect(url.searchParams.get('subject')).toBe('Demande de CV')
+    expect(url.searchParams.get('body')).toBe('Courriel de réponse: recruteur@example.com\n\nBonjour Felipe.')
   })
 })
 

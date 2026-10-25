@@ -1,6 +1,10 @@
 import { profile } from '../data/profile'
 
 /** Lien courriel direct, avec un sujet prérempli au besoin (p. ex. « Demande de CV »). */
-export function mailto(subject?: string) {
-  return `mailto:${profile.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`
+export function mailto(subject?: string, body?: string) {
+  const params = new URLSearchParams()
+  if (subject) params.set('subject', subject)
+  if (body) params.set('body', body)
+  const query = params.toString().replace(/\+/g, '%20')
+  return `mailto:${profile.email}${query ? `?${query}` : ''}`
 }

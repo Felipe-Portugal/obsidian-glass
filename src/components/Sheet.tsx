@@ -72,17 +72,11 @@ function useReturnFocus(source: HTMLElement | null | undefined) {
   }
 }
 
-function CloseLabel({ title, Close }: { title: string; Close: typeof Dialog.Close }) {
+function CloseButton({ title, Close }: { title: string; Close: typeof Dialog.Close }) {
   const { t } = useLanguage()
   return (
     <Close className="window__close glass" aria-label={t.window.closeNamed(title)}>
-      <X aria-hidden="true" size={16} strokeWidth={2} />
-      <span className="window__close-label" aria-hidden="true">
-        {t.window.close}
-      </span>
-      <kbd className="window__esc" aria-hidden="true">
-        {t.window.escKey}
-      </kbd>
+      <X aria-hidden="true" size={18} strokeWidth={2} />
     </Close>
   )
 }
@@ -114,7 +108,7 @@ function MobileSheet({ title, header, onClose, source, tone, children }: SheetPr
         >
           <Drawer.Handle className="drawer__handle" />
           <div className="drawer__bar">
-            <CloseLabel title={title} Close={Drawer.Close} />
+            <CloseButton title={title} Close={Drawer.Close} />
           </div>
           <div className="drawer__body">
             <header className="sheet__head">
@@ -254,7 +248,7 @@ function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', child
               <span className="window__bar-title" aria-hidden="true">
                 {title}
               </span>
-              <CloseLabel title={title} Close={Dialog.Close} />
+              <CloseButton title={title} Close={Dialog.Close} />
             </div>
             <div className="window__body">
               <header className="sheet__head">

@@ -52,6 +52,7 @@ body::before {
     radial-gradient(max(62vw, 30rem) max(46vw, 26rem) at 6% 0%, var(--halo-1), transparent 70%),
     radial-gradient(max(46vw, 24rem) max(40vw, 24rem) at 102% 16%, var(--halo-2), transparent 70%),
     radial-gradient(max(52vw, 26rem) max(40vw, 24rem) at 4% 50%, var(--halo-4), transparent 70%),
+    radial-gradient(max(44vw, 22rem) max(34vw, 20rem) at 78% 46%, var(--halo-5), transparent 70%),
     radial-gradient(max(64vw, 30rem) max(46vw, 26rem) at 92% 84%, var(--halo-3), transparent 70%),
     linear-gradient(180deg, var(--bg-top), var(--bg) 100vh);
 }

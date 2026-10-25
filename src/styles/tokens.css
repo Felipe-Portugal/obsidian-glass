@@ -76,6 +76,7 @@
   --halo-2: rgba(150, 128, 214, 0.14);
   --halo-3: rgba(214, 190, 156, 0.09);
   --halo-4: rgba(104, 172, 182, 0.1);
+  --halo-5: rgba(104, 172, 182, 0.06);
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1.3 0 0 0 -0.45'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
   --grain-opacity: 0.05;
 
@@ -90,6 +91,14 @@
   --plate-shadow: 0 1px 1px rgba(0, 0, 0, 0.35), 0 14px 28px -14px rgba(0, 0, 0, 0.6),
     0 46px 90px -42px rgba(0, 0, 0, 0.78);
   --plate-glow: rgba(186, 206, 244, 0.13);
+  /* Arête de verre liquide : vive dans l'angle haut gauche, rallumée dans l'angle opposé. */
+  --plate-rim-hi: rgba(255, 255, 255, 0.32);
+  --plate-rim-lo: rgba(255, 255, 255, 0.18);
+  /* Épaisseur : une lueur très douce le long des bords, comme la lumière prise dans la tranche. */
+  --plate-edge-glow: rgba(206, 220, 255, 0.035);
+  /* Nappe de lumière dans l'angle haut, et reflet qui suit le pointeur. */
+  --plate-sheen: rgba(214, 226, 255, 0.065);
+  --plate-catch: rgba(255, 255, 255, 0.075);
   /* Ombre des fenêtres : plus longue, plus douce, posée loin sous la plaque. */
   --window-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 24px 48px -16px rgba(0, 0, 0, 0.6),
     0 80px 140px -40px rgba(0, 0, 0, 0.85);
@@ -102,7 +111,7 @@
   --node: rgba(255, 255, 255, 0.04);
   --node-spec: rgba(255, 255, 255, 0.055);
   --node-edge: rgba(255, 255, 255, 0.075);
-  --node-rim: rgba(255, 255, 255, 0.12);
+  --node-rim: rgba(255, 255, 255, 0.18);
   --node-shadow: 0 1px 2px rgba(0, 0, 0, 0.32), 0 4px 10px -6px rgba(0, 0, 0, 0.5);
   /* Fond plein d'une pastille posée sur un rail, dans un creux : cache le rail sous elle. */
   --dot-fill: #0e1015;
@@ -128,7 +137,14 @@
   --light-parking: #8db3f0;
   --light-spot: #f0a868;
   --light-embedded: #7fcf9f;
-  --light-wash: 16%;
+  /* Lumières de section : le parcours en bleu-violet, la formation en lilas, les compétences en
+     sarcelle, le contact dans le bleu de l'accent. */
+  --light-xp: #9aa8f4;
+  --light-edu: #c4a6f2;
+  --light-skills: #7fc9c6;
+  --light-contact: #a9c7f5;
+  --light-wash: 20%;
+  --plate-tint: 0.7;
 }
 
 :root[data-theme='light'] {
@@ -154,6 +170,7 @@
   --halo-2: rgba(178, 158, 236, 0.18);
   --halo-3: rgba(240, 212, 172, 0.24);
   --halo-4: rgba(132, 198, 204, 0.16);
+  --halo-5: rgba(132, 198, 204, 0.08);
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.3 0 0 0 -0.45'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
   --grain-opacity: 0.04;
 
@@ -166,6 +183,11 @@
   --plate-shadow: 0 1px 1px rgba(17, 20, 25, 0.04), 0 14px 28px -16px rgba(17, 20, 25, 0.14),
     0 40px 80px -42px rgba(17, 20, 25, 0.24);
   --plate-glow: rgba(39, 83, 194, 0.1);
+  --plate-rim-hi: rgba(255, 255, 255, 0.7);
+  --plate-rim-lo: rgba(255, 255, 255, 0.8);
+  --plate-edge-glow: rgba(255, 255, 255, 0.28);
+  --plate-sheen: rgba(255, 255, 255, 0.25);
+  --plate-catch: rgba(255, 255, 255, 0.28);
   --window-shadow: 0 2px 4px rgba(17, 20, 25, 0.05), 0 24px 48px -18px rgba(17, 20, 25, 0.18),
     0 70px 120px -40px rgba(17, 20, 25, 0.3);
   --well: rgba(17, 20, 25, 0.035);
@@ -198,5 +220,10 @@
   --light-parking: #2f62c9;
   --light-spot: #a8561a;
   --light-embedded: #1f7a4b;
-  --light-wash: 12%;
+  --light-xp: #4a55c8;
+  --light-edu: #7a4cc2;
+  --light-skills: #1d7f7a;
+  --light-contact: #2753c2;
+  --light-wash: 16%;
+  --plate-tint: 0.75;
 }

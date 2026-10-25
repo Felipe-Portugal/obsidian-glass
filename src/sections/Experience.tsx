@@ -12,7 +12,7 @@ interface Props {
 export function Experience({ open, onOpen }: Props) {
   const { pick, t } = useLanguage()
   return (
-    <section className="plate tile tile--xp" id="experience" aria-labelledby="experience-title">
+    <section className="plate tile tile--xp" data-tone="xp" id="experience" aria-labelledby="experience-title">
       <div className="tile__head">
         <h2 id="experience-title" className="tile__label">
           {t.experience.title}

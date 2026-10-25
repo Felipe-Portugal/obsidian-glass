@@ -46,32 +46,33 @@ main:focus {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.43fr);
   align-items: end;
-  gap: var(--space-6) var(--gap);
-  padding-block: clamp(2.25rem, 1.2rem + 4vw, 4.5rem) clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  gap: var(--space-8);
+  padding-block: clamp(3.5rem, 2rem + 5vw, 6.5rem) clamp(3.5rem, 2.5rem + 3vw, 5rem);
 }
 
 .hero__main {
   display: grid;
-  gap: var(--space-3);
+  justify-items: start;
+  gap: var(--space-4);
 }
 
 .hero__name {
-  font-size: clamp(2.75rem, 1.5rem + 4.8vw, 4.75rem);
+  font-size: clamp(3rem, 1.7rem + 5.4vw, 5.5rem);
   font-weight: 560;
   line-height: 0.95;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.04em;
   margin-left: -0.04em;
 }
 
 .hero__dot {
-  color: var(--text-3);
+  color: var(--light-parking);
 }
 
 .hero__role {
-  margin-top: var(--space-1);
-  font-size: clamp(1.125rem, 0.98rem + 0.6vw, 1.4375rem);
+  margin-top: var(--space-2);
+  font-size: clamp(1.25rem, 1rem + 0.85vw, 1.625rem);
   font-weight: 460;
   line-height: 1.25;
   letter-spacing: -0.018em;
@@ -79,17 +80,41 @@ main:focus {
 }
 
 .hero__lede {
-  max-width: 34em;
-  font-size: var(--fs-md);
-  line-height: 1.6;
-  color: var(--text-3);
+  max-width: 35em;
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  color: var(--text-2);
 }
 
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.hero__contact {
+  min-height: 44px;
+  padding-inline: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 560;
+  text-decoration: underline;
+  text-decoration-color: var(--line-3);
+  text-underline-offset: 0.3em;
+}
+
+.hero__contact:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Une petite plaque flottante donne de la profondeur à l'en-tête. */
 .hero__side {
   display: grid;
   justify-items: start;
-  gap: var(--space-4);
-  padding-bottom: 0.3rem;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--r-xl);
 }
 
 /* Disponibilité : une ligne d'information, sans fond ni ombre de bouton. */
@@ -109,9 +134,6 @@ main:focus {
   height: 7px;
   border-radius: 50%;
   background: var(--ok);
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--ok) 16%, transparent),
-    0 0 10px color-mix(in srgb, var(--ok) 55%, transparent);
   transform: translateY(-1px);
 }
 
@@ -138,6 +160,41 @@ main:focus {
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
   }
+
+  .hero__side {
+    padding: var(--space-4) var(--space-5);
+    gap: var(--space-4);
+  }
+
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+  }
+}
+
+@media (max-width: 680px) {
+  .hero {
+    gap: var(--space-6);
+    padding-block: var(--space-10) var(--space-12);
+  }
+
+  .hero__main {
+    gap: var(--space-3);
+  }
+
+  .hero__role {
+    margin-top: 0;
+  }
+
+  .hero__lede {
+    font-size: var(--fs-md);
+  }
+
+  .hero__actions {
+    margin-top: var(--space-2);
+  }
+
 }
 
 /* Grille bento */
@@ -145,14 +202,14 @@ main:focus {
 .bento {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gap);
+  gap: clamp(1rem, 1.8vw, 1.5rem);
 }
 
 .bento__projects {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
 }
 
 .bento__head {
@@ -162,12 +219,12 @@ main:focus {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-1) var(--space-6);
-  padding: var(--space-2) var(--space-1) 0;
+  padding: 0 0 var(--space-2);
 }
 
 .bento__title,
 .tile__label {
-  font-size: var(--fs-title);
+  font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
   font-weight: 580;
   letter-spacing: -0.024em;
 }
@@ -182,7 +239,7 @@ main:focus {
   flex-direction: column;
   gap: var(--space-4);
   min-width: 0;
-  padding: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  padding: clamp(1.5rem, 1.15rem + 1vw, 2rem);
 }
 
 .tile__head {
@@ -222,16 +279,6 @@ main:focus {
   grid-column: 1 / -1;
 }
 
-@media (max-width: 1020px) {
-  .bento__projects {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .bento__projects > .project:last-child {
-    grid-column: 1 / -1;
-  }
-}
-
 @media (max-width: 860px) {
   .tile--xp,
   .tile--edu {
@@ -256,6 +303,22 @@ main:focus {
 
 [data-project='embedded'] {
   --light: var(--light-embedded);
+}
+
+[data-tone='xp'] {
+  --light: var(--light-xp);
+}
+
+[data-tone='edu'] {
+  --light: var(--light-edu);
+}
+
+[data-tone='skills'] {
+  --light: var(--light-skills);
+}
+
+[data-tone='contact'] {
+  --light: var(--light-contact);
 }
 
 /* Maturité : un libellé précédé d'une marque dont la forme porte aussi le sens. */
@@ -283,11 +346,11 @@ main:focus {
 }
 
 .maturity--prototype::before {
-  border: 1.5px solid var(--text-2);
+  border: 1.5px solid var(--light, var(--text-2));
 }
 
 .maturity--individual::before {
-  background: var(--text-3);
+  background: var(--light, var(--text-3));
   border-radius: 2px;
   transform: rotate(45deg) scale(0.85);
 }
@@ -383,33 +446,20 @@ main:focus {
 /* Une colonne par famille sur grand écran ; un filet sépare les colonnes. */
 .skills {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) repeat(4, minmax(0, 1fr));
-  gap: var(--space-5) 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-8);
 }
 
 .skills__row {
   display: grid;
   align-content: start;
   gap: var(--space-3);
-  padding-inline: var(--space-5);
+  padding-inline: 0;
 }
 
-.skills__row:first-child {
-  padding-left: 0;
-}
-
-.skills__row + .skills__row {
-  background: var(--rule) left / 1px 100% no-repeat;
-}
-
-@media (max-width: 1180px) {
+@media (max-width: 900px) {
   .skills {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .skills__row:nth-child(3n + 1) {
-    padding-left: 0;
-    background: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -422,14 +472,13 @@ main:focus {
   .skills__row,
   .skills__row:nth-child(n) {
     padding-inline: 0;
-    background: none;
   }
 }
 
 .skills__label {
-  font-size: var(--fs-xs);
-  font-weight: 540;
-  color: var(--text-3);
+  font-size: var(--fs-sm);
+  font-weight: 580;
+  color: var(--text-2);
 }
 
 /* Formation */
@@ -490,7 +539,8 @@ main:focus {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   align-items: end;
-  gap: var(--space-5) var(--gap);
+  gap: var(--space-8);
+  padding-block: clamp(2rem, 2.5vw, 3rem);
 }
 
 .contact__intro,
@@ -584,7 +634,7 @@ main:focus {
 
 /* Bouton principal : une pastille d'argent poli, éclairée par le haut. */
 .button--primary {
-  background: linear-gradient(180deg, var(--text), color-mix(in srgb, var(--text) 84%, var(--bg)));
+  background: linear-gradient(180deg, var(--text), color-mix(in srgb, var(--accent) 34%, color-mix(in srgb, var(--text) 84%, var(--bg))));
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
     0 1px 2px rgba(0, 0, 0, 0.3),
@@ -593,20 +643,30 @@ main:focus {
 }
 
 .button--primary:hover {
-  background: linear-gradient(180deg, var(--text), color-mix(in srgb, var(--text) 92%, var(--bg)));
+  background: linear-gradient(180deg, var(--text), color-mix(in srgb, var(--accent) 22%, var(--text)));
 }
 
 .button--quiet {
-  background: linear-gradient(180deg, var(--node-spec), transparent 60%), var(--node);
+  background:
+    linear-gradient(180deg, var(--glass-spec), transparent 55%),
+    radial-gradient(120% 140% at 50% 130%, var(--glass-glow), transparent 60%),
+    var(--glass-smoke);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   box-shadow:
-    inset 0 0 0 1px var(--node-edge),
-    inset 0 1px 0 var(--node-rim),
-    var(--node-shadow);
-  color: var(--text);
+    0 0 0 1px var(--glass-edge-out),
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 -1px 0 var(--glass-rim-low),
+    inset 0 0 0 1px var(--glass-hairline),
+    0 6px 16px -10px rgba(0, 0, 0, 0.5);
+  color: var(--glass-ink);
 }
 
 .button--quiet:hover {
-  background: linear-gradient(180deg, var(--node-spec), transparent 60%), color-mix(in srgb, var(--text) 8%, var(--node));
+  background:
+    linear-gradient(180deg, var(--glass-spec), transparent 55%),
+    var(--glass-lens),
+    var(--glass-smoke);
 }
 
 .button[aria-disabled='true'] {

@@ -32,7 +32,7 @@
 }
 
 .tech {
-  --tone: var(--brand-rest-d, var(--text-2));
+  --tone: color-mix(in srgb, var(--brand-d, var(--text-2)) 55%, var(--brand-rest-d, var(--text-2)));
   --tone-hot: var(--brand-d, var(--text));
   position: relative;
   display: grid;
@@ -55,7 +55,7 @@
 }
 
 :root[data-theme='light'] .tech {
-  --tone: var(--brand-rest-l, var(--text-2));
+  --tone: color-mix(in srgb, var(--brand-l, var(--text-2)) 55%, var(--brand-rest-l, var(--text-2)));
   --tone-hot: var(--brand-l, var(--text));
 }
 

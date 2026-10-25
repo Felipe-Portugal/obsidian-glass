@@ -66,10 +66,11 @@ describe('page', () => {
     }
   })
 
-  it('propose le CV sur demande par courriel, sans faux téléchargement', () => {
+  it('ouvre le formulaire avec une demande de CV préremplie, sans faux téléchargement', async () => {
     renderApp('fr')
-    const cv = screen.getByRole('link', { name: 'Demander le CV' })
-    expect(cv.getAttribute('href')).toBe('mailto:felipe-alberto.padilla-portugal.1@ens.etsmtl.ca?subject=Demande%20de%20CV')
+    fireEvent.click(screen.getByRole('button', { name: 'Demander le CV' }))
+    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' })
+    expect((await within(dialog).findByRole('textbox', { name: 'Sujet' }) as HTMLInputElement).value).toBe('Demande de CV')
   })
 })
 
@@ -113,6 +114,9 @@ describe('fenêtres', () => {
     fireEvent.click(opener)
 
     const dialog = await screen.findByRole('dialog', { name: 'Gestion des stationnements' })
+    const closeButton = within(dialog).getByRole('button', { name: /Fermer/ })
+    expect(closeButton.textContent).toBe('')
+    expect(closeButton.querySelector('svg')).toBeTruthy()
     expect(within(dialog).getByRole('heading', { name: 'Défi technique' })).toBeTruthy()
     expect(document.activeElement).toBe(within(dialog).getByRole('heading', { level: 2, name: 'Gestion des stationnements' }))
     // Les onglets : l'architecture n'est rendue qu'une fois son onglet choisi.
@@ -127,7 +131,7 @@ describe('fenêtres', () => {
     await new Promise((resolve) => setTimeout(resolve, 20))
     expect(screen.getByRole('dialog', { name: 'Gestion des stationnements' })).toBeTruthy()
 
-    fireEvent.click(within(dialog).getByRole('button', { name: /Fermer/ }))
+    fireEvent.click(closeButton)
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     expect(card?.dataset.lifted).toBeUndefined()
     await waitFor(() => expect(document.activeElement).toBe(opener))
@@ -173,15 +177,23 @@ describe('fenêtres', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
   })
 
-  it('proposent le CV sur demande et un repli courriel tant que le formulaire n’est pas configuré', async () => {
+  it('ouvre le formulaire depuis la section Contact et valide les champs avant de préparer un courriel', async () => {
     renderApp('fr')
-    fireEvent.click(screen.getByRole('button', { name: /CV sur demande/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Écrire un message' }))
     const dialog = await screen.findByRole('dialog', { name: 'Me contacter' })
-    expect(within(dialog).getByText('Le formulaire en ligne n’est pas encore activé.')).toBeTruthy()
-    const write = within(dialog).getByRole('link', { name: /Écrire un courriel/ })
-    expect(write.getAttribute('href')).toBe(
-      'mailto:felipe-alberto.padilla-portugal.1@ens.etsmtl.ca?subject=Demande%20de%20CV',
-    )
-    expect(within(dialog).queryByRole('button', { name: /Envoyer/ })).toBeNull()
+    expect(within(dialog).getByText(/prépare un courriel/)).toBeTruthy()
+    const emailLink = within(dialog).getByRole('link', { name: 'Ouvrir mon application courriel' })
+    fireEvent.click(emailLink)
+    expect(within(dialog).getByText('Indiquez votre adresse courriel.')).toBeTruthy()
+    expect(within(dialog).getByText('Indiquez un sujet.')).toBeTruthy()
+
+    fireEvent.change(within(dialog).getByRole('textbox', { name: 'Votre courriel' }), { target: { value: 'recruteur@example.com' } })
+    fireEvent.change(within(dialog).getByRole('textbox', { name: 'Sujet' }), { target: { value: 'Stage hiver' } })
+    fireEvent.change(within(dialog).getByRole('textbox', { name: 'Message' }), { target: { value: 'Bonjour Felipe, votre profil nous intéresse.' } })
+    const draft = new URL(emailLink.getAttribute('href') ?? '')
+    expect(draft.protocol).toBe('mailto:')
+    expect(draft.searchParams.get('subject')).toBe('Stage hiver')
+    expect(draft.searchParams.get('body')).toContain('recruteur@example.com')
+    expect(draft.searchParams.get('body')).toContain('Bonjour Felipe, votre profil nous intéresse.')
   })
 })

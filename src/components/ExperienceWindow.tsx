@@ -14,6 +14,9 @@ interface Props {
 
 type Tab = 'work' | 'tech'
 
+/** Lumière de la fenêtre : celle du projet le plus proche de la période. */
+const TONE: Record<string, string> = { software: 'parking', embedded: 'spot', research: 'spot' }
+
 /**
  * Période d'expérience, dans la structure des études de cas : le rôle en titre, les périodes en
  * frise, puis deux onglets (réalisations, technologies). Les panneaux sont superposés et gardent
@@ -29,6 +32,7 @@ export function ExperienceWindow({ entry, source, onClose }: Props) {
     <Sheet
       title={title}
       source={source}
+      tone={TONE[entry.id] ?? 'parking'}
       size="md"
       onClose={onClose}
       header={
