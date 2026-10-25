@@ -1,12 +1,10 @@
 # Publication sur GitHub Pages.
-# Déclenchement manuel uniquement (onglet Actions → « Publier sur GitHub Pages » → Run workflow) :
-# rien n'est publié tant que le propriétaire du dépôt ne le décide pas.
-# Pour publier à chaque push sur main, ajouter sous « on: » :
-#   push:
-#     branches: [main]
+# Publication à chaque push sur main, avec lancement manuel possible depuis Actions.
 name: Publier sur GitHub Pages
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:

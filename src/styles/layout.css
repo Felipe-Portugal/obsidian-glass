@@ -94,20 +94,6 @@ main:focus {
   margin-top: var(--space-4);
 }
 
-.hero__contact {
-  min-height: 44px;
-  padding-inline: var(--space-2);
-  font-size: var(--fs-sm);
-  font-weight: 560;
-  text-decoration: underline;
-  text-decoration-color: var(--line-3);
-  text-underline-offset: 0.3em;
-}
-
-.hero__contact:hover {
-  text-decoration-color: currentColor;
-}
-
 /* Une petite plaque flottante donne de la profondeur à l'en-tête. */
 .hero__side {
   display: grid;
@@ -380,11 +366,6 @@ main:focus {
 
 .row:hover {
   background: color-mix(in srgb, var(--text) 5%, transparent);
-}
-
-/* Pendant que sa fenêtre est ouverte, la rangée est devenue la fenêtre : sa place reste vide. */
-.row[data-lifted] {
-  visibility: hidden;
 }
 
 .row:focus-visible {

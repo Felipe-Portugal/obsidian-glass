@@ -1,6 +1,6 @@
 /*
  * Fenêtres de détail (Sheet.tsx) : une plaque de verre profond, à double bordure et à ombre
- * longue, née de la tuile ou de la rangée qui l'ouvre. La lumière du projet se pose dans l'angle
+ * longue, ouverte à taille constante. La lumière du projet se pose dans l'angle
  * haut ; la barre de titre ne prend son verre qu'une fois le contenu passé dessous. Sur mobile,
  * la même matière en feuille du bas (floating.css).
  */
@@ -10,9 +10,9 @@
   inset: 0;
   z-index: 50;
   background: var(--backdrop);
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  backdrop-filter: blur(6px) saturate(120%);
-  animation: fade-in var(--dur) var(--ease-out);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  animation: fade-in var(--dur-fast) var(--ease-out);
 }
 
 @keyframes fade-in {
@@ -37,7 +37,7 @@
   width: min(760px, calc(100vw - 2 * var(--gutter)));
 }
 
-/* La plaque : c'est elle qui se métamorphose ; le contenu, posé dessus, paraît sur la fin. */
+/* La plaque, le contenu et l'ombre suivent la même trajectoire. */
 .window__paper {
   position: absolute;
   inset: 0;
@@ -45,32 +45,13 @@
   background:
     linear-gradient(90deg, transparent 8%, var(--plate-rim) 50%, transparent 92%) top / 100% 1px no-repeat,
     radial-gradient(70% 55% at 100% 0%, color-mix(in srgb, var(--light, var(--glass-light)) var(--light-wash), transparent), transparent 70%),
-    linear-gradient(135deg, var(--plate-spec), transparent 36%),
+    linear-gradient(var(--material-light-angle), var(--plate-spec), transparent 36%),
     var(--plate-deep);
   box-shadow:
     0 0 0 1px var(--plate-edge),
     inset 0 0 0 1px var(--plate-liseret),
     inset 0 1px 0 var(--plate-rim),
-    0 2px 6px rgba(0, 0, 0, 0.2);
-  transform-origin: 0 0;
-}
-
-/* L'ombre longue paraît une fois la fenêtre posée : repeinte à chaque image de la métamorphose,
-   elle la ralentirait sans qu'on la voie bouger. */
-.window__paper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: var(--window-shadow);
-  opacity: 0;
-  transition: opacity 120ms var(--ease-out);
-  pointer-events: none;
-}
-
-.window[data-settled] .window__paper::after {
-  opacity: 1;
-  transition-duration: 240ms;
+    var(--window-shadow);
 }
 
 .window__frame {
@@ -79,10 +60,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   border-radius: var(--r-xl);
-}
-
-/* Étude de cas : hauteur fixe, les onglets changent le contenu sans faire sauter la fenêtre. */
-.window--lg .window__frame {
+  /* Les onglets et le formulaire chargé en différé ne déplacent pas la fenêtre. */
   height: min(46rem, calc(100dvh - 3rem));
 }
 

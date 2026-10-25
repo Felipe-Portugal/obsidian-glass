@@ -26,7 +26,7 @@ export function Experience({ open, onOpen }: Props) {
               type="button"
               className="row"
               aria-haspopup="dialog"
-              data-lifted={open === entry.id || undefined}
+              aria-expanded={open === entry.id}
               onClick={(event) => onOpen(entry.id, event.currentTarget)}
             >
               <span className="row__main">

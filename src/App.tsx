@@ -108,7 +108,7 @@ export function App() {
         <div className="page">
           <TopBar />
           <main id="contenu" tabIndex={-1}>
-            <Hero onContact={(source) => openWindow({ kind: 'contact', source })} />
+            <Hero />
             <div className="bento" ref={glowRef}>
               <Projects
                 open={active?.kind === 'project' ? active.id : null}

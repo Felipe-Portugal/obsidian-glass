@@ -26,7 +26,7 @@
 .cw__direct {
   padding: var(--space-5);
   border-radius: var(--r-lg);
-  background: var(--well);
+  background: var(--well-surface);
   box-shadow: var(--well-shadow);
 }
 
@@ -249,7 +249,7 @@
   gap: var(--space-2);
   padding: var(--space-6);
   border-radius: var(--r-lg);
-  background: var(--well);
+  background: var(--well-surface);
   box-shadow: var(--well-shadow);
 }
 

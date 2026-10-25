@@ -7,7 +7,7 @@ import './project.css'
 
 interface Props {
   project: Project
-  /** L'étude de cas est ouverte : elle est née de la tuile, dont la place reste vide jusqu'à son retour. */
+  /** L'étude de cas de cette tuile est ouverte. */
   lifted: boolean
   onOpen: (tile: HTMLElement) => void
 }
@@ -28,7 +28,6 @@ export function ProjectCard({ project, lifted, onOpen }: Props) {
       ref={tileRef}
       className="plate tile project"
       data-project={project.id}
-      data-lifted={lifted || undefined}
       aria-labelledby={titleId}
     >
       <div className="project__top">
@@ -43,6 +42,7 @@ export function ProjectCard({ project, lifted, onOpen }: Props) {
         type="button"
         className="project__open"
         aria-haspopup="dialog"
+        aria-expanded={lifted}
         onClick={() => {
           if (tileRef.current) onOpen(tileRef.current)
         }}

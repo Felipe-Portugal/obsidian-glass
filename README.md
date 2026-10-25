@@ -45,7 +45,7 @@ src/
 scripts/
   extract-icons.mjs   extraction des logos de technologies
 .github/workflows/
-  deploy.yml          publication manuelle sur GitHub Pages
+  deploy.yml          vérifications et publication sur GitHub Pages
 ```
 
 ## Contenu et traductions
@@ -91,12 +91,9 @@ L'identifiant Formspree est public par nature (il figure dans le HTML de tout fo
 
 ## Publication sur GitHub Pages
 
-Le workflow `.github/workflows/deploy.yml` construit le site et le publie sur GitHub Pages. Il ne se déclenche **que manuellement** (onglet *Actions* → « Publier sur GitHub Pages » → *Run workflow*).
+Le site est publié à l'adresse **https://poggerion.github.io/obsidian-glass/**. Le workflow `.github/workflows/deploy.yml` exécute les vérifications, construit le site et le publie sur GitHub Pages à chaque push sur `main`. Il peut aussi être lancé manuellement dans l'onglet *Actions*.
 
-1. Placer ce dossier à la racine d'un dépôt GitHub.
-2. *Settings → Pages → Build and deployment → Source* : choisir **GitHub Actions**.
-3. Facultatif : définir la variable `VITE_FORMSPREE_ID` (voir plus haut).
-4. Lancer le workflow.
+La source de publication du dépôt est **GitHub Actions** (*Settings → Pages → Build and deployment*). La variable `VITE_FORMSPREE_ID` est facultative ; sans elle, le formulaire prépare un courriel dans l'application du visiteur.
 
 Chemin de base : un site de projet est servi sous `/<dépôt>/`, un site utilisateur (`<compte>.github.io`) ou un domaine personnalisé sous `/`. Le workflow obtient le bon chemin de `actions/configure-pages` et le transmet au build par la variable `BASE_PATH`. Pour tester un build local sous un sous-chemin :
 
@@ -120,7 +117,7 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
   - Chaque projet a sa lumière (`--light-*`).
   - Le fond (halos diffus et grain très léger) est dans `src/styles/base.css`, jetons `--halo-*` et `--grain`.
   - Transparence réduite, contraste renforcé ou flou indisponible : les mêmes surfaces deviennent opaques.
-- **Mouvement** : ressorts de [Motion](https://motion.dev) (`motion/mini`, joués par le navigateur) pour la lentille du dock et pour les fenêtres, qui naissent de la carte ou du bouton qui les ouvre. Toutes les animations respectent `prefers-reduced-motion`.
+- **Mouvement** : [Motion](https://motion.dev) (`motion/mini`) anime la lentille du dock et la fenêtre à taille constante ; sur mobile, Vaul anime la feuille du bas. Toutes les animations respectent `prefers-reduced-motion`.
 
 ## Accessibilité et vie privée
 
@@ -135,7 +132,7 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
 |---|---|---|
 | CV en PDF sans téléphone | À fournir ; « CV sur demande » en attendant | `public/cv/`, `src/data/profile.ts` |
 | Identifiant Formspree | À configurer ; courriel direct en attendant | `.env.local`, variable de dépôt |
-| Dépôt et adresse GitHub Pages | À choisir ; workflow prêt, non lancé | `.github/workflows/deploy.yml` |
+| Dépôt et adresse GitHub Pages | `Poggerion/obsidian-glass` et `https://poggerion.github.io/obsidian-glass/` | `.github/workflows/deploy.yml` |
 | Détection par PyTorch (projet Spot) | À confirmer ; le site dit « un modèle de détection » | `src/data/validation.ts` |
 | Adresse canonique et image de partage | À ajouter une fois le domaine connu | `index.html` |
 

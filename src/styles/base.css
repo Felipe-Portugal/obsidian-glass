@@ -33,6 +33,11 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Le gutter est déjà réservé : la marge ajoutée par le verrouillage rétrécirait la page. */
+html body[data-scroll-locked] {
+  margin-right: 0 !important;
+}
+
 /*
  * Ambiance : des halos diffus semés le long de la page, que les plaques de verre laissent
  * passer, et un grain très léger. Ils défilent avec la page : fixés, ils obligeraient certains

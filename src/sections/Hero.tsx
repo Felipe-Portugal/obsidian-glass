@@ -2,14 +2,10 @@ import { GraduationCap, Languages, MapPin } from 'lucide-react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 
-interface Props {
-  onContact: (source: HTMLElement) => void
-}
-
 /**
- * Présentation et accès direct aux projets ou au contact ; les informations pratiques restent à droite.
+ * Présentation et accès direct aux projets ; les informations pratiques restent à droite.
  */
-export function Hero({ onContact }: Props) {
+export function Hero() {
   const { t } = useLanguage()
   return (
     <section className="hero" aria-labelledby="hero-title">
@@ -21,9 +17,6 @@ export function Hero({ onContact }: Props) {
         <p className="hero__lede">{t.hero.lede}</p>
         <div className="hero__actions">
           <a className="button button--primary" href="#projets">{t.hero.seeProjects}</a>
-          <button type="button" className="hero__contact" aria-haspopup="dialog" onClick={(event) => onContact(event.currentTarget)}>
-            {t.hero.contact}
-          </button>
         </div>
       </div>
       <div className="hero__side glass">

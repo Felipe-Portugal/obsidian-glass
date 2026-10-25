@@ -4,7 +4,7 @@ import type { Project } from '../data/types'
 import { useLanguage } from '../i18n/LanguageProvider'
 
 interface Props {
-  /** Projet dont l'étude de cas est ouverte : elle est née de sa tuile. */
+  /** Projet dont l'étude de cas est ouverte. */
   open: Project['id'] | null
   onOpen: (id: Project['id'], tile: HTMLElement) => void
 }

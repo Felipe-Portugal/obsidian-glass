@@ -1,6 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
-import { spring } from 'motion'
 import { animate } from 'motion/mini'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Drawer } from 'vaul'
@@ -15,39 +14,35 @@ interface SheetProps {
   /** Sous le titre : résumé, maturité, contexte. */
   header?: ReactNode
   onClose: () => void
-  /** Élément d'où la fenêtre naît (une tuile, un bouton du dock) et où elle se repose. */
+  /** Élément qui reprend le focus à la fermeture. */
   source?: HTMLElement | null
   /** Projet dont la fenêtre prend la lumière. */
   tone?: string
-  /** lg : hauteur fixe, le contenu défile à l'intérieur (les onglets ne font pas sauter la fenêtre). */
+  /** Largeur de la fenêtre ; le contenu défile à hauteur constante. */
   size?: 'md' | 'lg'
   children: ReactNode
 }
 
-/** Un ressort à peine rebondi pour l'ouverture ; amorti et plus court pour le retour. */
-const OPEN = { type: spring, stiffness: 320, damping: 32 }
-const CLOSE = { type: spring, stiffness: 560, damping: 48 }
-const FADE = { duration: 0.24, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
-const IDENTITY = 'translate(0px, 0px) scale(1, 1)'
-const LOWERED = 'translate(0px, 10px) scale(1, 1)'
+// La fenêtre apparaît à sa taille finale ; le mouvement reste lié à l'élément qui l'a ouverte.
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number]
+const OPEN = { duration: 0.28, ease: EASE }
+const CLOSE = { duration: 0.2, ease: EASE }
+const IDENTITY = 'translate(0px, 0px)'
 
-/** La transformation qui ramène le papier au rectangle de l'élément d'origine, coins compris. */
-function onSource(source: HTMLElement, paper: HTMLElement) {
-  const from = source.getBoundingClientRect()
-  const to = paper.getBoundingClientRect()
-  if (from.width < 1 || from.height < 1 || to.width < 1 || to.height < 1) return null
-  const sx = from.width / to.width
-  const sy = from.height / to.height
-  const r = Math.min(parseFloat(getComputedStyle(source).borderTopLeftRadius) || 0, from.width / 2, from.height / 2)
-  return {
-    transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${sx}, ${sy})`,
-    borderRadius: `${r / sx}px / ${r / sy}px`,
+function sourceOffset(source: HTMLElement | null | undefined, sheet: HTMLElement) {
+  const origin = source?.isConnected ? source.getBoundingClientRect() : null
+  const target = sheet.getBoundingClientRect()
+  if (!origin || origin.right < 0 || origin.left > window.innerWidth || origin.bottom < 0 || origin.top > window.innerHeight) {
+    return 'translate(0px, 16px)'
   }
+  const x = Math.max(-20, Math.min(20, (origin.left + origin.width / 2 - target.left - target.width / 2) * 0.08))
+  const y = Math.max(-20, Math.min(20, (origin.top + origin.height / 2 - target.top - target.height / 2) * 0.08))
+  return `translate(${x}px, ${y}px)`
 }
 
 /**
  * Fenêtre de détail. Grand écran : un dialogue Radix (focus piégé puis rendu, Échap, clic à
- * l'extérieur, défilement bloqué) dont le papier naît de l'élément d'origine. Mobile : une
+ * l'extérieur, défilement bloqué) qui apparaît à taille constante. Mobile : une
  * feuille Vaul qui monte du bas et se referme d'un glissement.
  */
 export function Sheet(props: SheetProps) {
@@ -92,7 +87,7 @@ function MobileSheet({ title, header, onClose, source, tone, children }: SheetPr
   // Démontée par le parent une fois l'animation de sortie finie ; un délai de secours au cas où.
   useEffect(() => {
     if (open) return
-    const timer = window.setTimeout(() => onCloseRef.current(), prefersReducedMotion() ? 0 : 600)
+    const timer = window.setTimeout(() => onCloseRef.current(), prefersReducedMotion() ? 0 : 450)
     return () => window.clearTimeout(timer)
   }, [open])
 
@@ -125,13 +120,12 @@ function MobileSheet({ title, header, onClose, source, tone, children }: SheetPr
 
 function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', children }: SheetProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
-  const paperRef = useRef<HTMLDivElement>(null)
+  const windowRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const onCloseRef = useRef(onClose)
   const sourceRef = useRef(source)
   const closing = useRef(false)
-  const [settled, setSettled] = useState(false)
   const [barTitle, setBarTitle] = useState(false)
   const returnFocus = useReturnFocus(source)
 
@@ -142,38 +136,28 @@ function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', child
 
   // Plus d'animation ni de style en ligne : la mise en page reprend la main.
   const settle = useCallback(() => {
-    for (const el of [paperRef.current, frameRef.current]) {
-      if (!el) continue
-      el.getAnimations?.().forEach((animation) => animation.cancel())
-      el.style.removeProperty('transform')
-      el.style.removeProperty('border-radius')
-      el.style.removeProperty('opacity')
-    }
+    const el = windowRef.current
+    if (!el) return
+    el.getAnimations?.().forEach((animation) => animation.cancel())
+    el.style.removeProperty('transform')
+    el.style.removeProperty('opacity')
   }, [])
 
-  // Ouverture : le papier naît de son origine et le contenu paraît sur la fin. Le contenu Radix
+  // Ouverture : toute la fenêtre suit une seule trajectoire. Le contenu Radix
   // est rendu dans un portail au second passage : on attend qu'il soit là.
   const opened = useRef(false)
   const onContentMount = useCallback(() => {
     if (opened.current) return
     opened.current = true
-    const paper = paperRef.current
-    const frame = frameRef.current
-    const from = sourceRef.current
+    const sheet = windowRef.current
     const still = prefersReducedMotion()
     const land = () => {
+      if (closing.current) return
       settle()
-      setSettled(true)
     }
-    const start = paper && frame && from?.isConnected && !still ? onSource(from, paper) : null
-    if (paper && frame && start) {
-      const sheet = getComputedStyle(paper).borderRadius
-      frame.style.opacity = '0'
-      animate(paper, { transform: [start.transform, IDENTITY], borderRadius: [start.borderRadius, sheet] }, OPEN).then(land)
-      animate(frame, { opacity: [0, 1] }, { duration: 0.22, delay: 0.18, ease: 'easeOut' })
-    } else if (paper && frame && !still) {
-      for (const el of [paper, frame]) animate(el, { opacity: [0, 1], transform: [LOWERED, IDENTITY] }, FADE)
-      window.setTimeout(land, FADE.duration * 1000)
+    if (sheet && !still) {
+      sheet.style.opacity = '0'
+      animate(sheet, { opacity: [0, 1], transform: [sourceOffset(sourceRef.current, sheet), IDENTITY] }, OPEN).then(land)
     } else {
       land()
     }
@@ -182,9 +166,8 @@ function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', child
   const requestClose = useCallback(() => {
     if (closing.current) return
     closing.current = true
-    const paper = paperRef.current
-    const frame = frameRef.current
-    if (prefersReducedMotion() || !paper || !frame) {
+    const sheet = windowRef.current
+    if (prefersReducedMotion() || !sheet) {
       onCloseRef.current()
       return
     }
@@ -194,21 +177,13 @@ function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', child
       finished = true
       onCloseRef.current()
     }
-    window.setTimeout(finish, 900)
-    setSettled(false)
-    const now = getComputedStyle(paper)
-    const from = { transform: now.transform === 'none' ? IDENTITY : now.transform, borderRadius: now.borderRadius }
-    const shown = Number(getComputedStyle(frame).opacity)
+    window.setTimeout(finish, 400)
+    const now = getComputedStyle(sheet)
+    const from = now.transform === 'none' ? IDENTITY : now.transform
+    const shown = Number(now.opacity)
     settle()
-    const origin = sourceRef.current
-    const end = origin?.isConnected ? onSource(origin, paper) : null
-    if (overlayRef.current) animate(overlayRef.current, { opacity: [1, 0] }, { duration: 0.24, ease: 'easeIn' })
-    animate(frame, { opacity: [shown, 0] }, { duration: 0.12, ease: 'easeOut' })
-    if (end) {
-      animate(paper, { transform: [from.transform, end.transform], borderRadius: [from.borderRadius, end.borderRadius] }, CLOSE).then(finish)
-    } else {
-      animate(paper, { opacity: [1, 0], transform: [from.transform, LOWERED] }, { duration: 0.18, ease: 'easeIn' }).then(finish)
-    }
+    if (overlayRef.current) animate(overlayRef.current, { opacity: [1, 0] }, { duration: 0.18, ease: EASE })
+    animate(sheet, { opacity: [shown, 0], transform: [from, sourceOffset(sourceRef.current, sheet)] }, CLOSE).then(finish)
   }, [settle])
 
   // Le titre revient dans la barre quand le titre principal sort de la vue.
@@ -231,7 +206,6 @@ function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', child
         <Dialog.Content
           className={`window window--${size}`}
           data-project={tone}
-          data-settled={settled || undefined}
           aria-describedby={undefined}
           onOpenAutoFocus={(event) => {
             event.preventDefault()
@@ -239,10 +213,11 @@ function DesktopSheet({ title, header, onClose, source, tone, size = 'lg', child
           }}
           onCloseAutoFocus={returnFocus}
           ref={(element) => {
+            windowRef.current = element
             if (element) onContentMount()
           }}
         >
-          <div className="window__paper" ref={paperRef} aria-hidden="true" />
+          <div className="window__paper" aria-hidden="true" />
           <div className="window__frame" ref={frameRef}>
             <div className="window__bar" data-scrolled={barTitle}>
               <span className="window__bar-title" aria-hidden="true">

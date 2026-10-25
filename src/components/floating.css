@@ -25,6 +25,27 @@
   inset: 0;
   z-index: 50;
   background: var(--backdrop);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* La feuille parcourt presque tout l'écran : son entrée respire, sa sortie reste plus rapide. */
+.drawer--sheet[data-vaul-drawer][data-state='open'] {
+  animation-duration: 380ms;
+  transition-duration: 380ms;
+}
+
+.drawer--sheet[data-vaul-drawer][data-state='closed'] {
+  animation-duration: 300ms;
+  transition-duration: 300ms;
+}
+
+.drawer-overlay[data-vaul-overlay][data-vaul-snap-points='false'][data-state='open'] {
+  animation-duration: 320ms;
+}
+
+.drawer-overlay[data-vaul-overlay][data-vaul-snap-points='false'][data-state='closed'] {
+  animation-duration: 260ms;
 }
 
 .drawer {

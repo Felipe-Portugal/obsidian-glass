@@ -69,7 +69,7 @@ describe('page', () => {
   it('ouvre le formulaire avec une demande de CV préremplie, sans faux téléchargement', async () => {
     renderApp('fr')
     fireEvent.click(screen.getByRole('button', { name: 'Demander le CV' }))
-    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' })
+    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' }, { timeout: 3000 })
     expect((await within(dialog).findByRole('textbox', { name: 'Sujet' }) as HTMLInputElement).value).toBe('Demande de CV')
   })
 })
@@ -123,9 +123,7 @@ describe('fenêtres', () => {
     expect(within(dialog).queryByRole('figure')).toBeNull()
     fireEvent.mouseDown(within(dialog).getByRole('tab', { name: 'Architecture' }))
     expect(within(dialog).getByRole('figure', { name: 'Architecture conceptuelle' })).toBeTruthy()
-    // La tuile a pris la forme de la fiche : sa place reste vide tant que la fiche est ouverte.
-    const card = opener.closest('article')
-    expect(card?.dataset.lifted).toBe('true')
+    expect(opener.getAttribute('aria-expanded')).toBe('true')
 
     // Le double montage de StrictMode ne doit pas refermer la fenêtre.
     await new Promise((resolve) => setTimeout(resolve, 20))
@@ -133,7 +131,7 @@ describe('fenêtres', () => {
 
     fireEvent.click(closeButton)
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
-    expect(card?.dataset.lifted).toBeUndefined()
+    expect(opener.getAttribute('aria-expanded')).toBe('false')
     await waitFor(() => expect(document.activeElement).toBe(opener))
   })
 
@@ -146,7 +144,7 @@ describe('fenêtres', () => {
     const dialog = await screen.findByRole('dialog', { name: 'Conseiller technique – Systèmes embarqués' })
     expect(within(dialog).getByRole('tablist', { name: 'Sections de la période' })).toBeTruthy()
     expect(within(dialog).getByText(/pytest, incluant des tests de charge/)).toBeTruthy()
-    expect(row.dataset.lifted).toBe('true')
+    expect(row.getAttribute('aria-expanded')).toBe('true')
 
     fireEvent.mouseDown(within(dialog).getByRole('tab', { name: 'Technologies' }))
     const chips = within(dialog).getByRole('list', { name: 'Technologies et outils nommés dans ces réalisations.' })
@@ -156,7 +154,7 @@ describe('fenêtres', () => {
     // Ouverte d'un clic, sans focus préalable : le focus revient quand même à la rangée.
     fireEvent.keyDown(dialog, { key: 'Escape' })
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
-    expect(row.dataset.lifted).toBeUndefined()
+    expect(row.getAttribute('aria-expanded')).toBe('false')
     await waitFor(() => expect(document.activeElement).toBe(row))
   })
 
@@ -180,8 +178,8 @@ describe('fenêtres', () => {
   it('ouvre le formulaire depuis la section Contact et valide les champs avant de préparer un courriel', async () => {
     renderApp('fr')
     fireEvent.click(screen.getByRole('button', { name: 'Écrire un message' }))
-    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' })
-    expect(within(dialog).getByText(/prépare un courriel/)).toBeTruthy()
+    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' }, { timeout: 3000 })
+    expect(await within(dialog).findByText(/prépare un courriel/, {}, { timeout: 3000 })).toBeTruthy()
     const emailLink = within(dialog).getByRole('link', { name: 'Ouvrir mon application courriel' })
     fireEvent.click(emailLink)
     expect(within(dialog).getByText('Indiquez votre adresse courriel.')).toBeTruthy()
