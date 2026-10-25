@@ -101,6 +101,7 @@ const fr = {
     lead: 'Pour un stage ou une question, écrivez-moi directement.',
     write: 'Écrire un message',
     cv: 'Demander le CV',
+    cvOpen: 'Ouvrir le CV',
   },
   contact: {
     title: 'Me contacter',
@@ -249,7 +250,7 @@ const en: UiStrings = {
   dock: {
     label: 'Shortcuts',
     cv: 'Résumé',
-    cvPdf: 'Open the résumé (PDF)',
+    cvPdf: 'Open the résumé (PDF, in French)',
     cvOnRequest: 'Résumé on request: open the contact form',
     cvOnRequestShort: 'Résumé on request',
     linkedin: 'LinkedIn',
@@ -262,6 +263,7 @@ const en: UiStrings = {
     lead: 'For an internship or a question, write to me directly.',
     write: 'Write a message',
     cv: 'Request my résumé',
+    cvOpen: 'Open my résumé',
   },
   contact: {
     title: 'Get in touch',

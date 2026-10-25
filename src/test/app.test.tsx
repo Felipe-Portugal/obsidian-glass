@@ -66,11 +66,15 @@ describe('page', () => {
     }
   })
 
-  it('ouvre le formulaire avec une demande de CV préremplie, sans faux téléchargement', async () => {
+  it('ouvre le CV en PDF depuis le dock et la section Contact, dans un nouvel onglet', () => {
     renderApp('fr')
-    fireEvent.click(screen.getByRole('button', { name: 'Demander le CV' }))
-    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' }, { timeout: 3000 })
-    expect((await within(dialog).findByRole('textbox', { name: 'Sujet' }) as HTMLInputElement).value).toBe('Demande de CV')
+    const links = screen.getAllByRole('link', { name: /CV \(PDF\)/ })
+    expect(links.length).toBe(2)
+    for (const link of links) {
+      expect(link.getAttribute('href')).toBe('/cv/Felipe_Portugal_CV_FR.pdf')
+      expect(link.getAttribute('target')).toBe('_blank')
+      expect(link.getAttribute('type')).toBe('application/pdf')
+    }
   })
 })
 

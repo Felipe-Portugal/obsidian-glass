@@ -65,17 +65,9 @@ Le contenu est volontairement factuel : aucune métrique, aucune capture d'écra
 
 ## CV en PDF
 
-Le CV n'est pas encore publié : `profile.resume` vaut `null`. Le dock et la section Contact proposent « CV sur demande », qui ouvre la fenêtre de contact avec un objet prérempli.
+Le CV est publié en français : `public/cv/Felipe_Portugal_CV_FR.pdf`, déclaré dans `profile.resume` (`src/data/profile.ts`). Le dock et la section Contact l'ouvrent dans un nouvel onglet ; la version anglaise du site ouvre le même PDF.
 
-Pour publier le CV :
-
-1. Préparer un PDF **sans numéro de téléphone**.
-2. Le déposer dans `public/cv/`, par exemple `public/cv/Felipe_Portugal_CV_FR.pdf` et `public/cv/Felipe_Portugal_CV_EN.pdf`.
-3. Dans `src/data/profile.ts` :
-
-   ```ts
-   resume: { fr: 'cv/Felipe_Portugal_CV_FR.pdf', en: 'cv/Felipe_Portugal_CV_EN.pdf' },
-   ```
+Pour le mettre à jour, remplacer le fichier en gardant son nom. Pour ajouter une version anglaise, la déposer dans `public/cv/` et pointer `resume.en` vers elle. Si `resume` vaut `null`, le dock et la section Contact reviennent à « CV sur demande », qui ouvre la fenêtre de contact avec un objet prérempli.
 
 Un test vérifie que les fichiers déclarés existent bien dans `public/`.
 
@@ -130,7 +122,6 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
 
 | Élément | État | Où le modifier |
 |---|---|---|
-| CV en PDF sans téléphone | À fournir ; « CV sur demande » en attendant | `public/cv/`, `src/data/profile.ts` |
 | Identifiant Formspree | À configurer ; courriel direct en attendant | `.env.local`, variable de dépôt |
 | Dépôt et adresse GitHub Pages | `Poggerion/obsidian-glass` et `https://poggerion.github.io/obsidian-glass/` | `.github/workflows/deploy.yml` |
 | Détection par PyTorch (projet Spot) | À confirmer ; le site dit « un modèle de détection » | `src/data/validation.ts` |

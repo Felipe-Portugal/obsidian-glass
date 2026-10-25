@@ -1,7 +1,7 @@
 import { Check, Copy } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
 import { useLanguage } from '../i18n/LanguageProvider'
+import { notify } from '../lib/notify'
 import { Tip } from './Tip'
 
 /** Copie l'adresse courriel ; la confirmation (ou l'échec) s'annonce dans un toast (Sonner). */
@@ -16,10 +16,10 @@ export function CopyButton({ value }: { value: string }) {
     try {
       await navigator.clipboard.writeText(value)
       setCopied(true)
-      toast(t.contact.copied)
+      notify(t.contact.copied)
       timer.current = window.setTimeout(() => setCopied(false), 2400)
     } catch {
-      toast(t.contact.copyFailed)
+      notify(t.contact.copyFailed)
     }
   }
 

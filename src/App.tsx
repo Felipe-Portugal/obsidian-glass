@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
-import { Toaster } from 'sonner'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { ContactWindow } from './components/ContactWindow'
 import { Dock } from './components/Dock'
 import type { ExperienceWindow } from './components/ExperienceWindow'
 import type { ProjectWindow } from './components/ProjectWindow'
 import { TipProvider } from './components/Tip'
 import { TopBar } from './components/TopBar'
+import { onFirstNotify } from './lib/notify'
 import { usePointerGlowWithin } from './lib/usePointerGlow'
 import { experience } from './data/experience'
 import { projects } from './data/projects'
@@ -26,6 +26,9 @@ interface Windows {
   ExperienceWindow: typeof ExperienceWindow
   ContactWindow: typeof ContactWindow
 }
+
+// Les confirmations (« Adresse copiée ») et leur bibliothèque ne se chargent qu'à la première.
+const Notifications = lazy(() => import('./components/Notifications'))
 
 let windowsLoad: Promise<Windows> | undefined
 
@@ -69,6 +72,7 @@ export function App() {
   const { resolved } = useTheme()
   const [active, setActive] = useState<ActiveWindow>(null)
   const [windows, setWindows] = useState<Windows | null>(null)
+  const [notifications, setNotifications] = useState(false)
   const glowRef = usePointerGlowWithin<HTMLDivElement>('.plate')
   const close = () => setActive(null)
   const project = active?.kind === 'project' ? projects.find((item) => item.id === active.id) : undefined
@@ -87,6 +91,8 @@ export function App() {
       () => undefined,
     )
   }
+
+  useEffect(() => onFirstNotify(() => setNotifications(true)), [])
 
   useEffect(() => {
     const preload = () => void loadWindows().then(setWindows, () => undefined)
@@ -147,14 +153,11 @@ export function App() {
           />
         )}
 
-        <Toaster
-          theme={resolved}
-          position="bottom-center"
-          offset={96}
-          mobileOffset={{ bottom: 104 }}
-          duration={2400}
-          toastOptions={{ unstyled: true, classNames: { toast: 'toast glass' } }}
-        />
+        {notifications && (
+          <Suspense fallback={null}>
+            <Notifications theme={resolved} />
+          </Suspense>
+        )}
       </div>
     </TipProvider>
   )
