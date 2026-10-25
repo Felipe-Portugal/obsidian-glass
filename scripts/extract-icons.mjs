@@ -57,6 +57,15 @@ const SOURCES = {
   pytorch: { si: 'pytorch' },
   mqtt: { si: 'mqtt' },
   stripe: { si: 'stripe' },
+  c: { si: 'c' },
+  powershell: { devicon: 'powershell/powershell-plain.svg', hex: '#5391fe' },
+  bootstrap: { si: 'bootstrap' },
+  jquery: { si: 'jquery' },
+  mariadb: { si: 'mariadb' },
+  sqlite: { si: 'sqlite' },
+  gitlab: { si: 'gitlab' },
+  vmware: { si: 'vmware' },
+  bluetooth: { si: 'bluetooth' },
   linkedin: { devicon: 'linkedin/linkedin-plain.svg', hex: '#0a66c2' },
 }
 

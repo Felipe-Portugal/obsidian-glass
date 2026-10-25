@@ -18,10 +18,12 @@ export const technologies = {
   java: { name: 'Java', icon: 'java' },
   csharp: { name: 'C#', icon: 'csharp' },
   php: { name: 'PHP', icon: 'php' },
+  c: { name: 'C', icon: 'c' },
   cplusplus: { name: 'C++', icon: 'cplusplus' },
   rust: { name: 'Rust', icon: 'rust' },
   sql: { name: 'SQL', short: 'SQL' },
   bash: { name: 'Bash', icon: 'bash' },
+  powershell: { name: 'PowerShell', icon: 'powershell' },
 
   // Interfaces
   reactnative: { name: 'React Native', icon: 'react' },
@@ -30,6 +32,8 @@ export const technologies = {
   androidstudio: { name: 'Android Studio', icon: 'androidstudio' },
   html5: { name: 'HTML', icon: 'html5' },
   css: { name: 'CSS', icon: 'css' },
+  bootstrap: { name: 'Bootstrap', icon: 'bootstrap' },
+  jquery: { name: 'jQuery', icon: 'jquery' },
   aspnetcore: { name: 'ASP.NET Core', icon: 'dotnet' },
   blazor: { name: 'Blazor', icon: 'blazor' },
   javafx: { name: 'JavaFX', short: 'FX' },
@@ -40,6 +44,8 @@ export const technologies = {
   // Le logo Oracle est un mot-symbole illisible à cette taille : monogramme explicite.
   oracle: { name: 'Oracle (SQL, PL/SQL)', short: 'PL/SQL' },
   mysql: { name: 'MySQL', icon: 'mysql' },
+  mariadb: { name: 'MariaDB', icon: 'mariadb' },
+  sqlite: { name: 'SQLite', icon: 'sqlite' },
   efcore: { name: 'Entity Framework Core', icon: 'efcore' },
   rest: { name: { fr: 'API REST', en: 'REST APIs' }, short: 'REST' },
   grafana: { name: 'Grafana', icon: 'grafana' },
@@ -49,8 +55,10 @@ export const technologies = {
   docker: { name: 'Docker', icon: 'docker' },
   git: { name: 'Git', icon: 'git' },
   gitea: { name: 'Gitea', icon: 'gitea' },
+  gitlab: { name: 'GitLab', icon: 'gitlab' },
   azuredevops: { name: 'Azure DevOps', icon: 'azuredevops' },
   linux: { name: 'Linux', icon: 'linux' },
+  vmware: { name: 'VMware ESXi', icon: 'vmware' },
   pytest: { name: 'pytest', icon: 'pytest' },
   maven: { name: 'Maven', icon: 'maven' },
 
@@ -64,6 +72,8 @@ export const technologies = {
   pillow: { name: 'Pillow', short: 'PIL' },
   pytorch: { name: 'PyTorch', icon: 'pytorch' },
   mqtt: { name: 'MQTT', icon: 'mqtt' },
+  bluetooth: { name: 'Bluetooth LE', icon: 'bluetooth' },
+  lorawan: { name: 'LoRaWAN', short: 'LoRa' },
   buses: { name: 'GPIO, I2C, SPI, UART', short: 'GPIO' },
   rtc: { name: { fr: 'Horloge temps réel (RTC)', en: 'Real-time clock (RTC)' }, short: 'RTC' },
 
