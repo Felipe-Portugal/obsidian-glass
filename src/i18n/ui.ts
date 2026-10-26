@@ -29,7 +29,6 @@ const fr = {
     study: 'Étudiant en génie logiciel, ÉTS',
     languages: 'Français, anglais, espagnol',
     status: 'Recherche un stage de 4\u00a0mois à l’hiver 2027 · ouvert à 8\u00a0mois',
-    seeProjects: 'Voir les projets',
     contact: 'Me contacter',
   },
   projects: {
@@ -198,7 +197,6 @@ const en: UiStrings = {
     study: 'Software engineering student, ÉTS',
     languages: 'French, English, Spanish',
     status: 'Looking for a 4-month internship in winter 2027 · open to 8 months',
-    seeProjects: 'View projects',
     contact: 'Contact me',
   },
   projects: {

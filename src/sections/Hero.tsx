@@ -2,9 +2,7 @@ import { GraduationCap, Languages, MapPin } from 'lucide-react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 
-/**
- * Présentation et accès direct aux projets ; les informations pratiques restent à droite.
- */
+/** Présentation et informations pratiques. */
 export function Hero() {
   const { t } = useLanguage()
   return (
@@ -15,9 +13,6 @@ export function Hero() {
         </h1>
         <p className="hero__role">{t.hero.role}</p>
         <p className="hero__lede">{t.hero.lede}</p>
-        <div className="hero__actions">
-          <a className="button button--primary" href="#projets">{t.hero.seeProjects}</a>
-        </div>
       </div>
       <div className="hero__side glass">
         <p className="hero__status">

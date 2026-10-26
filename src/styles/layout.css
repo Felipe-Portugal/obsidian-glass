@@ -86,14 +86,6 @@ main:focus {
   color: var(--text-2);
 }
 
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
-}
-
 /* Une petite plaque flottante donne de la profondeur à l'en-tête. */
 .hero__side {
   display: grid;
@@ -176,11 +168,6 @@ main:focus {
   .hero__lede {
     font-size: var(--fs-md);
   }
-
-  .hero__actions {
-    margin-top: var(--space-2);
-  }
-
 }
 
 /* Grille bento */
