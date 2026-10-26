@@ -384,8 +384,8 @@ export const projects: readonly Project[] = [
       en: 'Development, documentation and deliverable sign-off with the client.',
     },
     result: {
-      fr: 'Les livrables réunissent l’application Android, le Raspberry Pi et l’Arduino et ont été validés avec le client.',
-      en: 'The deliverables bring together the Android app, Raspberry Pi and Arduino and were validated with the client.',
+      fr: 'Le besoin du Cégep a abouti à une application Android et à des composants Raspberry Pi et Arduino, documentés et validés avec le client.',
+      en: 'The Cégep’s need led to an Android app and Raspberry Pi and Arduino components, documented and validated with the client.',
     },
     cardTech: ['android', 'java', 'raspberrypi', 'python', 'arduino'],
     detail: {
