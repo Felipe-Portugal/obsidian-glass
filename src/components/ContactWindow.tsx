@@ -1,11 +1,8 @@
-import { lazy, Suspense } from 'react'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { formspreeId } from '../lib/contact'
+import ContactForm from './ContactForm'
 import { Sheet } from './Sheet'
 import './contact.css'
-
-// Le formulaire et @formspree/core ne sont chargés qu'à l'ouverture de la fenêtre.
-const ContactForm = lazy(() => import('./ContactForm'))
 
 interface Props {
   onClose: () => void
@@ -25,9 +22,7 @@ export function ContactWindow({ onClose, source, subject }: Props) {
         <h3 id="contact-form-title" className="sr-only">
           {t.contact.form.title}
         </h3>
-        <Suspense fallback={<p className="cw__loading">{t.contact.loading}</p>}>
-          <ContactForm {...(formId ? { formId } : {})} {...(subject ? { initialSubject: subject } : {})} />
-        </Suspense>
+        <ContactForm {...(formId ? { formId } : {})} {...(subject ? { initialSubject: subject } : {})} />
       </section>
     </Sheet>
   )

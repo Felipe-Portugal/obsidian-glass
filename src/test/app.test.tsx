@@ -218,12 +218,12 @@ describe('fenêtres', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
   })
 
-  it('ouvre le formulaire depuis la section Contact et valide les champs avant de préparer un courriel', async () => {
+  it('ouvre immédiatement le formulaire depuis la section Contact et prépare un courriel', () => {
     renderApp('fr')
     fireEvent.click(screen.getByRole('button', { name: 'Écrire un message' }))
-    const dialog = await screen.findByRole('dialog', { name: 'Me contacter' }, { timeout: 3000 })
-    expect(await within(dialog).findByText(/Rédigez votre message ici/, {}, { timeout: 3000 })).toBeTruthy()
-    const emailLink = await within(dialog).findByRole('link', { name: 'Ouvrir mon application courriel' })
+    const dialog = screen.getByRole('dialog', { name: 'Me contacter' })
+    expect(within(dialog).getByText(/Rédigez votre message ici/)).toBeTruthy()
+    const emailLink = within(dialog).getByRole('link', { name: 'Ouvrir mon application courriel' })
     fireEvent.click(emailLink)
     expect(within(dialog).getByText('Indiquez un sujet.')).toBeTruthy()
     expect(within(dialog).getByText('Écrivez votre message.')).toBeTruthy()

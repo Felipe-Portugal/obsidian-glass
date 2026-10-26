@@ -1,6 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { AboutWindow } from './components/AboutWindow'
-import type { ContactWindow } from './components/ContactWindow'
+import { ContactWindow } from './components/ContactWindow'
 import { Dock } from './components/Dock'
 import type { EducationWindow, ExperienceWindow } from './components/ExperienceWindow'
 import type { ProjectWindow } from './components/ProjectWindow'
@@ -28,7 +28,6 @@ interface Windows {
   ProjectWindow: typeof ProjectWindow
   ExperienceWindow: typeof ExperienceWindow
   EducationWindow: typeof EducationWindow
-  ContactWindow: typeof ContactWindow
   AboutWindow: typeof AboutWindow
 }
 
@@ -38,22 +37,19 @@ const Notifications = lazy(() => import('./components/Notifications'))
 let windowsLoad: Promise<Windows> | undefined
 
 /**
- * Les fenêtres (onglets, schémas, formulaire) ne servent qu'à l'ouverture : chargées à part, dès
- * que la page est au repos. Une fenêtre demandée plus tôt s'ouvre une fois son code arrivé, sans
- * état intermédiaire où la tuile aurait déjà laissé sa place.
+ * Les études de cas et le portrait sont chargés à part, dès que la page est au repos.
+ * Le contact reste dans le code initial pour s'ouvrir sans attente au premier clic.
  */
 function loadWindows() {
   windowsLoad ??= Promise.all([
     import('./components/ProjectWindow'),
     import('./components/ExperienceWindow'),
-    import('./components/ContactWindow'),
     import('./components/AboutWindow'),
   ]).then(
-    ([project, period, contact, about]) => ({
+    ([project, period, about]) => ({
       ProjectWindow: project.ProjectWindow,
       ExperienceWindow: period.ExperienceWindow,
       EducationWindow: period.EducationWindow,
-      ContactWindow: contact.ContactWindow,
       AboutWindow: about.AboutWindow,
     }),
     (error: unknown) => {
@@ -82,13 +78,22 @@ export function App() {
   const [active, setActive] = useState<ActiveWindow>(null)
   const [windows, setWindows] = useState<Windows | null>(null)
   const [notifications, setNotifications] = useState(false)
+  const openRequest = useRef(0)
   const glowRef = usePointerGlowWithin<HTMLDivElement>('.plate')
-  const close = () => setActive(null)
+  const close = () => {
+    openRequest.current += 1
+    setActive(null)
+  }
   const project = active?.kind === 'project' ? projects.find((item) => item.id === active.id) : undefined
   const period = active?.kind === 'experience' ? experience.find((item) => item.id === active.id) : undefined
   const program = active?.kind === 'education' ? education.find((item) => item.id === active.id) : undefined
 
   const openWindow = (next: NonNullable<ActiveWindow>) => {
+    const request = ++openRequest.current
+    if (next.kind === 'contact') {
+      setActive(next)
+      return
+    }
     if (windows) {
       setActive(next)
       return
@@ -96,7 +101,7 @@ export function App() {
     loadWindows().then(
       (loaded) => {
         setWindows(loaded)
-        setActive(next)
+        if (request === openRequest.current) setActive(next)
       },
       () => undefined,
     )
@@ -158,8 +163,8 @@ export function App() {
         {windows && program && active?.kind === 'education' && (
           <windows.EducationWindow key={program.id} entry={program} source={active.source} onClose={close} />
         )}
-        {windows && active?.kind === 'contact' && (
-          <windows.ContactWindow
+        {active?.kind === 'contact' && (
+          <ContactWindow
             source={active.source}
             onClose={close}
             {...(active.subject ? { subject: active.subject } : {})}

@@ -136,7 +136,6 @@ const fr = {
     copyFailed: 'Copie impossible\u00a0: sélectionnez l’adresse manuellement.',
     linkedin: 'Profil LinkedIn',
     cvSubject: 'Demande de CV',
-    loading: 'Chargement du formulaire…',
     form: {
       title: 'Formulaire',
       allRequired: 'Tous les champs sont obligatoires.',
@@ -318,7 +317,6 @@ const en: UiStrings = {
     copyFailed: 'Could not copy: please select the address manually.',
     linkedin: 'LinkedIn profile',
     cvSubject: 'Résumé request',
-    loading: 'Loading the form…',
     form: {
       title: 'Form',
       allRequired: 'All fields are required.',

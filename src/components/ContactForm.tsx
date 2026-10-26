@@ -1,6 +1,5 @@
-import { createClient, isSubmissionError } from '@formspree/core'
 import { AlertCircle, CheckCircle2, LoaderCircle, Mail, Send } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { mailto } from '../lib/mailto'
@@ -54,7 +53,6 @@ type Status = 'idle' | 'submitting' | 'success' | 'error'
  */
 export default function ContactForm({ formId, initialSubject }: { formId?: string; initialSubject?: string }) {
   const { t } = useLanguage()
-  const client = useMemo(() => (formId ? createClient() : null), [formId])
   const [values, setValues] = useState<ContactValues>({ email: '', subject: initialSubject ?? '', message: '' })
   const [issues, setIssues] = useState<FieldIssues>({})
   const [attempted, setAttempted] = useState(false)
@@ -133,7 +131,7 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (status === 'submitting') return
-    if (!formId || !client) {
+    if (!formId) {
       emailLink.current?.click()
       return
     }
@@ -142,24 +140,30 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
     setStatus('submitting')
     setServiceError(null)
     const subject = values.subject.trim()
-    const result = await client.submitForm(formId, {
-      email: values.email.trim(),
-      subject,
-      message: values.message.trim(),
-      _subject: `Portfolio · ${subject}`,
-      _gotcha: honeypot.current?.value ?? '',
-    })
+    try {
+      const { createClient, isSubmissionError } = await import('@formspree/core')
+      const result = await createClient().submitForm(formId, {
+        email: values.email.trim(),
+        subject,
+        message: values.message.trim(),
+        _subject: `Portfolio · ${subject}`,
+        _gotcha: honeypot.current?.value ?? '',
+      })
 
-    if (isSubmissionError(result)) {
-      const mapped = mapSubmissionError(result)
-      setIssues((current) => ({ ...current, ...mapped.fields }))
-      setServiceError(mapped)
+      if (isSubmissionError(result)) {
+        const mapped = mapSubmissionError(result)
+        setIssues((current) => ({ ...current, ...mapped.fields }))
+        setServiceError(mapped)
+        setStatus('error')
+        const firstServerInvalid = CONTACT_FIELDS.find((field) => mapped.fields[field])
+        if (firstServerInvalid) fieldRefs.current[firstServerInvalid]?.focus()
+        return
+      }
+      setStatus('success')
+    } catch {
+      setServiceError({ form: 'network', fields: {}, detail: null })
       setStatus('error')
-      const firstServerInvalid = CONTACT_FIELDS.find((field) => mapped.fields[field])
-      if (firstServerInvalid) fieldRefs.current[firstServerInvalid]?.focus()
-      return
     }
-    setStatus('success')
   }
 
   const reset = () => {
