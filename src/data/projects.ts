@@ -28,26 +28,26 @@ export const projects: readonly Project[] = [
       label: { fr: 'Déployée à l’interne', en: 'Deployed internally' },
     },
     summary: {
-      fr: 'Une application mobile et une interface d’administration pour gérer les stationnements du Cégep de Sept-Îles.',
-      en: 'A mobile app and an admin interface to manage parking at Cégep de Sept-Îles.',
+      fr: 'Une application mobile et une interface d’administration pour simplifier la demande et la gestion des vignettes de stationnement du Cégep de Sept-Îles.',
+      en: 'A mobile app and an admin interface to simplify parking permit requests and management at Cégep de Sept-Îles.',
     },
     contribution: {
       fr: 'Application mobile, certains endpoints d’API REST et composantes backend, paiement Stripe.',
       en: 'Mobile app, some REST API endpoints and backend components, Stripe payments.',
     },
     result: {
-      fr: 'Le système est déployé à l’interne pour le personnel du Cégep et quelques utilisateurs externes.',
-      en: 'The system is deployed internally for Cégep staff and a few external users.',
+      fr: 'Les demandes de vignettes sont plus rapides à traiter. L’administration et les surveillants disposent d’un historique, des factures et du lien entre chaque vignette et le bon véhicule.',
+      en: 'Permit requests are faster to process. Administrators and parking staff can access the history, invoices and the vehicle linked to each permit.',
     },
     cardTech: ['reactnative', 'expo', 'typescript', 'php', 'postgresql'],
     detail: {
       context: {
         fr: [
-          'Système de gestion des stationnements destiné au Cégep de Sept-Îles, développé dans le cadre de mon travail à l’ITMI.',
+          'Auparavant, une personne devait faire la file pour obtenir un formulaire, le transmettre à un autre bureau pour approbation, puis payer avant de recevoir une vignette physique. Le projet visait à accélérer ce parcours pour les utilisateurs, l’administration et les surveillants.',
           'L’application est déployée à l’interne pour le personnel du Cégep et quelques utilisateurs externes. Elle n’est pas publiée sur les magasins d’applications.',
         ],
         en: [
-          'A parking management system built for Cégep de Sept-Îles as part of my work at ITMI.',
+          'Previously, a person had to queue for a form, send it to another office for approval, then pay before receiving a physical permit. The project aimed to speed up this process for users, administrators and parking staff.',
           'The app is deployed internally for the Cégep’s staff and a few external users. It is not published on the app stores.',
         ],
       },
@@ -201,8 +201,8 @@ export const projects: readonly Project[] = [
       en: 'Python and Spot SDK: missions, image processing and sensor data.',
     },
     result: {
-      fr: 'Le prototype permet de choisir ou d’enregistrer des missions, de traiter leurs photos et de visualiser les données des capteurs.',
-      en: 'The prototype can select or record missions, process their photos and visualise sensor data.',
+      fr: 'Le personnel accède rapidement aux données des missions, traitées sur le serveur et déposées dans un répertoire en fichiers Excel et CSV.',
+      en: 'Staff can quickly access mission data processed on the server and placed in a directory as Excel and CSV files.',
     },
     cardTech: ['python', 'spotsdk', 'opencv', 'rust', 'grafana'],
     detail: {
@@ -219,14 +219,14 @@ export const projects: readonly Project[] = [
       role: {
         fr: [
           'Développer en Python, avec le Spot SDK, un prototype fonctionnel qui permet de sélectionner des missions autonomes existantes et d’en enregistrer de nouvelles.',
-          'Automatiser le traitement des photos des missions sur le serveur Linux, avec les données de différents payloads (OpenCV, Pillow, NumPy), et transmettre les résultats aux utilisateurs concernés.',
+          'Automatiser le traitement des photos et des données des missions sur le serveur Linux (OpenCV, Pillow, NumPy), puis déposer les données formatées en fichiers Excel et CSV dans un répertoire accessible au personnel concerné.',
           'Récupérer en Rust les données de différents capteurs extérieurs, exploitées dans Grafana.',
           'Écrire des tests automatisés client et serveur en Python avec pytest, incluant des tests de charge.',
           'Rédiger la documentation technique et former le personnel.',
         ],
         en: [
           'Developed in Python, with the Spot SDK, a working prototype for selecting existing autonomous missions and recording new ones.',
-          'Automated the processing of mission photos on the Linux server, with data from various payloads (OpenCV, Pillow, NumPy), and delivered the results to the people concerned.',
+          'Automated the processing of mission photos and data on the Linux server (OpenCV, Pillow, NumPy), then placed formatted Excel and CSV files in a directory accessible to the relevant staff.',
           'Collected data from various outdoor sensors in Rust, used in Grafana.',
           'Wrote automated client and server tests in Python with pytest, including load tests.',
           'Wrote the technical documentation and trained staff.',
@@ -262,8 +262,8 @@ export const projects: readonly Project[] = [
             title: { fr: 'Images des missions', en: 'Mission images' },
             link: 'sequence',
             summary: {
-              fr: 'Les photos de la Spot CAM+IR sont transférées au retour à la station, traitées sur le serveur Linux par la détection puis l’OCR, qui produit les valeurs extraites.',
-              en: 'Spot CAM+IR photos are transferred back at the station, processed on the Linux server by detection then OCR, which produces the extracted values.',
+              fr: 'Les photos de la Spot CAM+IR sont transférées au retour à la station et traitées sur le serveur Linux. Les données formatées sont déposées dans un répertoire en fichiers Excel et CSV.',
+              en: 'Spot CAM+IR photos are transferred back at the station and processed on the Linux server. The formatted data is placed in a directory as Excel and CSV files.',
             },
             nodes: [
               {
@@ -295,8 +295,8 @@ export const projects: readonly Project[] = [
               },
               {
                 id: 'values',
-                label: { fr: 'Valeurs extraites', en: 'Extracted values' },
-                detail: { fr: 'Résultats transmis', en: 'Results delivered' },
+                label: { fr: 'Fichiers Excel et CSV', en: 'Excel and CSV files' },
+                detail: { fr: 'Répertoire accessible au personnel', en: 'Directory accessible to staff' },
                 kind: 'result',
               },
             ],
@@ -369,29 +369,29 @@ export const projects: readonly Project[] = [
   {
     id: 'embedded',
     layout: 'compact',
-    title: { fr: 'Android · Raspberry Pi · Arduino', en: 'Android · Raspberry Pi · Arduino' },
+    title: { fr: 'Surveillance d’un logement temporaire', en: 'Temporary accommodation monitoring' },
     context: { fr: 'Cégep de Sept-Îles', en: 'Cégep de Sept-Îles' },
     maturity: {
       kind: 'individual',
       label: { fr: 'Projet individuel', en: 'Individual project' },
     },
     summary: {
-      fr: 'Une solution Android, Raspberry Pi et Arduino pour un besoin réel du Cégep de Sept-Îles et de ses professeurs.',
-      en: 'An Android, Raspberry Pi and Arduino solution for a real need of Cégep de Sept-Îles and its teachers.',
+      fr: 'Une solution Android, Raspberry Pi et Arduino conçue pour surveiller un hébergement temporaire, comme une chambre d’hôtel.',
+      en: 'An Android, Raspberry Pi and Arduino solution designed to monitor temporary lodging, such as a hotel room.',
     },
     contribution: {
       fr: 'Développement, documentation et validation des livrables avec le client.',
       en: 'Development, documentation and deliverable sign-off with the client.',
     },
     result: {
-      fr: 'Le besoin du Cégep a abouti à une application Android et à des composants Raspberry Pi et Arduino, documentés et validés avec le client.',
-      en: 'The Cégep’s need led to an Android app and Raspberry Pi and Arduino components, documented and validated with the client.',
+      fr: 'Le projet a réuni une application Android et des composants embarqués pour répondre au besoin des personnes en déplacement de surveiller leur logement temporaire en continu.',
+      en: 'The project brought together an Android app and embedded components to address travellers’ need to monitor their temporary lodging continuously.',
     },
     cardTech: ['android', 'java', 'raspberrypi', 'python', 'arduino'],
     detail: {
       context: {
-        fr: ['Projet individuel réalisé pour répondre à un besoin réel du Cégep de Sept-Îles et de ses professeurs.'],
-        en: ['An individual project built to meet a real need of Cégep de Sept-Îles and its teachers.'],
+        fr: ['Projet individuel réalisé pour le Cégep de Sept-Îles. Il a été pensé pour les personnes en déplacement qui veulent s’assurer que leur logement temporaire, par exemple une chambre d’hôtel, est surveillé en tout temps.'],
+        en: ['An individual project built for Cégep de Sept-Îles. It was designed for travellers who want their temporary lodging, such as a hotel room, monitored at all times.'],
       },
       role: {
         fr: [
