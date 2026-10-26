@@ -26,7 +26,7 @@ describe('page', () => {
     renderApp('fr')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Felipe Portugal.')
     expect(screen.getByText('Développeur logiciel polyvalent')).toBeTruthy()
-    expect(headings(2)).toEqual(['Projets', 'Parcours', 'Compétences', 'Contact'])
+    expect(headings(2)).toEqual(['Projets', 'Parcours', 'Compétences', 'À propos de moi', 'Contact'])
     expect(document.documentElement.lang).toBe('fr')
   })
 
@@ -34,7 +34,7 @@ describe('page', () => {
     renderApp('fr')
     fireEvent.click(screen.getByRole('button', { name: 'EN — Passer en anglais' }))
     expect(screen.getByRole('button', { name: 'FR — Switch to French' })).toBeTruthy()
-    expect(headings(2)).toEqual(['Projects', 'Background', 'Skills', 'Contact'])
+    expect(headings(2)).toEqual(['Projects', 'Background', 'Skills', 'About me', 'Contact'])
     expect(document.documentElement.lang).toBe('en')
     expect(window.localStorage.getItem('og-lang')).toBe('en')
     expect(document.title).toMatch(/Versatile software developer/)
@@ -112,6 +112,24 @@ describe('logos des compétences', () => {
 })
 
 describe('fenêtres', () => {
+  it('ouvre le portrait, puis rend le focus au bouton après Échap', async () => {
+    renderApp('fr')
+    const opener = screen.getByRole('button', { name: 'Lire mon portrait' })
+    fireEvent.click(opener)
+
+    const dialog = await screen.findByRole('dialog', { name: 'À propos de moi' })
+    expect(opener.getAttribute('aria-expanded')).toBe('true')
+    expect(within(dialog).getByRole('heading', { name: 'Mes points forts' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'Ce que j’améliore' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'En équipe' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'En dehors du travail' })).toBeTruthy()
+    expect(within(dialog).getByText(/marcher en forêt, aller à la pêche/)).toBeTruthy()
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(opener.getAttribute('aria-expanded')).toBe('false')
+    await waitFor(() => expect(document.activeElement).toBe(opener))
+  })
+
   it('ouvrent une étude de cas nommée, à onglets, puis rendent le focus à la fermeture', async () => {
     renderApp('fr')
     const opener = screen.getByRole('button', { name: /Ouvrir l’étude de cas\s*: Gestion des stationnements/ })

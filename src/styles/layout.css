@@ -238,9 +238,10 @@ main:focus {
   color: var(--text-3);
 }
 
-/* Le parcours, les compétences puis le contact : des bandes pleines sous les projets. */
+/* Le parcours, les compétences, le portrait puis le contact : des bandes pleines sous les projets. */
 .tile--path,
 .tile--skills,
+.tile--about,
 .tile--contact {
   grid-column: 1 / -1;
 }
@@ -274,6 +275,10 @@ main:focus {
 
 [data-tone='skills'] {
   --light: var(--light-skills);
+}
+
+[data-tone='about'] {
+  --light: var(--light-about);
 }
 
 [data-tone='contact'] {
@@ -596,6 +601,42 @@ main:focus {
   font-size: var(--fs-sm);
   font-weight: 580;
   color: var(--text-2);
+}
+
+/* Portrait : une invitation lisible avant la prise de contact. */
+.tile--about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-8);
+  padding-block: clamp(2rem, 2.5vw, 3rem);
+}
+
+.about__copy {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.about__lead {
+  max-width: 48ch;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.about__open {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+@media (max-width: 680px) {
+  .tile--about {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+
+  .about__open {
+    justify-self: start;
+  }
 }
 
 /* Contact */

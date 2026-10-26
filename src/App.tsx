@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import type { AboutWindow } from './components/AboutWindow'
 import type { ContactWindow } from './components/ContactWindow'
 import { Dock } from './components/Dock'
 import type { EducationWindow, ExperienceWindow } from './components/ExperienceWindow'
@@ -12,6 +13,7 @@ import { projects } from './data/projects'
 import { education } from './data/skills'
 import type { Project } from './data/types'
 import { useLanguage } from './i18n/LanguageProvider'
+import { About } from './sections/About'
 import { Contact } from './sections/Contact'
 import { Hero } from './sections/Hero'
 import { Projects } from './sections/Projects'
@@ -27,6 +29,7 @@ interface Windows {
   ExperienceWindow: typeof ExperienceWindow
   EducationWindow: typeof EducationWindow
   ContactWindow: typeof ContactWindow
+  AboutWindow: typeof AboutWindow
 }
 
 // Les confirmations (« Adresse copiée ») et leur bibliothèque ne se chargent qu'à la première.
@@ -44,12 +47,14 @@ function loadWindows() {
     import('./components/ProjectWindow'),
     import('./components/ExperienceWindow'),
     import('./components/ContactWindow'),
+    import('./components/AboutWindow'),
   ]).then(
-    ([project, period, contact]) => ({
+    ([project, period, contact, about]) => ({
       ProjectWindow: project.ProjectWindow,
       ExperienceWindow: period.ExperienceWindow,
       EducationWindow: period.EducationWindow,
       ContactWindow: contact.ContactWindow,
+      AboutWindow: about.AboutWindow,
     }),
     (error: unknown) => {
       windowsLoad = undefined
@@ -63,12 +68,13 @@ type ActiveWindow =
   | { kind: 'project'; id: Project['id']; card: HTMLElement | null }
   | { kind: 'experience' | 'education'; id: string; source: HTMLElement | null }
   | { kind: 'contact'; source: HTMLElement | null; subject?: string }
+  | { kind: 'about'; source: HTMLElement | null }
   | null
 
 /**
  * Une page compacte : un en-tête court, puis une grille de tuiles (projets, parcours,
- * compétences, contact). Le détail s'ouvre à la demande, toujours dans la même structure de
- * fenêtre (études de cas, étapes du parcours, contact), en feuille du bas sur mobile.
+ * compétences, à propos, contact). Le détail s'ouvre à la demande, toujours dans la même structure
+ * de fenêtre (études de cas, étapes du parcours, portrait, contact), en feuille du bas sur mobile.
  */
 export function App() {
   const { t } = useLanguage()
@@ -129,6 +135,7 @@ export function App() {
                 onOpen={(kind, id, item) => openWindow({ kind, id, source: item })}
               />
               <Skills />
+              <About open={active?.kind === 'about'} onOpen={(source) => openWindow({ kind: 'about', source })} />
               <Contact onOpen={(source, subject) => openWindow({ kind: 'contact', source, ...(subject ? { subject } : {}) })} />
             </div>
           </main>
@@ -157,6 +164,9 @@ export function App() {
             onClose={close}
             {...(active.subject ? { subject: active.subject } : {})}
           />
+        )}
+        {windows && active?.kind === 'about' && (
+          <windows.AboutWindow source={active.source} onClose={close} />
         )}
 
         {notifications && (
