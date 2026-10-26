@@ -104,11 +104,11 @@ export function Dock({ onContact }: Props) {
                 rel="noopener"
                 type="application/pdf"
                 hrefLang="fr"
+                aria-label={`${t.dock.cv} ${t.a11y.cvPdf} ${t.a11y.newTab}`}
                 {...lensProps}
               >
                 <FileText aria-hidden="true" size={18} strokeWidth={1.75} />
                 <span className="dock__label">{t.dock.cv}</span>
-                <span className="sr-only"> {t.dock.cvPdf} {t.a11y.newTab}</span>
               </a>
             </Tip>
           ) : (

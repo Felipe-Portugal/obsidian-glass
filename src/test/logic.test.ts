@@ -58,6 +58,7 @@ describe('validation du formulaire de contact', () => {
 
   it('accepte un message complet', () => {
     expect(validateContact(valid)).toEqual({})
+    expect(validateContact({ ...valid, email: '' }, false)).toEqual({})
   })
 
   it('signale les champs vides, trop courts, trop longs ou invalides', () => {

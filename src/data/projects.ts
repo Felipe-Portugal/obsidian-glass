@@ -35,6 +35,10 @@ export const projects: readonly Project[] = [
       fr: 'Application mobile, certains endpoints d’API REST et composantes backend, paiement Stripe.',
       en: 'Mobile app, some REST API endpoints and backend components, Stripe payments.',
     },
+    result: {
+      fr: 'Le système est déployé à l’interne pour le personnel du Cégep et quelques utilisateurs externes.',
+      en: 'The system is deployed internally for Cégep staff and a few external users.',
+    },
     cardTech: ['reactnative', 'expo', 'typescript', 'php', 'postgresql'],
     detail: {
       context: {
@@ -195,6 +199,10 @@ export const projects: readonly Project[] = [
     contribution: {
       fr: 'Python et Spot SDK\u00a0: missions, traitement d’images et données de capteurs.',
       en: 'Python and Spot SDK: missions, image processing and sensor data.',
+    },
+    result: {
+      fr: 'Le prototype permet de choisir ou d’enregistrer des missions, de traiter leurs photos et de visualiser les données des capteurs.',
+      en: 'The prototype can select or record missions, process their photos and visualise sensor data.',
     },
     cardTech: ['python', 'spotsdk', 'opencv', 'rust', 'grafana'],
     detail: {
@@ -374,6 +382,10 @@ export const projects: readonly Project[] = [
     contribution: {
       fr: 'Développement, documentation et validation des livrables avec le client.',
       en: 'Development, documentation and deliverable sign-off with the client.',
+    },
+    result: {
+      fr: 'Les livrables réunissent l’application Android, le Raspberry Pi et l’Arduino et ont été validés avec le client.',
+      en: 'The deliverables bring together the Android app, Raspberry Pi and Arduino and were validated with the client.',
     },
     cardTech: ['android', 'java', 'raspberrypi', 'python', 'arduino'],
     detail: {

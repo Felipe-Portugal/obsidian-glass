@@ -110,17 +110,17 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
   const onChange = (field: ContactField) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const next = { ...values, [field]: event.target.value }
     setValues(next)
-    if (attempted || issues[field]) setIssues((current) => ({ ...current, [field]: validateContact(next)[field] }))
+    if (attempted || issues[field]) setIssues((current) => ({ ...current, [field]: validateContact(next, Boolean(formId))[field] }))
   }
 
   const onBlur = (field: ContactField) => () => {
     if (!values[field].trim() && !attempted) return
-    setIssues((current) => ({ ...current, [field]: validateContact(values)[field] }))
+    setIssues((current) => ({ ...current, [field]: validateContact(values, Boolean(formId))[field] }))
   }
 
   const validateFields = () => {
     setAttempted(true)
-    const found = validateContact(values)
+    const found = validateContact(values, Boolean(formId))
     setIssues(found)
     const firstInvalid = CONTACT_FIELDS.find((field) => found[field])
     if (firstInvalid) {
@@ -190,16 +190,15 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
     return ids.length ? ids.join(' ') : undefined
   }
   const submitting = status === 'submitting'
-  const emailDraft = mailto(values.subject.trim(), `${t.contact.form.replyTo}: ${values.email.trim()}\n\n${values.message.trim()}`)
+  const emailDraft = mailto(values.subject.trim(), values.message.trim())
 
   return (
     <form className="form" noValidate onSubmit={onSubmit} aria-describedby="contact-required">
-      {!formId && <p className="form__delivery">{t.contact.form.mailtoNotice}</p>}
       <p className="form__hint" id="contact-required">
         {t.contact.form.allRequired}
       </p>
 
-      <Field id="contact-email" label={t.contact.form.email} error={issueText('email', issues.email)}>
+      {formId && <Field id="contact-email" label={t.contact.form.email} error={issueText('email', issues.email)}>
         <input
           ref={(element) => {
             fieldRefs.current.email = element
@@ -219,7 +218,7 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
           aria-invalid={issues.email ? true : undefined}
           aria-describedby={describe('email')}
         />
-      </Field>
+      </Field>}
 
       <Field id="contact-subject" label={t.contact.form.subject} error={issueText('subject', issues.subject)}>
         <input
@@ -272,10 +271,10 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
       </Field>
 
       {/* Champ piège anti-robots de Formspree : invisible et hors de la navigation clavier. */}
-      <div className="form__trap" aria-hidden="true">
+      {formId && <div className="form__trap" aria-hidden="true">
         <label htmlFor="contact-gotcha">{t.contact.form.honeypot}</label>
         <input id="contact-gotcha" ref={honeypot} type="text" name="_gotcha" tabIndex={-1} autoComplete="off" />
-      </div>
+      </div>}
 
       {status === 'error' && serviceError?.form && (
         <div className="form__alert" role="alert">
@@ -316,7 +315,7 @@ export default function ContactForm({ formId, initialSubject }: { formId?: strin
           </a>
         )}
         <output className="sr-only">{submitting ? t.contact.form.submitting : ''}</output>
-        <p className="form__privacy">{formId ? t.contact.form.privacy : t.contact.form.mailtoPrivacy}</p>
+        {formId && <p className="form__privacy">{t.contact.form.privacy}</p>}
       </div>
     </form>
   )

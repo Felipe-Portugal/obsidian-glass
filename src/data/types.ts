@@ -62,6 +62,8 @@ export interface Project {
   summary: Localized
   /** Contribution personnelle, en une ligne. */
   contribution: Localized
+  /** Effet concret vérifiable, sans promesse de métrique ou de déploiement non confirmé. */
+  result: Localized
   cardTech: readonly TechId[]
   detail: {
     context: Localized<readonly string[]>

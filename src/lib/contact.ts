@@ -28,15 +28,17 @@ export function formspreeId(): string | null {
   return raw && /^[A-Za-z0-9]+$/.test(raw) ? raw : null
 }
 
-export function validateContact(values: ContactValues): FieldIssues {
+export function validateContact(values: ContactValues, requireEmail = true): FieldIssues {
   const issues: FieldIssues = {}
   const email = values.email.trim()
   const subject = values.subject.trim()
   const message = values.message.trim()
 
-  if (!email) issues.email = 'required'
-  else if (email.length > LIMITS.email) issues.email = 'tooLong'
-  else if (!EMAIL_PATTERN.test(email)) issues.email = 'invalid'
+  if (requireEmail) {
+    if (!email) issues.email = 'required'
+    else if (email.length > LIMITS.email) issues.email = 'tooLong'
+    else if (!EMAIL_PATTERN.test(email)) issues.email = 'invalid'
+  }
 
   if (!subject) issues.subject = 'required'
   else if (subject.length < LIMITS.subjectMin) issues.subject = 'tooShort'

@@ -23,9 +23,8 @@ function LanguageSwitch() {
           key={code}
           type="button"
           className="segmented__item segmented__item--text"
-          lang={code}
           aria-pressed={lang === code}
-          aria-label={t.topbar.languageNames[code]}
+          aria-label={`${code.toUpperCase()} — ${t.topbar.languageActions[code]}`}
           onClick={() => setLang(code)}
         >
           {code.toUpperCase()}

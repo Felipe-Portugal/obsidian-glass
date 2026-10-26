@@ -73,6 +73,9 @@ export function ProjectWindow({ project, card, onClose }: Props) {
         </Tabs.List>
 
         <Tabs.Content className="tabs__panel" value="contribution">
+          <Part id={section('result')} title={t.projects.result} className="pw__result">
+            <p>{pick(project.result)}</p>
+          </Part>
           <Part id={section('role')} title={t.window.role}>
             <List items={pick(detail.role)} />
           </Part>

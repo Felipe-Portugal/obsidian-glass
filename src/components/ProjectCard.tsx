@@ -56,6 +56,10 @@ export function ProjectCard({ project, lifted, onOpen }: Props) {
         <span className="project__label">{t.projects.contribution}</span>
         {pick(project.contribution)}
       </p>
+      <p className="project__result">
+        <span className="project__label">{t.projects.result}</span>
+        {pick(project.result)}
+      </p>
       <TechToolbar ids={project.cardTech} label={`${t.projects.techLabel}, ${title}`} size="sm" />
       <p className="project__meta">
         <span className={`maturity maturity--${project.maturity.kind}`}>{pick(project.maturity.label)}</span>

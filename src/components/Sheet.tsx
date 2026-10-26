@@ -19,7 +19,7 @@ interface SheetProps {
   /** Projet dont la fenêtre prend la lumière. */
   tone?: string
   /** Largeur de la fenêtre ; le contenu défile à hauteur constante. */
-  size?: 'md' | 'lg'
+  size?: 'md' | 'lg' | 'contact'
   children: ReactNode
 }
 

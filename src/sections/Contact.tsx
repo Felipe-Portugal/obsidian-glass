@@ -40,10 +40,9 @@ export function Contact({ onOpen }: Props) {
             <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.75} />
           </a>
           {resume ? (
-            <a className="button button--quiet" href={resume} target="_blank" rel="noopener" type="application/pdf" hrefLang="fr">
+            <a className="button button--quiet" href={resume} target="_blank" rel="noopener" type="application/pdf" hrefLang="fr" aria-label={`${t.contactTile.cvOpen} ${t.a11y.cvPdf} ${t.a11y.newTab}`}>
               <FileText aria-hidden="true" size={16} strokeWidth={1.75} />
               <span>{t.contactTile.cvOpen}</span>
-              <span className="sr-only"> {t.dock.cvPdf} {t.a11y.newTab}</span>
             </a>
           ) : (
             <button type="button" className="button button--quiet" aria-haspopup="dialog" onClick={(event) => onOpen(event.currentTarget, t.contact.cvSubject)}>
