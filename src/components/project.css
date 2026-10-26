@@ -175,12 +175,16 @@
   border-radius: var(--r-xl);
 }
 
+/*
+ * La rangée de logos est au-dessus du bouton et n'ouvre rien : la tuile ne réagit qu'au survol
+ * et à l'appui du reste de sa surface, pour ne pas promettre une ouverture qui ne viendra pas.
+ */
 @media (hover: hover) and (pointer: fine) {
-  .project:hover {
+  .project:hover:not(:has(.techbar:hover)) {
     transform: translateY(-2px);
   }
 
-  .project:hover .project__arrow {
+  .project:hover:not(:has(.techbar:hover)) .project__arrow {
     background: var(--text);
     box-shadow: none;
     color: var(--bg);
@@ -188,6 +192,6 @@
   }
 }
 
-.project:active {
+.project:active:not(:has(.techbar:active)) {
   transform: scale(0.99);
 }

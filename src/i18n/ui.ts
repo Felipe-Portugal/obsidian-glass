@@ -16,7 +16,6 @@ const fr = {
     newTab: '(nouvel onglet)',
   },
   topbar: {
-    home: 'Felipe Portugal, haut de la page',
     language: 'Langue du site',
     languageNames: { fr: 'Français', en: 'English' },
     theme: 'Thème',
@@ -189,7 +188,6 @@ const en: UiStrings = {
     newTab: '(new tab)',
   },
   topbar: {
-    home: 'Felipe Portugal, top of page',
     language: 'Site language',
     languageNames: { fr: 'Français', en: 'English' },
     theme: 'Theme',

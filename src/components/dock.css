@@ -127,6 +127,39 @@
   background: linear-gradient(180deg, transparent, var(--hairline) 25%, var(--hairline) 75%, transparent);
 }
 
+/*
+ * Au bas de la page, la tuile de contact reprend CV, LinkedIn et contact : les liens se replient
+ * et le dock ne garde que le retour en haut. Les infobulles passent par un portail, le rognage
+ * ne les coupe pas.
+ */
+.dock__link {
+  max-width: 200px;
+  overflow: hidden;
+  transition:
+    max-width var(--dur) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.dock[data-at-end] .dock__link {
+  max-width: 0;
+  opacity: 0;
+}
+
+.dock__end {
+  transition:
+    margin var(--dur) var(--ease-out),
+    padding var(--dur) var(--ease-out);
+}
+
+.dock[data-at-end] .dock__end {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.dock[data-at-end] .dock__end::before {
+  opacity: 0;
+}
+
 .dock .tip {
   bottom: calc(100% + 14px);
 }

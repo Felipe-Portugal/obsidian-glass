@@ -58,13 +58,10 @@ function ThemeSwitch() {
   )
 }
 
+/** Langue et thème, toujours à portée : les sélecteurs suivent le défilement en haut à droite. */
 export function TopBar() {
-  const { t } = useLanguage()
   return (
     <header className="topbar">
-      <a className="monogram" href="#top" aria-label={t.topbar.home}>
-        FP<span aria-hidden="true">.</span>
-      </a>
       <div className="topbar__controls">
         <LanguageSwitch />
         <ThemeSwitch />

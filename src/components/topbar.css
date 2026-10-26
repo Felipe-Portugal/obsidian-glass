@@ -1,31 +1,16 @@
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+  justify-content: flex-end;
   padding-top: max(var(--space-5), env(safe-area-inset-top, 0px));
-}
-
-.monogram {
-  font-size: 1.3125rem;
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 1;
-  text-decoration: none;
-  padding: var(--space-2) var(--space-1);
-  margin-left: calc(-1 * var(--space-1));
-}
-
-.monogram span {
-  color: var(--text-3);
-  transition: color var(--dur) var(--ease-out);
-}
-
-.monogram:hover span {
-  color: var(--text);
+  /* La bande reste transparente au pointeur : seuls les sélecteurs le captent. */
+  pointer-events: none;
 }
 
 .topbar__controls {
+  pointer-events: auto;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -54,8 +39,12 @@
     box-shadow var(--dur-fast) var(--ease-out);
 }
 
-.segmented__item:hover {
-  color: var(--glass-ink);
+@media (hover: hover) and (pointer: fine) {
+  .segmented__item:not([aria-pressed='true']):hover {
+    background: color-mix(in srgb, var(--glass-ink) 10%, transparent);
+    color: var(--glass-ink);
+    box-shadow: inset 0 0 0 1px var(--glass-hairline);
+  }
 }
 
 .segmented__item[aria-pressed='true'] {

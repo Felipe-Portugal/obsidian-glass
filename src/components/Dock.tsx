@@ -1,7 +1,7 @@
 import { ArrowUp, FileText, Mail } from 'lucide-react'
 import { spring } from 'motion'
 import { animate } from 'motion/mini'
-import { useRef, type FocusEvent, type PointerEvent } from 'react'
+import { useEffect, useRef, useState, type FocusEvent, type PointerEvent } from 'react'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { useRefraction } from '../lib/refraction'
@@ -21,7 +21,8 @@ const LENS = { type: spring, stiffness: 560, damping: 42, mass: 0.7 }
 
 /**
  * Dock flottant en verre : CV, LinkedIn, contact et retour en haut. Aucun lien fictif. Une
- * lentille de verre plus clair glisse sous l'élément pointé ou atteint au clavier.
+ * lentille de verre plus clair glisse sous l'élément pointé ou atteint au clavier. Au bas de la
+ * page, la tuile de contact offre déjà les mêmes liens : le dock se replie sur le retour en haut.
  */
 export function Dock({ onContact }: Props) {
   const { pick, t } = useLanguage()
@@ -30,6 +31,15 @@ export function Dock({ onContact }: Props) {
   const lensRef = useRef<HTMLSpanElement>(null)
   const lensShown = useRef(false)
   const resume = profile.resume ? `${import.meta.env.BASE_URL}${pick(profile.resume)}` : null
+  const [atEnd, setAtEnd] = useState(false)
+
+  useEffect(() => {
+    const contact = document.getElementById('contact')
+    if (!contact || typeof IntersectionObserver === 'undefined') return
+    const observer = new IntersectionObserver(([entry]) => setAtEnd(entry?.isIntersecting ?? false), { threshold: 0.4 })
+    observer.observe(contact)
+    return () => observer.disconnect()
+  }, [])
 
   const toTop = () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
@@ -58,6 +68,11 @@ export function Dock({ onContact }: Props) {
     lensShown.current = true
   }
 
+  // Les liens repliés emportent la lentille qui s'y trouvait.
+  useEffect(() => {
+    if (atEnd) moveLens(null)
+  }, [atEnd])
+
   const lensProps = {
     onPointerEnter: (event: PointerEvent<HTMLElement>) => {
       if (event.pointerType !== 'touch') moveLens(event.currentTarget)
@@ -69,6 +84,7 @@ export function Dock({ onContact }: Props) {
   return (
     <nav
       className="dock glass"
+      data-at-end={atEnd || undefined}
       aria-label={t.dock.label}
       ref={(element) => {
         glowRef(element)
@@ -78,7 +94,7 @@ export function Dock({ onContact }: Props) {
     >
       <span className="dock__lens" ref={lensRef} aria-hidden="true" />
       <ul className="dock__list">
-        <li>
+        <li className="dock__link" inert={atEnd}>
           {resume ? (
             <Tip label={t.dock.cvPdf}>
               <a
@@ -113,7 +129,7 @@ export function Dock({ onContact }: Props) {
             </Tip>
           )}
         </li>
-        <li>
+        <li className="dock__link" inert={atEnd}>
           <Tip label={`${t.contact.linkedin} ${t.a11y.newTab}`}>
             <a className="dock__item" href={profile.linkedin} target="_blank" rel="noopener noreferrer" {...lensProps}>
               <BrandSvg icon="linkedin" className="dock__brand" />
@@ -122,7 +138,7 @@ export function Dock({ onContact }: Props) {
             </a>
           </Tip>
         </li>
-        <li>
+        <li className="dock__link" inert={atEnd}>
           <Tip label={t.dock.contactHint}>
             <button
               type="button"
