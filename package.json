@@ -2,7 +2,7 @@
   "name": "obsidian-glass",
   "private": true,
   "version": "1.0.0",
-  "description": "ePortfolio de Felipe Portugal, développeur logiciel polyvalent.",
+  "description": "ePortfolio de Felipe Portugal, étudiant en génie logiciel à l'ÉTS.",
   "type": "module",
   "engines": {
     "node": ">=20.19"

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useEffectEvent, useRef, useState } from 'react'
 import type { AboutWindow } from './components/AboutWindow'
 import { ContactWindow } from './components/ContactWindow'
 import { Dock } from './components/Dock'
@@ -121,15 +121,23 @@ export function App() {
   useEffect(() => onFirstNotify(() => setNotifications(true)), [])
 
   // Chaque étude de cas a son adresse (#projet-spot…) : lien direct, Retour et Avance du navigateur.
+  // Événements d'effet : ils lisent toujours la dernière version d'openWindow sans réabonner l'écouteur.
+  const openFromHash = useEffectEvent((id: Project['id']) => {
+    openWindow({ kind: 'project', id, card: document.querySelector<HTMLElement>(`.project[data-project="${id}"]`) })
+  })
+  const syncWithHash = useEffectEvent(() => {
+    const id = projectFromHash()
+    if (id) openFromHash(id)
+    else setActive((current) => (current?.kind === 'project' ? null : current))
+  })
   useEffect(() => {
-    const sync = () => {
-      const id = projectFromHash()
-      if (id) openWindow({ kind: 'project', id, card: document.querySelector<HTMLElement>(`.project[data-project="${id}"]`) })
-      else setActive((current) => (current?.kind === 'project' ? null : current))
-    }
-    sync()
-    window.addEventListener('popstate', sync)
-    return () => window.removeEventListener('popstate', sync)
+    // Arrivée directe sur l'adresse d'une étude de cas : la fenêtre suit l'adresse, un système externe.
+    const id = projectFromHash()
+    // oxlint-disable-next-line react/set-state-in-effect
+    if (id) openFromHash(id)
+    const onPopState = () => syncWithHash()
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
   }, [])
 
   useEffect(() => {

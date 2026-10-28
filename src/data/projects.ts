@@ -31,8 +31,8 @@ export const projects: readonly Project[] = [
       en: 'Mobile app, admin pages, some REST API endpoints and backend components, Stripe payments.',
     },
     result: {
-      fr: 'Les demandes de vignettes sont plus rapides à traiter. L’administration et les surveillants disposent d’un historique, des factures et du lien entre chaque vignette et le bon véhicule.',
-      en: 'Permit requests are faster to process. Administrators and parking staff can access the history, invoices and the vehicle linked to each permit.',
+      fr: 'Les demandes de vignettes se traitent dans l’interface web d’administration. L’administration et les surveillants y consultent l’historique, les factures et le véhicule lié à chaque vignette.',
+      en: 'Permit requests are processed in the web admin interface. Administrators and parking staff can view the history, invoices and the vehicle linked to each permit there.',
     },
     cardTech: ['reactnative', 'expo', 'typescript', 'php', 'postgresql'],
     detail: {
@@ -198,8 +198,8 @@ export const projects: readonly Project[] = [
       en: 'Python and Spot SDK: missions, gauge detection and reading, data export, sensors in InfluxDB and Grafana.',
     },
     result: {
-      fr: 'Le personnel accède rapidement aux données des missions, traitées sur le serveur et déposées dans un répertoire en fichiers Excel et CSV.',
-      en: 'Staff can quickly access mission data processed on the server and placed in a directory as Excel and CSV files.',
+      fr: 'Les photos de mission sont traitées sur le serveur Linux, et les valeurs lues sont déposées en fichiers Excel et CSV dans un répertoire accessible au personnel.',
+      en: 'Mission photos are processed on the Linux server, and the values read are saved as Excel and CSV files in a directory accessible to staff.',
     },
     cardTech: ['python', 'spotsdk', 'pytorch', 'opencv', 'rust'],
     detail: {
@@ -381,8 +381,8 @@ export const projects: readonly Project[] = [
       en: 'System design, sensors (motion, microphone, camera), embedded programming and the Android app.',
     },
     result: {
-      fr: 'Le projet a réuni une application Android et des composants embarqués pour répondre au besoin des personnes en déplacement de surveiller leur logement temporaire en continu.',
-      en: 'The project brought together an Android app and embedded components to address travellers’ need to monitor their temporary lodging continuously.',
+      fr: 'Un système de surveillance livré et validé avec le client : capteurs de mouvement, microphone et caméra lus par le Raspberry Pi et l’Arduino, avec une application Android.',
+      en: 'A monitoring system delivered and signed off with the client: motion sensors, a microphone and a camera read by the Raspberry Pi and the Arduino, with an Android app.',
     },
     cardTech: ['android', 'java', 'raspberrypi', 'python', 'arduino'],
     detail: {

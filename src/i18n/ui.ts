@@ -5,7 +5,7 @@ import type { Lang } from '../data/types'
 
 const fr = {
   meta: {
-    title: 'Felipe Portugal · Développeur logiciel polyvalent',
+    title: 'Felipe Portugal · Stagiaire en développement logiciel et mobile',
     description:
       'Portfolio de Felipe Portugal, étudiant en génie logiciel à l’ÉTS, à Montréal\u00a0: applications mobiles, backend, données et robotique.',
     locale: 'fr_CA',
@@ -23,19 +23,19 @@ const fr = {
     themes: { auto: 'Thème automatique (système)', light: 'Thème clair', dark: 'Thème sombre' },
   },
   hero: {
-    role: 'Développeur logiciel polyvalent',
-    lede: 'Étudiant en génie logiciel à l’ÉTS et diplômé du DEC en techniques de l’informatique, je suis passionné par les systèmes embarqués et l’implémentation de l’IA. À l’ITMI, j’ai contribué à des applications mobiles, à des services backend et à des outils pour le robot Spot.',
+    role: 'Stagiaire en développement logiciel et mobile',
+    lede: 'Étudiant en génie logiciel à l’ÉTS et diplômé du DEC en techniques de l’informatique. À l’ITMI, j’ai contribué à une application mobile React Native et à son API PHP, puis, pour le robot Spot, à la détection de manomètres avec PyTorch et à leur lecture par OCR. Je veux aller plus loin en systèmes embarqués et en IA appliquée.',
     factsLabel: 'En bref',
     study: 'Étudiant en génie logiciel, ÉTS',
     languages: 'Français, anglais, espagnol',
-    status: 'Recherche un stage de 4\u00a0mois à l’hiver 2027 · ouvert à 8\u00a0mois',
+    status: 'Stage de 4\u00a0mois à temps plein dès janvier 2027 · ouvert à 8\u00a0mois',
     contact: 'Me contacter',
   },
   projects: {
     title: 'Projets',
     hint: 'Chaque étude de cas détaille ma contribution, l’architecture et les limites.',
     contribution: 'Ma contribution',
-    result: 'Ce que le projet a changé',
+    result: 'Ce qui a été livré',
     open: 'Ouvrir l’étude de cas',
     techLabel: 'Technologies principales',
   },
@@ -128,7 +128,7 @@ const fr = {
   contactTile: {
     title: 'Contact',
     lead: 'Pour un stage ou une question, écrivez-moi directement.',
-    write: 'Écrire un message',
+    write: 'Me contacter',
     cv: 'Demander le CV',
     cvOpen: 'Ouvrir le CV',
   },
@@ -191,7 +191,7 @@ export type UiStrings = typeof fr
 
 const en: UiStrings = {
   meta: {
-    title: 'Felipe Portugal · Versatile software developer',
+    title: 'Felipe Portugal · Software and mobile development intern',
     description:
       'Portfolio of Felipe Portugal, software engineering student at ÉTS in Montréal: mobile apps, backend, data and robotics.',
     locale: 'en_CA',
@@ -209,19 +209,19 @@ const en: UiStrings = {
     themes: { auto: 'Automatic theme (system)', light: 'Light theme', dark: 'Dark theme' },
   },
   hero: {
-    role: 'Versatile software developer',
-    lede: 'A software engineering student at ÉTS with a college diploma (DEC) in computer science, I am passionate about embedded systems and implementing AI. At ITMI, I contributed to mobile apps, backend services and tools for the Spot robot.',
+    role: 'Software and mobile development intern',
+    lede: 'Software engineering student at ÉTS with a college diploma (DEC) in computer science. At ITMI, I contributed to a React Native mobile app and its PHP API, then, for the Spot robot, to gauge detection with PyTorch and reading their values with OCR. I want to go further in embedded systems and applied AI.',
     factsLabel: 'At a glance',
     study: 'Software engineering student, ÉTS',
     languages: 'French, English, Spanish',
-    status: 'Looking for a 4-month internship in winter 2027 · open to 8 months',
+    status: 'Full-time 4-month internship from January 2027 · open to 8 months',
     contact: 'Contact me',
   },
   projects: {
     title: 'Projects',
     hint: 'Each case study details my contribution, the architecture and the limits.',
     contribution: 'My contribution',
-    result: 'What this project changed',
+    result: 'What was delivered',
     open: 'Open the case study',
     techLabel: 'Main technologies',
   },
@@ -314,7 +314,7 @@ const en: UiStrings = {
   contactTile: {
     title: 'Contact',
     lead: 'For an internship or a question, write to me directly.',
-    write: 'Write a message',
+    write: 'Contact me',
     cv: 'Request my résumé',
     cvOpen: 'Open my résumé',
   },

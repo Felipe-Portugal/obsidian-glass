@@ -1,6 +1,6 @@
 # Obsidian Glass
 
-ePortfolio de Felipe Portugal, développeur logiciel polyvalent : une seule page, bilingue (français et anglais), avec mode clair, mode sombre et mode automatique.
+ePortfolio de Felipe Portugal, étudiant en génie logiciel à l'ÉTS qui cherche un stage en développement logiciel et mobile : une seule page, bilingue (français et anglais), avec mode clair, mode sombre et mode automatique.
 
 React 19, Vite et TypeScript strict. Les comportements d'interface reposent sur des primitives accessibles et sans style ([Radix UI](https://www.radix-ui.com/primitives) pour les fenêtres, onglets et infobulles, [Vaul](https://vaul.emilkowal.ski) pour les feuilles du bas sur mobile, [Sonner](https://sonner.emilkowal.ski) pour les confirmations) ; tout le style reste en CSS maison, sur les jetons du projet. Aucun suivi, aucun cookie.
 

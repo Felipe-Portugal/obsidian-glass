@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { StrictMode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { App } from '../App'
+import { profile } from '../data/profile'
 import type { Lang } from '../data/types'
 import { LanguageProvider } from '../i18n/LanguageProvider'
 import { ThemeProvider } from '../theme/ThemeProvider'
@@ -25,7 +26,7 @@ describe('page', () => {
   it('présente le profil et les sections attendues, dans l’ordre', () => {
     renderApp('fr')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Felipe Portugal.')
-    expect(screen.getByText('Développeur logiciel polyvalent')).toBeTruthy()
+    expect(screen.getByText('Stagiaire en développement logiciel et mobile')).toBeTruthy()
     expect(headings(2)).toEqual(['Projets', 'Parcours', 'Compétences', 'À propos de moi', 'Contact'])
     expect(document.documentElement.lang).toBe('fr')
   })
@@ -37,7 +38,7 @@ describe('page', () => {
     expect(headings(2)).toEqual(['Projects', 'Background', 'Skills', 'About me', 'Contact'])
     expect(document.documentElement.lang).toBe('en')
     expect(window.localStorage.getItem('og-lang')).toBe('en')
-    expect(document.title).toMatch(/Versatile software developer/)
+    expect(document.title).toMatch(/Software and mobile development intern/)
   })
 
   it('mémorise un thème manuel et oublie le mode automatique', () => {
@@ -76,6 +77,12 @@ describe('page', () => {
       expect(link.getAttribute('target')).toBe('_blank')
       expect(link.getAttribute('type')).toBe('application/pdf')
     }
+  })
+
+  it('nomme LinkedIn et GitHub nommés même réduits à leur icône', () => {
+    renderApp('fr')
+    expect(screen.getAllByRole('link', { name: /^LinkedIn/ }).some((link) => link.getAttribute('href') === profile.linkedin)).toBe(true)
+    expect(screen.getAllByRole('link', { name: /^GitHub/ }).some((link) => link.getAttribute('href') === profile.github)).toBe(true)
   })
 })
 
@@ -141,7 +148,7 @@ describe('fenêtres', () => {
     expect(closeButton.textContent).toBe('')
     expect(closeButton.querySelector('svg')).toBeTruthy()
     expect(within(dialog).getByRole('heading', { name: 'Défi technique' })).toBeTruthy()
-    expect(within(dialog).getByRole('heading', { name: 'Ce que le projet a changé' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'Ce qui a été livré' })).toBeTruthy()
     expect(document.activeElement).toBe(within(dialog).getByRole('heading', { level: 2, name: 'Gestion des stationnements' }))
     // Les onglets : l'architecture n'est rendue qu'une fois son onglet choisi.
     expect(within(dialog).queryByRole('figure')).toBeNull()
@@ -233,7 +240,7 @@ describe('fenêtres', () => {
 
   it('ouvre immédiatement le formulaire depuis la section Contact et prépare un courriel', () => {
     renderApp('fr')
-    fireEvent.click(screen.getByRole('button', { name: 'Écrire un message' }))
+    fireEvent.click(within(document.getElementById('contact')!).getByRole('button', { name: 'Me contacter' }))
     const dialog = screen.getByRole('dialog', { name: 'Me contacter' })
     expect(within(dialog).getByText(/Rédigez votre message ici/)).toBeTruthy()
     const emailLink = within(dialog).getByRole('link', { name: 'Ouvrir mon application courriel' })
