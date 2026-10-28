@@ -1,22 +1,16 @@
 import type { TechId } from './technologies'
 import type { DiagramNode, Project } from './types'
-import { validated } from './validation'
-
-const pytorch = validated.pytorchDetection
 
 const detectionNode: DiagramNode = {
   id: 'detection',
   label: { fr: 'Détection', en: 'Detection' },
-  detail: pytorch
-    ? { fr: 'Repérage des manomètres (PyTorch)', en: 'Locating the gauges (PyTorch)' }
-    : { fr: 'Repérage des manomètres', en: 'Locating the gauges' },
+  detail: { fr: 'Repérage des manomètres (PyTorch)', en: 'Locating the gauges (PyTorch)' },
   kind: 'step',
   contributed: true,
-  ...(pytorch ? { tech: ['pytorch'] as const } : {}),
+  tech: ['pytorch'],
 }
 
-const spotImageTech: TechId[] = ['python', 'spotsdk', 'spotcam', 'linux', 'opencv', 'pillow', 'numpy']
-if (pytorch) spotImageTech.push('pytorch')
+const spotImageTech: TechId[] = ['python', 'spotsdk', 'spotcam', 'linux', 'opencv', 'pillow', 'numpy', 'pytorch']
 
 export const projects: readonly Project[] = [
   {
@@ -241,15 +235,11 @@ export const projects: readonly Project[] = [
       },
       approach: {
         fr: [
-          pytorch
-            ? 'Sur le serveur Linux, le traitement se fait en deux temps\u00a0: un modèle PyTorch repère les manomètres dans chaque photo, puis l’OCR extrait leurs valeurs.'
-            : 'Sur le serveur Linux, le traitement se fait en deux temps\u00a0: un modèle de détection repère les manomètres dans chaque photo, puis l’OCR extrait leurs valeurs.',
+          'Sur le serveur Linux, le traitement se fait en deux temps\u00a0: un modèle PyTorch repère les manomètres dans chaque photo, puis l’OCR extrait leurs valeurs.',
           'Les données des capteurs suivent une chaîne distincte\u00a0: collecte en Rust, stockage dans InfluxDB, visualisation dans Grafana.',
         ],
         en: [
-          pytorch
-            ? 'On the Linux server, processing happens in two stages: a PyTorch model locates the gauges in each photo, then OCR extracts their values.'
-            : 'On the Linux server, processing happens in two stages: a detection model locates the gauges in each photo, then OCR extracts their values.',
+          'On the Linux server, processing happens in two stages: a PyTorch model locates the gauges in each photo, then OCR extracts their values.',
           'Sensor data follows a separate pipeline: collection in Rust, storage in InfluxDB, visualisation in Grafana.',
         ],
       },

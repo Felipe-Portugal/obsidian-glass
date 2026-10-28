@@ -1,6 +1,6 @@
 import type { EducationEntry, SkillGroup } from './types'
 
-/** Sélection de technologies confirmées dans facts_felipe.md, pas la liste brute complète. */
+/** Sélection des technologies réellement employées dans les projets et les emplois. */
 export const skillGroups: readonly SkillGroup[] = [
   {
     id: 'languages',

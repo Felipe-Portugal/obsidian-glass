@@ -57,7 +57,6 @@ Tout le texte vit dans `src/data/` (contenu) et `src/i18n/ui.ts` (interface). Ch
 - `projects.ts` : les trois projets, leur fiche détaillée et leur schéma d'architecture.
 - `experience.ts`, `skills.ts` : parcours, compétences, formation.
 - `technologies.ts` : catalogue des technologies (nom affiché, logo ou monogramme).
-- `validation.ts` : précisions en attente de confirmation (voir « Éléments à valider »).
 - `ui.ts` : libellés d'interface, messages d'erreur, textes d'accessibilité.
 
 Langue initiale : choix mémorisé, sinon langue du navigateur (`fr*` → français, `en*` → anglais), sinon français. Le choix est mémorisé dans `localStorage` (`og-lang`) ; `<html lang>`, le titre et les métadonnées suivent.
@@ -96,6 +95,8 @@ BASE_PATH=/mon-depot npm run build
 
 Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement des sous-routes sur GitHub Pages. GitHub Pages ne permettant pas d'en-têtes HTTP personnalisés, la politique de sécurité du contenu (CSP) est injectée au build dans une balise `<meta>`, avec l'empreinte du seul script inline (choix du thème et de la langue avant l'affichage).
 
+Le workflow n'accorde aucun droit par défaut : la construction lit seulement le dépôt et la configuration Pages, et seule la publication peut écrire sur Pages.
+
 ## Personnalisation visuelle
 
 - **Couleurs, typographie, rayons, ombres, durées** : `src/styles/tokens.css`. Le thème sombre est la référence ; le bloc `[data-theme='light']` en est l'équivalent clair.
@@ -119,17 +120,10 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
 - Lien d'évitement, contrastes vérifiés dans les deux thèmes, schémas lisibles sans la couleur.
 - Aucun outil d'analyse, aucun cookie, aucune requête vers un tiers hormis Formspree à l'envoi du formulaire. Seules les préférences de langue (`og-lang`) et de thème (`og-theme`) sont gardées dans le navigateur.
 
-## Éléments à valider
-
-| Élément | État | Où le modifier |
-|---|---|---|
-| Identifiant Formspree | À configurer ; courriel direct en attendant | `.env.local`, variable de dépôt |
-| Dépôt et adresse GitHub Pages | `Felipe-Portugal/obsidian-glass` et `https://felipe-portugal.github.io/obsidian-glass/` | `.github/workflows/deploy.yml` |
-| Détection par PyTorch (projet Spot) | À confirmer ; le site dit « un modèle de détection » | `src/data/validation.ts` |
-| Adresse canonique et image de partage | `https://felipe-portugal.github.io/obsidian-glass/`, `public/og-image.png` (1200 × 630) | `index.html` |
-
 ## Licences
 
-Code et contenu : Felipe Portugal. Licence du code à définir avant publication du dépôt.
+Code et contenu © Felipe Portugal, tous droits réservés. Le dépôt est public pour être consulté ; aucune licence de réutilisation n'est accordée.
+
+Police : [Geist](https://vercel.com/font) (SIL Open Font License 1.1), auto-hébergée via `@fontsource-variable/geist`.
 
 Logos de technologies : extraits de [Simple Icons](https://simpleicons.org) (CC0 1.0) et de [Devicon](https://devicon.dev) (MIT). Les marques et logos restent la propriété de leurs détenteurs respectifs et ne sont utilisés que pour désigner les technologies employées.

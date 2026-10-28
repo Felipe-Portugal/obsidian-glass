@@ -1,10 +1,10 @@
 import type { ExperienceEntry } from './types'
 
 /**
- * Rôles de développement et de robotique à l'ITMI uniquement (CISSS et CAPRA exclus).
+ * Rôles de développement et de robotique à l'ITMI.
  * La répartition des réalisations entre le stage et l'emploi qui a suivi n'est pas
  * confirmée : elles sont présentées ensemble, pour toute la période.
- * Dates des rôles en robotique : facts_felipe.md (été 2024; hiver 2024).
+ * Rôles en robotique : été 2024, puis hiver 2024.
  */
 export const experience: readonly ExperienceEntry[] = [
   {

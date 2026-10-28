@@ -1,3 +1,5 @@
+/// <reference types="node" />
+// Ce test lit les fichiers du dépôt : il tourne sous Node, pas dans le navigateur.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -7,7 +9,6 @@ import { profile } from '../data/profile'
 import { projects } from '../data/projects'
 import { education, skillGroups } from '../data/skills'
 import { technologies, type Technology } from '../data/technologies'
-import { validated } from '../data/validation'
 import { ui } from '../i18n/ui'
 
 const root = resolve(__dirname, '../..')
@@ -28,26 +29,20 @@ const published = collectStrings([projects, experience, skillGroups, education, 
 /**
  * Termes privés à ne jamais publier (projets non publiables, coordonnées, outils internes).
  * Ils restent hors du dépôt, dans .content-guard.local (ignoré par git) : les écrire ici
- * suffirait à les publier. Format : { "forbidden": ["terme", ...] }.
+ * suffirait à les publier. Format : { "forbidden": ["terme", ...], "patterns": ["regex", ...] }.
  */
 const guardFile = join(root, '.content-guard.local')
-const privateTerms: string[] = existsSync(guardFile)
-  ? (JSON.parse(readFileSync(guardFile, 'utf8')) as { forbidden: string[] }).forbidden
-  : []
+const guard: { forbidden?: string[]; patterns?: string[] } = existsSync(guardFile)
+  ? (JSON.parse(readFileSync(guardFile, 'utf8')) as { forbidden?: string[]; patterns?: string[] })
+  : {}
+const privateTerms = guard.forbidden ?? []
+const privatePatterns = guard.patterns ?? []
 
-describe('fidélité à facts_felipe.md', () => {
+describe('règles éditoriales du contenu', () => {
   it.each([
     ['numéro de téléphone', /\(?\d{3}\)?[\s.-]\d{3}-\d{4}/],
-    ['citoyenneté', /citoyen|citizen/i],
     ['niveaux de maîtrise', /\bexpert|\bsenior\b|maîtrise avancée|advanced proficiency/i],
-    ['développeur unique', /seul développeur|sole developer|independently|on my own/i],
-    ['titre non confirmé', /System Architect/i],
-    ['certification non obtenue', /\bCCNA\b/],
-    ['Nomad de HashiCorp', /HashiCorp/i],
-    ['détails Stripe inventés', /webhook|PCI\b|idempoten/i],
-    ['modèle de branches non précisé', /GitFlow|trunk-based/i],
-    ['outils de test non confirmés', /JUnit|Mockito|Selenium|Cypress|JMeter|Locust|TestNG/i],
-    ['TorchServe', /TorchServe/i],
+    ['travail d’équipe présenté comme solo', /seul développeur|sole developer|independently|on my own/i],
     ['pourcentages et métriques', /\d+\s?%|\b\d+\s+(images|utilisateurs|users|requêtes|requests)\b/i],
   ])('aucune mention : %s', (_label, pattern) => {
     // Seule métrique publiable : la couverture de 99 % du projet LOG240.
@@ -63,12 +58,8 @@ describe('fidélité à facts_felipe.md', () => {
     for (const term of privateTerms) expect(text.includes(term.toLowerCase()), term).toBe(false)
   })
 
-  it('n’affiche PyTorch que si la validation est confirmée', () => {
-    const projectText = JSON.stringify(projects)
-    if (!validated.pytorchDetection) {
-      expect(projectText).not.toMatch(/pytorch/i)
-      expect(skillGroups.flatMap((group) => group.items)).not.toContain('pytorch')
-    }
+  it.runIf(privatePatterns.length > 0)('aucun motif privé de .content-guard.local', () => {
+    for (const pattern of privatePatterns) expect(published, pattern).not.toMatch(new RegExp(pattern, 'i'))
   })
 
   it('décrit l’application mobile comme une contribution', () => {
@@ -87,7 +78,6 @@ describe('fidélité à facts_felipe.md', () => {
     const [software] = experience
     expect(software?.roles.map((role) => role.period.fr)).toEqual(['Mai – sept. 2025', 'Janv. – mai 2025'])
     expect(software?.note?.fr).toMatch(/ensemble de la période/)
-    expect(JSON.stringify(experience)).not.toMatch(/CISSS|CAPRA/)
   })
 
   it('ne montre pour une période que des technologies nommées dans ses réalisations', () => {
