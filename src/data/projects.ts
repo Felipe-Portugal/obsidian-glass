@@ -33,8 +33,8 @@ export const projects: readonly Project[] = [
       en: 'A mobile app and an admin interface to simplify parking permit requests and management at Cégep de Sept-Îles.',
     },
     contribution: {
-      fr: 'Application mobile, certains endpoints d’API REST et composantes backend, paiement Stripe.',
-      en: 'Mobile app, some REST API endpoints and backend components, Stripe payments.',
+      fr: 'Application mobile, pages d’administration, certains endpoints d’API REST et composantes backend, paiement Stripe.',
+      en: 'Mobile app, admin pages, some REST API endpoints and backend components, Stripe payments.',
     },
     result: {
       fr: 'Les demandes de vignettes sont plus rapides à traiter. L’administration et les surveillants disposent d’un historique, des factures et du lien entre chaque vignette et le bon véhicule.',
@@ -207,7 +207,7 @@ export const projects: readonly Project[] = [
       fr: 'Le personnel accède rapidement aux données des missions, traitées sur le serveur et déposées dans un répertoire en fichiers Excel et CSV.',
       en: 'Staff can quickly access mission data processed on the server and placed in a directory as Excel and CSV files.',
     },
-    cardTech: ['python', 'spotsdk', 'opencv', 'rust', 'grafana'],
+    cardTech: ['python', 'spotsdk', 'pytorch', 'opencv', 'rust'],
     detail: {
       context: {
         fr: [

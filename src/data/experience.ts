@@ -31,13 +31,13 @@ export const experience: readonly ExperienceEntry[] = [
     },
     points: {
       fr: [
-        'Contribution au développement de l’application mobile de gestion des stationnements (React Native, Expo, TypeScript) et développement de l’interface web administrateur du système.',
+        'Contribution au développement de l’application mobile de gestion des stationnements (React Native, Expo, TypeScript) et développement de pages de l’interface web administrateur (demandes de vignettes, historique, factures).',
         'Endpoints d’API REST et composantes backend en PHP avec Nomad, framework interne d’ITMI; PostgreSQL (connexion, requêtes, migrations); schémas et requêtes SQL Server pour certaines plateformes web.',
         'Fonctionnalités d’une application web de gestion d’inventaire et de contrats; visualisations de données avec PHP et Grafana.',
         'Agile/Scrum, tickets Azure DevOps Boards, pull requests et revues de code dans Gitea; maintenance d’applications en production, formation des utilisateurs et échanges avec les clients.',
       ],
       en: [
-        'Contributed to the parking management mobile app (React Native, Expo, TypeScript) and built the system’s web admin interface.',
+        'Contributed to the parking management mobile app (React Native, Expo, TypeScript) and built pages of the web admin interface (permit requests, history, invoices).',
         'REST API endpoints and backend components in PHP on Nomad, ITMI’s internal framework; PostgreSQL (connection, queries, migrations); SQL Server schemas and queries for some web platforms.',
         'Features for an inventory and contract management web app; data visualisations with PHP and Grafana.',
         'Agile/Scrum, Azure DevOps Boards tickets, pull requests and code reviews in Gitea; maintenance of production applications, user training and client communication.',

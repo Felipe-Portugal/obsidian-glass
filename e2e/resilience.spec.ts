@@ -36,4 +36,9 @@ test('paquet des fenêtres bloqué : la page reste utilisable', async ({ page })
   await expect(page.locator('#root .app')).toBeVisible()
   await expect(page.locator(prerender)).toHaveCount(0)
   await expect(page.getByRole('heading', { level: 1, name: /Felipe Portugal/ })).toBeVisible()
+
+  // Ouvrir une étude de cas : un message l'explique au lieu de ne rien faire.
+  await page.getByRole('button', { name: /Ouvrir l’étude de cas\s*: Gestion des stationnements/ }).click()
+  await expect(page.getByText('Cette fenêtre n’a pas pu se charger', { exact: false })).toBeVisible()
+  await expect(page.getByRole('dialog')).toHaveCount(0)
 })

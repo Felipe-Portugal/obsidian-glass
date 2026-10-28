@@ -6,7 +6,7 @@ import type { EducationWindow, ExperienceWindow } from './components/ExperienceW
 import type { ProjectWindow } from './components/ProjectWindow'
 import { TipProvider } from './components/Tip'
 import { TopBar } from './components/TopBar'
-import { onFirstNotify } from './lib/notify'
+import { notify, onFirstNotify } from './lib/notify'
 import { usePointerGlowWithin } from './lib/usePointerGlow'
 import { experience } from './data/experience'
 import { projects } from './data/projects'
@@ -113,7 +113,8 @@ export function App() {
         setWindows(loaded)
         if (request === openRequest.current) setActive(next)
       },
-      () => undefined,
+      // Paquet des fenêtres introuvable (réseau coupé, déploiement en cours) : on le dit.
+      () => notify(t.window.loadFailed),
     )
   }
 

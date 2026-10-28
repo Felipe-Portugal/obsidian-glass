@@ -41,6 +41,7 @@ const fr = {
   },
   window: {
     closeNamed: (name: string) => `Fermer\u00a0: ${name}`,
+    loadFailed: 'Cette fenêtre n’a pas pu se charger. Vérifiez votre connexion, puis réessayez.',
     context: 'Contexte',
     role: 'Mon rôle',
     challenge: 'Défi technique',
@@ -87,7 +88,7 @@ const fr = {
     open: 'Lire mon portrait',
     intro: 'J’aime quand le logiciel agit sur le monde réel. C’est ce qui m’a mené du DEC à l’ÉTS, et ce qui guide les projets que je choisis.',
     path: 'Mon parcours',
-    pathText: 'Au DEC en techniques de l’informatique, au Cégep de Sept-Îles, j’ai touché à tout : applications web et mobiles, bases de données, réseaux, objets connectés et robotique avec le robot Spot de Boston Dynamics. C’est à la fin du DEC que j’ai commencé à l’ITMI, d’abord comme auxiliaire de recherche, puis comme conseiller technique en systèmes embarqués.',
+    pathText: 'Au DEC en techniques de l’informatique, au Cégep de Sept-Îles, j’ai touché à tout : applications web et mobiles, bases de données, réseaux, objets connectés et robotique avec le robot Spot de Boston Dynamics. C’est à la fin du DEC que j’ai commencé à l’ITMI, d’abord comme auxiliaire de recherche, puis comme conseiller technique en systèmes embarqués. En 2025, j’y suis revenu comme stagiaire, puis assistant développeur en visualisation de données industrielles, où j’ai contribué à des applications mobiles et à des services backend.',
     university: 'Pourquoi l’université',
     universityText: 'J’ai voulu poursuivre à l’université pour peaufiner mes compétences et approfondir mes connaissances dans le domaine qui me passionne : aller au-delà de ce que je connaissais déjà et me dépasser dans de nouveaux défis.',
     team: 'En équipe',
@@ -226,6 +227,7 @@ const en: UiStrings = {
   },
   window: {
     closeNamed: (name: string) => `Close: ${name}`,
+    loadFailed: 'This window could not load. Check your connection, then try again.',
     context: 'Context',
     role: 'My role',
     challenge: 'Technical challenge',
@@ -272,7 +274,7 @@ const en: UiStrings = {
     open: 'Read my profile',
     intro: 'I like it when software acts on the real world. That is what led me from my college diploma to ÉTS, and it guides the projects I choose.',
     path: 'My path',
-    pathText: 'During my DEC (college diploma) in computer science at Cégep de Sept-Îles, I worked on a bit of everything: web and mobile apps, databases, networks, connected devices and robotics with Boston Dynamics’ Spot robot. Towards the end of the DEC, I started at ITMI, first as a research assistant, then as an embedded systems technical advisor.',
+    pathText: 'During my DEC (college diploma) in computer science at Cégep de Sept-Îles, I worked on a bit of everything: web and mobile apps, databases, networks, connected devices and robotics with Boston Dynamics’ Spot robot. Towards the end of the DEC, I started at ITMI, first as a research assistant, then as an embedded systems technical advisor. In 2025, I returned there as an intern, then as an industrial data visualization assistant developer, contributing to mobile apps and backend services.',
     university: 'Why university',
     universityText: 'I wanted to continue at university to refine my skills and deepen my knowledge in the field I am passionate about: to go beyond what I already knew and push myself with new challenges.',
     team: 'Working with a team',
