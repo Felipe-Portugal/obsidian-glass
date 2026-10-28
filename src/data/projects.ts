@@ -11,6 +11,7 @@ const detectionNode: DiagramNode = {
     ? { fr: 'Repérage des manomètres (PyTorch)', en: 'Locating the gauges (PyTorch)' }
     : { fr: 'Repérage des manomètres', en: 'Locating the gauges' },
   kind: 'step',
+  contributed: true,
   ...(pytorch ? { tech: ['pytorch'] as const } : {}),
 }
 
@@ -54,17 +55,19 @@ export const projects: readonly Project[] = [
       role: {
         fr: [
           'Contribuer au développement de l’application mobile côté client, avec React Native, Expo et TypeScript.',
-          'Développer l’interface web administrateur du système\u00a0: pages, formulaires et vues.',
+          'Développer des pages de l’interface web administrateur\u00a0: traitement des demandes de vignettes, consultation de l’historique et des factures, et lien entre chaque vignette et son véhicule, avec les formulaires et les vues associés.',
           'Développer certains endpoints d’API REST et certaines composantes backend en PHP, avec Nomad, le framework interne d’ITMI.',
           'Travailler sur la connexion PostgreSQL, les requêtes et les migrations.',
-          'Intégrer l’authentification de base, l’authentification Microsoft et le paiement Stripe.',
+          'Intégrer l’authentification de base et l’authentification Microsoft dans l’application client.',
+          'Intégrer le paiement Stripe avec les outils fournis par Stripe, côté client dans l’application mobile et côté serveur dans l’API PHP.',
         ],
         en: [
           'Contributed to the development of the client-side mobile app, with React Native, Expo and TypeScript.',
-          'Built the system’s web admin interface: pages, forms and views.',
+          'Built pages of the web admin interface: processing permit requests, viewing the history and invoices, and linking each permit to its vehicle, with the related forms and views.',
           'Developed some of the REST API endpoints and backend components in PHP, on Nomad, ITMI’s internal framework.',
           'Worked on the PostgreSQL connection, queries and migrations.',
-          'Integrated basic authentication, Microsoft authentication and Stripe payments.',
+          'Integrated basic authentication and Microsoft authentication in the client app.',
+          'Integrated Stripe payments with the tools Stripe provides, on the client side in the mobile app and on the server side in the PHP API.',
         ],
       },
       challenge: {
@@ -73,11 +76,11 @@ export const projects: readonly Project[] = [
       },
       approach: {
         fr: [
-          'Le paiement a été pris en charge des deux côtés\u00a0: intégration de Stripe dans le parcours de l’application mobile, et traitement correspondant dans le backend PHP construit sur Nomad.',
+          'Le paiement s’appuie sur les outils fournis par Stripe des deux côtés\u00a0: côté client, dans le parcours de l’application mobile, et côté serveur, dans le backend PHP construit sur Nomad.',
           'Le détail du flux de paiement appartient au client et n’est pas exposé ici.',
         ],
         en: [
-          'Payments were handled on both sides: Stripe integrated into the mobile app’s flow, with the matching processing in the PHP backend built on Nomad.',
+          'Payments rely on the tools Stripe provides on both sides: on the client, in the mobile app’s flow, and on the server, in the PHP backend built on Nomad.',
           'The details of the payment flow belong to the client and are not disclosed here.',
         ],
       },
@@ -197,8 +200,8 @@ export const projects: readonly Project[] = [
       en: 'Automatically processing the photos and data the Spot robot collects during its missions.',
     },
     contribution: {
-      fr: 'Python et Spot SDK\u00a0: missions, traitement d’images et données de capteurs.',
-      en: 'Python and Spot SDK: missions, image processing and sensor data.',
+      fr: 'Python et Spot SDK\u00a0: missions, détection et lecture des manomètres, export des données, capteurs dans InfluxDB et Grafana.',
+      en: 'Python and Spot SDK: missions, gauge detection and reading, data export, sensors in InfluxDB and Grafana.',
     },
     result: {
       fr: 'Le personnel accède rapidement aux données des missions, traitées sur le serveur et déposées dans un répertoire en fichiers Excel et CSV.',
@@ -219,15 +222,15 @@ export const projects: readonly Project[] = [
       role: {
         fr: [
           'Développer en Python, avec le Spot SDK, un prototype fonctionnel qui permet de sélectionner des missions autonomes existantes et d’en enregistrer de nouvelles.',
-          'Automatiser le traitement des photos et des données des missions sur le serveur Linux (OpenCV, Pillow, NumPy), puis déposer les données formatées en fichiers Excel et CSV dans un répertoire accessible au personnel concerné.',
-          'Récupérer en Rust les données de différents capteurs extérieurs, exploitées dans Grafana.',
+          'Implémenter sur le serveur Linux la chaîne de traitement des photos de mission\u00a0: détection des manomètres avec un modèle PyTorch, lecture de leurs valeurs par OCR (OpenCV, Pillow, NumPy), puis export des données formatées en fichiers Excel et CSV dans un répertoire accessible au personnel concerné.',
+          'Récupérer en Rust les données de différents capteurs extérieurs, les stocker dans InfluxDB et les visualiser dans Grafana.',
           'Écrire des tests automatisés client et serveur en Python avec pytest, incluant des tests de charge.',
           'Rédiger la documentation technique et former le personnel.',
         ],
         en: [
           'Developed in Python, with the Spot SDK, a working prototype for selecting existing autonomous missions and recording new ones.',
-          'Automated the processing of mission photos and data on the Linux server (OpenCV, Pillow, NumPy), then placed formatted Excel and CSV files in a directory accessible to the relevant staff.',
-          'Collected data from various outdoor sensors in Rust, used in Grafana.',
+          'Implemented the mission photo pipeline on the Linux server: gauge detection with a PyTorch model, reading their values with OCR (OpenCV, Pillow, NumPy), then exporting the formatted data as Excel and CSV files to a directory accessible to the relevant staff.',
+          'Collected data from various outdoor sensors in Rust, stored it in InfluxDB and visualised it in Grafana.',
           'Wrote automated client and server tests in Python with pytest, including load tests.',
           'Wrote the technical documentation and trained staff.',
         ],
@@ -292,12 +295,14 @@ export const projects: readonly Project[] = [
                 label: { fr: 'OCR', en: 'OCR' },
                 detail: { fr: 'Lecture des valeurs', en: 'Reading the values' },
                 kind: 'step',
+                contributed: true,
               },
               {
                 id: 'values',
                 label: { fr: 'Fichiers Excel et CSV', en: 'Excel and CSV files' },
                 detail: { fr: 'Répertoire accessible au personnel', en: 'Directory accessible to staff' },
                 kind: 'result',
+                contributed: true,
               },
             ],
           },
@@ -330,6 +335,7 @@ export const projects: readonly Project[] = [
                 detail: { fr: 'Séries temporelles', en: 'Time series' },
                 tech: ['influxdb'],
                 kind: 'store',
+                contributed: true,
               },
               {
                 id: 'grafana',
@@ -337,6 +343,7 @@ export const projects: readonly Project[] = [
                 detail: { fr: 'Visualisation', en: 'Visualisation' },
                 tech: ['grafana'],
                 kind: 'result',
+                contributed: true,
               },
             ],
           },
@@ -380,8 +387,8 @@ export const projects: readonly Project[] = [
       en: 'An Android, Raspberry Pi and Arduino solution designed to monitor temporary lodging, such as a hotel room.',
     },
     contribution: {
-      fr: 'Développement, documentation et validation des livrables avec le client.',
-      en: 'Development, documentation and deliverable sign-off with the client.',
+      fr: 'Conception du système, capteurs (mouvement, micro, caméra), programmation embarquée et application Android.',
+      en: 'System design, sensors (motion, microphone, camera), embedded programming and the Android app.',
     },
     result: {
       fr: 'Le projet a réuni une application Android et des composants embarqués pour répondre au besoin des personnes en déplacement de surveiller leur logement temporaire en continu.',
@@ -395,14 +402,16 @@ export const projects: readonly Project[] = [
       },
       role: {
         fr: [
+          'Concevoir seul un véritable système de surveillance, qui combine plusieurs capteurs\u00a0: détecteur de mouvement, microphone et caméra, entre autres.',
+          'Programmer le Raspberry Pi en Python et l’Arduino pour lire ces capteurs, avec les interfaces matérielles GPIO, I2C, SPI et UART et une horloge temps réel (RTC).',
+          'Mettre en œuvre le traitement local et les communications réseau entre les composantes.',
           'Développer l’application Android en Java, avec Android Studio.',
-          'Programmer le Raspberry Pi en Python, ainsi que l’Arduino.',
-          'Mettre en œuvre le traitement local, les communications réseau et les interfaces matérielles\u00a0: GPIO, I2C, SPI, UART et horloge temps réel (RTC).',
         ],
         en: [
+          'As an individual project, designed a real monitoring system combining several sensors: a motion detector, a microphone and a camera, among others.',
+          'Programmed the Raspberry Pi in Python and the Arduino to read these sensors, through GPIO, I2C, SPI and UART hardware interfaces and a real-time clock (RTC).',
+          'Implemented local processing and network communications between the components.',
           'Developed the Android app in Java, with Android Studio.',
-          'Programmed the Raspberry Pi in Python, as well as the Arduino.',
-          'Implemented local processing, network communications and hardware interfaces: GPIO, I2C, SPI, UART and a real-time clock (RTC).',
         ],
       },
       practices: {
@@ -438,6 +447,7 @@ export const projects: readonly Project[] = [
                 detail: { fr: 'Java · Android Studio', en: 'Java · Android Studio' },
                 tech: ['android', 'java'],
                 kind: 'component',
+                contributed: true,
               },
               {
                 id: 'rpi',
@@ -445,6 +455,7 @@ export const projects: readonly Project[] = [
                 detail: { fr: 'Python', en: 'Python' },
                 tech: ['raspberrypi', 'python'],
                 kind: 'device',
+                contributed: true,
               },
               {
                 id: 'arduino',
@@ -452,6 +463,7 @@ export const projects: readonly Project[] = [
                 detail: { fr: 'Microcontrôleur', en: 'Microcontroller' },
                 tech: ['arduino'],
                 kind: 'device',
+                contributed: true,
               },
             ],
           },
@@ -462,6 +474,7 @@ export const projects: readonly Project[] = [
             variant: 'band',
             title: { fr: 'Commun au projet', en: 'Across the project' },
             nodes: [
+              { id: 'sensors', label: { fr: 'Capteurs\u00a0: mouvement, micro, caméra', en: 'Sensors: motion, microphone, camera' } },
               { id: 'local', label: { fr: 'Traitement local', en: 'Local processing' } },
               { id: 'network', label: { fr: 'Communications réseau', en: 'Network communications' } },
               { id: 'buses', label: { fr: 'GPIO · I2C · SPI · UART', en: 'GPIO · I2C · SPI · UART' } },
@@ -469,7 +482,7 @@ export const projects: readonly Project[] = [
             ],
           },
         ],
-        legend: ['band'],
+        legend: ['contributed', 'band'],
         note: {
           fr: 'Les liaisons précises entre l’application, le Raspberry Pi et l’Arduino ne sont pas représentées.',
           en: 'The exact connections between the app, the Raspberry Pi and the Arduino are not shown.',

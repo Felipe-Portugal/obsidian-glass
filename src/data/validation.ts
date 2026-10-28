@@ -12,5 +12,6 @@ export const validated = {
    * À VALIDER. Ne pas écrire PyTorch ou TorchServe sans confirmation. »
    * Activer affiche PyTorch dans le schéma, l'approche et les technologies du projet Spot.
    */
-  pytorchDetection: false,
+  // Confirmé par Felipe le 28 octobre 2026 : il a implémenté la détection avec PyTorch.
+  pytorchDetection: true,
 } as const

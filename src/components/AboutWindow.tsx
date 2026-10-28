@@ -10,9 +10,10 @@ interface Props {
 export function AboutWindow({ onClose, source }: Props) {
   const { t } = useLanguage()
   const sections = [
-    { id: 'strengths', title: t.about.strengths, text: t.about.strengthsText },
-    { id: 'growth', title: t.about.growth, text: t.about.growthText },
+    { id: 'path', title: t.about.path, text: t.about.pathText },
+    { id: 'university', title: t.about.university, text: t.about.universityText },
     { id: 'team', title: t.about.team, text: t.about.teamText },
+    { id: 'passions', title: t.about.passions, text: t.about.passionsText },
     { id: 'interests', title: t.about.interests, text: t.about.interestsText },
   ]
 

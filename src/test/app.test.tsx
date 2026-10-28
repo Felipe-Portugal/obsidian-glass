@@ -119,8 +119,8 @@ describe('fenêtres', () => {
 
     const dialog = await screen.findByRole('dialog', { name: 'À propos de moi' })
     expect(opener.getAttribute('aria-expanded')).toBe('true')
-    expect(within(dialog).getByRole('heading', { name: 'Mes points forts' })).toBeTruthy()
-    expect(within(dialog).getByRole('heading', { name: 'Ce que j’améliore' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'Pourquoi l’université' })).toBeTruthy()
+    expect(within(dialog).getByRole('heading', { name: 'Ce qui me passionne' })).toBeTruthy()
     expect(within(dialog).getByRole('heading', { name: 'En équipe' })).toBeTruthy()
     expect(within(dialog).getByRole('heading', { name: 'En dehors du travail' })).toBeTruthy()
     expect(within(dialog).getByText(/marcher en forêt, aller à la pêche/)).toBeTruthy()
