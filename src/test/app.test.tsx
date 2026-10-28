@@ -210,6 +210,19 @@ describe('fenêtres', () => {
     expect(within(dialog).getByText('Jan. – May 2025')).toBeTruthy()
   })
 
+  it('donnent une adresse à chaque étude de cas, ouverte au chargement et effacée à la fermeture', async () => {
+    window.history.replaceState(null, '', '/#projet-spot')
+    renderApp('fr')
+    const dialog = await screen.findByRole('dialog', { name: 'Robotique Boston Dynamics Spot' })
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(window.location.hash).toBe('')
+
+    fireEvent.click(screen.getByRole('button', { name: /Ouvrir l’étude de cas\s*: Gestion des stationnements/ }))
+    await screen.findByRole('dialog', { name: 'Gestion des stationnements' })
+    expect(window.location.hash).toBe('#projet-parking')
+  })
+
   it('se ferment avec Échap', async () => {
     renderApp('en')
     fireEvent.click(screen.getByRole('button', { name: /Open the case study\s*: Boston Dynamics Spot robotics/ }))

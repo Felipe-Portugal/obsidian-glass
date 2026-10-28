@@ -60,6 +60,9 @@ function loadWindows() {
   return windowsLoad
 }
 
+const projectHash = (id: Project['id']) => `#projet-${id}`
+const projectFromHash = () => projects.find((item) => window.location.hash === projectHash(item.id))?.id
+
 type ActiveWindow =
   | { kind: 'project'; id: Project['id']; card: HTMLElement | null }
   | { kind: 'experience' | 'education'; id: string; source: HTMLElement | null }
@@ -83,6 +86,10 @@ export function App() {
   const close = () => {
     openRequest.current += 1
     setActive(null)
+    // L'adresse de l'étude de cas s'efface : retour arrière si l'ouverture l'avait ajoutée.
+    if (!projectFromHash()) return
+    if ((window.history.state as { caseStudy?: boolean } | null)?.caseStudy) window.history.back()
+    else window.history.replaceState(null, '', window.location.pathname + window.location.search)
   }
   const project = active?.kind === 'project' ? projects.find((item) => item.id === active.id) : undefined
   const period = active?.kind === 'experience' ? experience.find((item) => item.id === active.id) : undefined
@@ -90,6 +97,9 @@ export function App() {
 
   const openWindow = (next: NonNullable<ActiveWindow>) => {
     const request = ++openRequest.current
+    if (next.kind === 'project' && window.location.hash !== projectHash(next.id)) {
+      window.history.pushState({ caseStudy: true }, '', projectHash(next.id))
+    }
     if (next.kind === 'contact') {
       setActive(next)
       return
@@ -108,6 +118,18 @@ export function App() {
   }
 
   useEffect(() => onFirstNotify(() => setNotifications(true)), [])
+
+  // Chaque étude de cas a son adresse (#projet-spot…) : lien direct, Retour et Avance du navigateur.
+  useEffect(() => {
+    const sync = () => {
+      const id = projectFromHash()
+      if (id) openWindow({ kind: 'project', id, card: document.querySelector<HTMLElement>(`.project[data-project="${id}"]`) })
+      else setActive((current) => (current?.kind === 'project' ? null : current))
+    }
+    sync()
+    window.addEventListener('popstate', sync)
+    return () => window.removeEventListener('popstate', sync)
+  }, [])
 
   useEffect(() => {
     const preload = () => void loadWindows().then(setWindows, () => undefined)

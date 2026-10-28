@@ -65,6 +65,10 @@
         root.setAttribute('lang', lang)
         // JavaScript actif : la version statique pré-rendue cède la place à l'application.
         root.classList.add('js')
+        // Si l'application ne s'est pas montée (bundle bloqué ou en échec), la version statique revient.
+        window.setTimeout(function () {
+          if (!document.querySelector('#root .app')) root.classList.remove('js')
+        }, 4000)
       })()
     </script>
   </head>
