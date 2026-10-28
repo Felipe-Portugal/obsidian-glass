@@ -1,6 +1,6 @@
-import type { DiagramFlow, DiagramNode, DiagramSpec } from '../data/types'
-import { useLanguage } from '../i18n/LanguageProvider'
-import { brandStyle, TechGlyph } from './TechGlyph'
+import type { DiagramFlow, DiagramNode, DiagramSpec } from '../../data/types'
+import { useLanguage } from '../../i18n/LanguageProvider'
+import { brandStyle, TechGlyph } from '../ui/TechGlyph'
 import './diagram.css'
 
 function NodeLogos({ node }: { node: DiagramNode }) {

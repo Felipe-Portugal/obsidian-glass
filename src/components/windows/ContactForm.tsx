@@ -1,8 +1,8 @@
 import { AlertCircle, CheckCircle2, LoaderCircle, Mail, Send } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
-import { profile } from '../data/profile'
-import { useLanguage } from '../i18n/LanguageProvider'
-import { mailto } from '../lib/mailto'
+import { profile } from '../../data/profile'
+import { useLanguage } from '../../i18n/LanguageProvider'
+import { mailto } from '../../lib/mailto'
 import {
   CONTACT_FIELDS,
   LIMITS,
@@ -13,7 +13,7 @@ import {
   type FieldIssue,
   type FieldIssues,
   type MappedSubmissionError,
-} from '../lib/contact'
+} from '../../lib/contact'
 
 interface FieldProps {
   id: string

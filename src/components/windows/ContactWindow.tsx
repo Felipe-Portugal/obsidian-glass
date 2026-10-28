@@ -1,5 +1,5 @@
-import { useLanguage } from '../i18n/LanguageProvider'
-import { formspreeId } from '../lib/contact'
+import { useLanguage } from '../../i18n/LanguageProvider'
+import { formspreeId } from '../../lib/contact'
 import ContactForm from './ContactForm'
 import { Sheet } from './Sheet'
 import './contact.css'

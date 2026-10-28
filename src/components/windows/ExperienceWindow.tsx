@@ -1,9 +1,9 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { useState } from 'react'
-import type { EducationEntry, ExperienceEntry } from '../data/types'
-import { useLanguage } from '../i18n/LanguageProvider'
+import type { EducationEntry, ExperienceEntry } from '../../data/types'
+import { useLanguage } from '../../i18n/LanguageProvider'
 import { Sheet } from './Sheet'
-import { TechChip } from './TechGlyph'
+import { TechChip } from '../ui/TechGlyph'
 
 interface Props {
   entry: ExperienceEntry

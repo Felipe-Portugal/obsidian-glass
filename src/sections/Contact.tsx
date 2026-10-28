@@ -1,6 +1,6 @@
 import { ArrowUpRight, FileText, Mail, MapPin } from 'lucide-react'
-import { CopyButton } from '../components/ContactLinks'
-import { BrandSvg } from '../components/TechGlyph'
+import { CopyButton } from '../components/ui/CopyButton'
+import { BrandSvg } from '../components/ui/TechGlyph'
 import { profile } from '../data/profile'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { mailto } from '../lib/mailto'

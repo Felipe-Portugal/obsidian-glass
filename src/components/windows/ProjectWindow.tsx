@@ -1,10 +1,10 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import type { ReactNode } from 'react'
-import type { Project } from '../data/types'
-import { useLanguage } from '../i18n/LanguageProvider'
+import type { Project } from '../../data/types'
+import { useLanguage } from '../../i18n/LanguageProvider'
 import { ArchitectureDiagram } from './ArchitectureDiagram'
 import { Sheet } from './Sheet'
-import { TechChip } from './TechGlyph'
+import { TechChip } from '../ui/TechGlyph'
 
 interface Props {
   project: Project

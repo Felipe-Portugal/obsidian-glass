@@ -1,9 +1,9 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
-import type { Lang } from '../data/types'
-import { useLanguage } from '../i18n/LanguageProvider'
-import { useTheme } from '../theme/ThemeProvider'
-import type { ThemePreference } from '../theme/theme'
-import { Tip } from './Tip'
+import type { Lang } from '../../data/types'
+import { useLanguage } from '../../i18n/LanguageProvider'
+import { useTheme } from '../../theme/ThemeProvider'
+import type { ThemePreference } from '../../theme/theme'
+import { Tip } from '../ui/Tip'
 import './topbar.css'
 
 const LANGS: readonly Lang[] = ['fr', 'en']

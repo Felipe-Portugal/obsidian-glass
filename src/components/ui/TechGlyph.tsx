@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
-import { brandIcons, type BrandIconId } from '../data/icons.generated'
-import { technologies, type TechId, type Technology } from '../data/technologies'
-import { useLanguage } from '../i18n/LanguageProvider'
+import { brandIcons, type BrandIconId } from '../../data/icons.generated'
+import { technologies, type TechId, type Technology } from '../../data/technologies'
+import { useLanguage } from '../../i18n/LanguageProvider'
 import './tech.css'
 
 export function useTechName() {

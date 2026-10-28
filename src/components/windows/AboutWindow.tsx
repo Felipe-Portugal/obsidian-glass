@@ -1,4 +1,4 @@
-import { useLanguage } from '../i18n/LanguageProvider'
+import { useLanguage } from '../../i18n/LanguageProvider'
 import { Sheet } from './Sheet'
 import './about.css'
 

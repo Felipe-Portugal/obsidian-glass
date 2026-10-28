@@ -1,4 +1,4 @@
-import { TechToolbar } from '../components/TechToolbar'
+import { TechToolbar } from '../components/ui/TechToolbar'
 import { skillGroups } from '../data/skills'
 import { useLanguage } from '../i18n/LanguageProvider'
 

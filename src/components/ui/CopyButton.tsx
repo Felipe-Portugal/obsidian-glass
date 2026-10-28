@@ -1,7 +1,7 @@
 import { Check, Copy } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { useLanguage } from '../i18n/LanguageProvider'
-import { notify } from '../lib/notify'
+import { useLanguage } from '../../i18n/LanguageProvider'
+import { notify } from '../../lib/notify'
 import { Tip } from './Tip'
 
 /** Copie l'adresse courriel ; la confirmation (ou l'échec) s'annonce dans un toast (Sonner). */

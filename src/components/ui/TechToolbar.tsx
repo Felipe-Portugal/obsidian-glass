@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type Ref } from 'react'
-import type { TechId } from '../data/technologies'
+import type { TechId } from '../../data/technologies'
 import { brandStyle, TechGlyph, useTechName } from './TechGlyph'
 
 /** Garde l'infobulle dans la fenêtre visible (marge de 8 px). */

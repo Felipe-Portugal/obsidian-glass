@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useRef } from 'react'
 import type { Project } from '../data/types'
 import { useLanguage } from '../i18n/LanguageProvider'
-import { TechToolbar } from './TechToolbar'
+import { TechToolbar } from '../components/ui/TechToolbar'
 import './project.css'
 
 interface Props {

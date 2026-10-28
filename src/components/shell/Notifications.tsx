@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { toast, Toaster } from 'sonner'
-import { attachNotifier } from '../lib/notify'
+import { attachNotifier } from '../../lib/notify'
 
 /** Afficheur des confirmations, chargé à part à la première demande (lib/notify.ts). */
 export default function Notifications({ theme }: { theme: 'light' | 'dark' }) {

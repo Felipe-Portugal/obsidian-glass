@@ -35,19 +35,29 @@ Le site est servi sur `http://localhost:5173/`.
 
 ```
 src/
-  data/          contenu : profil, projets, expérience, compétences, technologies
-  i18n/          libellés d'interface FR/EN, détection et mémorisation de la langue
-  theme/         thème auto / clair / sombre
-  sections/      tuiles de la page (accueil, projets, expérience, formation, compétences, contact)
-  components/    fenêtres de détail à onglets (projets, expérience, contact), schémas, logos, dock
-  styles/        jetons de design, base, mise en page
-  lib/           utilitaires (stockage local, validation du contact, reflet au pointeur)
-  test/          tests Vitest
+  main.tsx, App.tsx    point d'entrée, composition de la page et gestion des fenêtres
+  prerender.ts         version statique du contenu, écrite dans dist/index.html au build
+  data/                contenu bilingue : profil, projets, expérience, compétences, parcours, technologies
+  i18n/                libellés d'interface FR/EN, détection et mémorisation de la langue
+  theme/               thème automatique, clair ou sombre
+  sections/            tuiles de la page : accueil, projets, parcours, compétences, à propos, contact
+  components/
+    shell/             barre du haut, dock flottant, confirmations
+    windows/           fenêtre commune (Sheet) et son contenu : études de cas, schémas, parcours, contact
+    ui/                briques partagées : logos, rangées de logos, infobulles, bouton de copie
+  styles/              jetons de design, base, matières de verre, mise en page
+  lib/                 utilitaires : stockage local, courriel, validation du contact, reflet au pointeur
+  test/                tests Vitest (contenu, logique, interface)
+e2e/                   tests de bout en bout Playwright sur le build
+public/                favicon, image de partage, robots.txt, CV en PDF
 scripts/
-  extract-icons.mjs   extraction des logos de technologies
+  extract-icons.mjs    extraction des logos de technologies
+  prerender.mjs        injection de la version statique dans le build
 .github/workflows/
-  deploy.yml          vérifications et publication sur GitHub Pages
+  deploy.yml           vérifications et publication sur GitHub Pages
 ```
+
+Chaque composant importe sa propre feuille de style, placée à côté de lui ; les styles communs à toute la page sont dans `src/styles/`.
 
 ## Contenu et traductions
 
@@ -61,7 +71,7 @@ Tout le texte vit dans `src/data/` (contenu) et `src/i18n/ui.ts` (interface). Ch
 
 Langue initiale : choix mémorisé, sinon langue du navigateur (`fr*` → français, `en*` → anglais), sinon français. Le choix est mémorisé dans `localStorage` (`og-lang`) ; `<html lang>`, le titre et les métadonnées suivent.
 
-Le contenu est volontairement factuel : aucune métrique, aucune capture d'écran, aucun élément confidentiel des projets clients. Les tests de `src/test/content.test.ts` vérifient une partie de ces règles. Un fichier local facultatif `.content-guard.local` (non versionné, au format `{ "forbidden": ["…"] }`) permet d'ajouter des termes privés que le site ne doit jamais contenir.
+Le contenu est volontairement factuel : aucune métrique, aucune capture d'écran, aucun élément confidentiel des projets clients. Les tests de `src/test/content.test.ts` vérifient une partie de ces règles. Un fichier local facultatif `.content-guard.local` (non versionné, au format `{ "forbidden": ["…"], "patterns": ["…"] }`) permet d'ajouter des termes et des expressions régulières que le site ne doit jamais contenir.
 
 ## CV en PDF
 
@@ -101,7 +111,7 @@ Le workflow n'accorde aucun droit par défaut : la construction lit seulement le
 
 - **Couleurs, typographie, rayons, ombres, durées** : `src/styles/tokens.css`. Le thème sombre est la référence ; le bloc `[data-theme='light']` en est l'équivalent clair.
 - **Police** : Geist (variable, auto-hébergée via `@fontsource-variable/geist`).
-- **Mise en page** : `src/styles/layout.css`. Une présentation typographique mène aux projets : une étude de cas occupe toute la largeur, suivie de deux cartes côte à côte. L'expérience et la formation se répondent, puis viennent les compétences et le contact. Le dock flottant reste accessible sur ordinateur et mobile. Le détail s'ouvre à la demande, toujours dans la même fenêtre (`Sheet.tsx`, `window.css`) : titre, résumé, repères, puis onglets. Études de cas (`ProjectWindow.tsx`), périodes d'expérience (`ExperienceWindow.tsx`) et contact naissent de la tuile, de la rangée ou du bouton qui les ouvre ; sur mobile, ce sont des feuilles du bas (`floating.css`).
+- **Mise en page** : `src/styles/layout.css`. Une présentation typographique mène aux projets : une étude de cas occupe toute la largeur, suivie de deux cartes côte à côte. Le parcours suit, puis viennent les compétences, la présentation et le contact. Le dock flottant reste accessible sur ordinateur et mobile. Le détail s'ouvre à la demande, toujours dans la même fenêtre (`components/windows/Sheet.tsx`, `window.css`) : titre, résumé, repères, puis onglets. Études de cas (`ProjectWindow.tsx`), périodes d'expérience (`ExperienceWindow.tsx`) et contact naissent de la tuile, de la rangée ou du bouton qui les ouvre ; sur mobile, ce sont des feuilles du bas (`components/ui/floating.css`).
 - **Logos** : ajouter une entrée dans `SOURCES` de `scripts/extract-icons.mjs`, lancer `npm run icons`, puis référencer la technologie dans `src/data/technologies.ts`. Le script corrige au besoin la couleur de marque pour garder un contraste d'au moins 3:1 sur les pastilles, dans les deux thèmes. Les pastilles sont en micro-verre (`--node` posé sur `--plate`) : si ces jetons changent dans `tokens.css`, mettre à jour `TILE_DARK` et `TILE_LIGHT` dans le script avec la teinte obtenue.
 - **Matières** : `src/styles/glass.css`.
   - Plaques de verre fumé (cartes, panneaux, fenêtres) : jetons `--plate-*`, double bordure.

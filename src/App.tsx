@@ -1,11 +1,11 @@
 import { lazy, Suspense, useEffect, useEffectEvent, useRef, useState } from 'react'
-import type { AboutWindow } from './components/AboutWindow'
-import { ContactWindow } from './components/ContactWindow'
-import { Dock } from './components/Dock'
-import type { EducationWindow, ExperienceWindow } from './components/ExperienceWindow'
-import type { ProjectWindow } from './components/ProjectWindow'
-import { TipProvider } from './components/Tip'
-import { TopBar } from './components/TopBar'
+import type { AboutWindow } from './components/windows/AboutWindow'
+import { ContactWindow } from './components/windows/ContactWindow'
+import { Dock } from './components/shell/Dock'
+import type { EducationWindow, ExperienceWindow } from './components/windows/ExperienceWindow'
+import type { ProjectWindow } from './components/windows/ProjectWindow'
+import { TipProvider } from './components/ui/Tip'
+import { TopBar } from './components/shell/TopBar'
 import { notify, onFirstNotify } from './lib/notify'
 import { usePointerGlowWithin } from './lib/usePointerGlow'
 import { experience } from './data/experience'
@@ -17,7 +17,7 @@ import { About } from './sections/About'
 import { Contact } from './sections/Contact'
 import { Hero } from './sections/Hero'
 import { Projects } from './sections/Projects'
-import { Skills } from './sections/SkillsAndEducation'
+import { Skills } from './sections/Skills'
 import { Timeline } from './sections/Timeline'
 import { useTheme } from './theme/ThemeProvider'
 import './styles/layout.css'
@@ -32,7 +32,7 @@ interface Windows {
 }
 
 // Les confirmations (« Adresse copiée ») et leur bibliothèque ne se chargent qu'à la première.
-const Notifications = lazy(() => import('./components/Notifications'))
+const Notifications = lazy(() => import('./components/shell/Notifications'))
 
 let windowsLoad: Promise<Windows> | undefined
 
@@ -42,9 +42,9 @@ let windowsLoad: Promise<Windows> | undefined
  */
 function loadWindows() {
   windowsLoad ??= Promise.all([
-    import('./components/ProjectWindow'),
-    import('./components/ExperienceWindow'),
-    import('./components/AboutWindow'),
+    import('./components/windows/ProjectWindow'),
+    import('./components/windows/ExperienceWindow'),
+    import('./components/windows/AboutWindow'),
   ]).then(
     ([project, period, about]) => ({
       ProjectWindow: project.ProjectWindow,

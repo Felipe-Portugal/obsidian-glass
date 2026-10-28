@@ -1,4 +1,4 @@
-import { ProjectCard } from '../components/ProjectCard'
+import { ProjectCard } from './ProjectCard'
 import { projects } from '../data/projects'
 import type { Project } from '../data/types'
 import { useLanguage } from '../i18n/LanguageProvider'

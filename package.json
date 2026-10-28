@@ -3,6 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "description": "ePortfolio de Felipe Portugal, étudiant en génie logiciel à l'ÉTS.",
+  "author": "Felipe Portugal",
+  "license": "UNLICENSED",
+  "homepage": "https://felipe-portugal.github.io/obsidian-glass/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Felipe-Portugal/obsidian-glass.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=20.19"

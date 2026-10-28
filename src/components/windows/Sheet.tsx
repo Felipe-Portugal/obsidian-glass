@@ -3,9 +3,9 @@ import { X } from 'lucide-react'
 import { animate } from 'motion/mini'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Drawer } from 'vaul'
-import { useLanguage } from '../i18n/LanguageProvider'
-import { prefersReducedMotion } from '../lib/storage'
-import { COMPACT_QUERY, useMediaQuery } from '../lib/useMediaQuery'
+import { useLanguage } from '../../i18n/LanguageProvider'
+import { prefersReducedMotion } from '../../lib/storage'
+import { COMPACT_QUERY, useMediaQuery } from '../../lib/useMediaQuery'
 import './window.css'
 
 interface SheetProps {
