@@ -25,6 +25,7 @@ Le site est servi sur `http://localhost:5173/`.
 | `npm run typecheck` | TypeScript strict, sans émission |
 | `npm run lint` | oxlint (règles React, TypeScript et accessibilité jsx-a11y) |
 | `npm run test` | Tests Vitest (contenu, logique, interface) |
+| `npm run test:e2e` | Tests de bout en bout dans Chrome sur `dist/` (Playwright) : adresses des études de cas, repli sur la version statique si JavaScript échoue. Lancés par la CI avant la publication |
 | `npm run check` | Les quatre contrôles à la suite : typecheck, lint, tests, build |
 | `npm run icons` | Régénère `src/data/icons.generated.ts` à partir des paquets de logos |
 

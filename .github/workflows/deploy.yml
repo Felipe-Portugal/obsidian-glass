@@ -42,6 +42,12 @@ jobs:
           # Absent : le site propose le courriel direct et l'indique honnêtement.
           VITE_FORMSPREE_ID: ${{ vars.VITE_FORMSPREE_ID }}
 
+      # Bout en bout dans Chrome sur le build obtenu : adresses des études de cas et repli
+      # sur la version statique si JavaScript échoue. Un échec bloque la publication.
+      - run: npm run test:e2e
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
