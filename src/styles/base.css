@@ -172,13 +172,45 @@ kbd {
   border: 0;
 }
 
-.noscript {
-  max-width: 40rem;
-  margin: 15vh auto 0;
-  padding: 0 var(--gutter);
+/* Version statique pré-rendue (src/prerender.ts) : lisible sans JavaScript, masquée sinon. */
+.prerender {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 10vh var(--gutter) var(--space-12);
   color: var(--text-2);
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-6);
+}
+
+.prerender h1,
+.prerender h2,
+.prerender h3,
+.prerender strong {
+  color: var(--text);
+}
+
+.prerender main,
+.prerender section,
+.prerender article,
+.prerender li {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.prerender main {
+  gap: var(--space-8);
+}
+
+.prerender ul,
+.prerender ol {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.2em;
+  list-style: revert;
+}
+
+.js .prerender {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

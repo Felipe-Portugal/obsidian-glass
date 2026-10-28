@@ -20,7 +20,7 @@ Le site est servi sur `http://localhost:5173/`.
 | Commande | Rôle |
 |---|---|
 | `npm run dev` | Serveur de développement avec rechargement à chaud |
-| `npm run build` | Vérification TypeScript puis build de production dans `dist/` |
+| `npm run build` | Vérification TypeScript, build de production dans `dist/`, puis écriture d'une version statique du contenu (`src/prerender.ts`) dans `dist/index.html`, lisible sans JavaScript |
 | `npm run preview` | Sert le build de `dist/` localement |
 | `npm run typecheck` | TypeScript strict, sans émission |
 | `npm run lint` | oxlint (règles React, TypeScript et accessibilité jsx-a11y) |
@@ -83,7 +83,7 @@ L'identifiant Formspree est public par nature (il figure dans le HTML de tout fo
 
 ## Publication sur GitHub Pages
 
-Le site est publié à l'adresse **https://poggerion.github.io/obsidian-glass/**. Le workflow `.github/workflows/deploy.yml` exécute les vérifications, construit le site et le publie sur GitHub Pages à chaque push sur `main`. Il peut aussi être lancé manuellement dans l'onglet *Actions*.
+Le site est publié à l'adresse **https://felipe-portugal.github.io/obsidian-glass/**. Le workflow `.github/workflows/deploy.yml` exécute les vérifications, construit le site et le publie sur GitHub Pages à chaque push sur `main`. Il peut aussi être lancé manuellement dans l'onglet *Actions*.
 
 La source de publication du dépôt est **GitHub Actions** (*Settings → Pages → Build and deployment*). La variable `VITE_FORMSPREE_ID` est facultative ; sans elle, le formulaire prépare un courriel dans l'application du visiteur.
 
@@ -123,9 +123,9 @@ Le site n'a qu'une page et aucun routeur : pas de problème de rafraîchissement
 | Élément | État | Où le modifier |
 |---|---|---|
 | Identifiant Formspree | À configurer ; courriel direct en attendant | `.env.local`, variable de dépôt |
-| Dépôt et adresse GitHub Pages | `Poggerion/obsidian-glass` et `https://poggerion.github.io/obsidian-glass/` | `.github/workflows/deploy.yml` |
+| Dépôt et adresse GitHub Pages | `Felipe-Portugal/obsidian-glass` et `https://felipe-portugal.github.io/obsidian-glass/` | `.github/workflows/deploy.yml` |
 | Détection par PyTorch (projet Spot) | À confirmer ; le site dit « un modèle de détection » | `src/data/validation.ts` |
-| Adresse canonique et image de partage | À ajouter une fois le domaine connu | `index.html` |
+| Adresse canonique et image de partage | `https://felipe-portugal.github.io/obsidian-glass/`, `public/og-image.png` (1200 × 630) | `index.html` |
 
 ## Licences
 

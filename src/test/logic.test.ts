@@ -106,3 +106,15 @@ describe('erreurs renvoyées par Formspree', () => {
     expect(mapSubmissionError(unknown, true)).toEqual({ form: 'generic', fields: {}, detail: 'Failed to fetch' })
   })
 })
+
+describe('version statique pré-rendue', () => {
+  it('reprend nom, projets, parcours et contact, sans balise injectée', async () => {
+    const { renderStaticPage } = await import('../prerender')
+    const html = renderStaticPage('fr')
+    expect(html).toContain('<h1>Felipe Portugal</h1>')
+    expect(html).toContain('Gestion des stationnements')
+    expect(html).toContain('Baccalauréat en génie logiciel')
+    expect(html).toContain('mailto:felipe-alberto.padilla-portugal.1@ens.etsmtl.ca')
+    expect(html).not.toMatch(/<script|undefined/)
+  })
+})

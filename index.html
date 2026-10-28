@@ -9,11 +9,11 @@
       content="Portfolio de Felipe Portugal, étudiant en génie logiciel à l’ÉTS, à Montréal : applications mobiles, backend, données et robotique."
     />
     <meta name="author" content="Felipe Portugal" />
-    <link rel="canonical" href="https://poggerion.github.io/obsidian-glass/" />
+    <link rel="canonical" href="https://felipe-portugal.github.io/obsidian-glass/" />
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0b0d10" />
     <meta property="og:type" content="profile" />
-    <meta property="og:url" content="https://poggerion.github.io/obsidian-glass/" />
+    <meta property="og:url" content="https://felipe-portugal.github.io/obsidian-glass/" />
     <meta property="og:title" content="Felipe Portugal · Développeur logiciel polyvalent" />
     <meta
       property="og:description"
@@ -23,7 +23,15 @@
     <meta property="og:locale:alternate" content="en_CA" />
     <meta property="profile:first_name" content="Felipe" />
     <meta property="profile:last_name" content="Portugal" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://felipe-portugal.github.io/obsidian-glass/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Felipe Portugal, développeur logiciel polyvalent : applications mobiles, backend, données et robotique."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
       (function () {
@@ -55,22 +63,13 @@
           }
         }
         root.setAttribute('lang', lang)
+        // JavaScript actif : la version statique pré-rendue cède la place à l'application.
+        root.classList.add('js')
       })()
     </script>
   </head>
   <body>
-    <noscript>
-      <div class="noscript">
-        <p><strong>Felipe Portugal</strong> · Développeur logiciel polyvalent · Montréal, Québec</p>
-        <p>
-          Ce site requiert JavaScript. Pour me joindre :
-          <a href="mailto:felipe-alberto.padilla-portugal.1@ens.etsmtl.ca">felipe-alberto.padilla-portugal.1@ens.etsmtl.ca</a>
-          · <a href="https://www.linkedin.com/in/felipe-portugal-151a75225/">LinkedIn</a>
-        </p>
-        <p lang="en">This site requires JavaScript. You can reach me by email or on LinkedIn (links above).</p>
-      </div>
-    </noscript>
-    <div id="root"></div>
+    <div id="root"><!--prerender--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
