@@ -8,7 +8,7 @@ interface Props {
   onOpen: (source: HTMLElement, subject?: string) => void
 }
 
-/** Bande de contact : l'invitation, puis l'adresse (copiable), le formulaire, LinkedIn et la demande de CV. */
+/** Bande de contact : l'invitation, puis l'adresse (copiable), le formulaire, LinkedIn, GitHub et le CV. */
 export function Contact({ onOpen }: Props) {
   const { pick, t } = useLanguage()
   const resume = profile.resume ? `${import.meta.env.BASE_URL}${pick(profile.resume)}` : null
@@ -36,6 +36,11 @@ export function Contact({ onOpen }: Props) {
           </button>
           <a className="button button--quiet" href={profile.linkedin} target="_blank" rel="noopener noreferrer">
             <span>LinkedIn</span>
+            <span className="sr-only"> {t.a11y.newTab}</span>
+            <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.75} />
+          </a>
+          <a className="button button--quiet" href={profile.github} target="_blank" rel="noopener noreferrer">
+            <span>GitHub</span>
             <span className="sr-only"> {t.a11y.newTab}</span>
             <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.75} />
           </a>

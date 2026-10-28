@@ -36,10 +36,15 @@ export function BrandSvg({ icon, className }: { icon: BrandIconId; className?: s
 export function TechGlyph({ id, className }: { id: TechId; className?: string }) {
   const tech: Technology = technologies[id]
   if (tech.icon) return <BrandSvg icon={tech.icon} {...(className ? { className } : {})} />
+  // Monogramme dessiné en CSS (::before) : il reste hors du nom accessible, que porte le parent
+  // (WCAG 2.5.3, le texte visible « FX » ne contredit pas le nom « JavaFX »).
   return (
-    <span className={`glyph glyph--mono ${className ?? ''}`} data-len={tech.short?.length ?? 0} aria-hidden="true">
-      {tech.short}
-    </span>
+    <span
+      className={`glyph glyph--mono ${className ?? ''}`}
+      data-short={tech.short}
+      data-len={tech.short?.length ?? 0}
+      aria-hidden="true"
+    />
   )
 }
 

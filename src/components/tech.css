@@ -17,6 +17,10 @@
   white-space: nowrap;
 }
 
+.glyph--mono::before {
+  content: attr(data-short);
+}
+
 .glyph--mono[data-len='5'],
 .glyph--mono[data-len='6'] {
   font-size: 10.5px;

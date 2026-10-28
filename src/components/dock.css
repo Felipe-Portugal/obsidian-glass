@@ -181,9 +181,27 @@
   }
 }
 
+/* Petits écrans : LinkedIn et GitHub se reconnaissent à leur logo ; leur nom reste lu, hors écran. */
+@media (max-width: 420px) {
+  .dock__item--brand {
+    width: 46px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .dock__item--brand .dock__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* Très petits écrans : les libellés suffisent, les pictogrammes cèdent la place au retour en haut. */
 @media (max-width: 360px) {
-  .dock__item:not(.dock__item--icon) > svg {
+  .dock__item:not(.dock__item--icon, .dock__item--brand) > svg {
     display: none;
   }
 }

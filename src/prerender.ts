@@ -49,7 +49,7 @@ export function renderStaticPage(lang: Lang = 'fr'): string {
       }
       const entry = education.find((item) => item.id === step.id)
       if (!entry) return ''
-      return `<li><h3>${escape(pick(entry.degree))}</h3><p>${escape(`${pick(entry.school)} · ${pick(entry.period)}`)}</p>${list(pick(entry.projects))}</li>`
+      return `<li><h3>${escape(pick(entry.degree))}</h3><p>${escape(`${pick(entry.school)} · ${pick(entry.period)}`)}</p>${entry.groups.map((group) => (group.label ? `<h4>${escape(pick(group.label))}</h4>` : '') + list(pick(group.items))).join('')}</li>`
     })
     .join('\n')
 

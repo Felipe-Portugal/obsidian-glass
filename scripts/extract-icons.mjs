@@ -66,6 +66,7 @@ const SOURCES = {
   gitlab: { si: 'gitlab' },
   vmware: { si: 'vmware' },
   bluetooth: { si: 'bluetooth' },
+  github: { si: 'github' },
   linkedin: { devicon: 'linkedin/linkedin-plain.svg', hex: '#0a66c2' },
 }
 

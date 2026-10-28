@@ -24,7 +24,7 @@ const fr = {
   },
   hero: {
     role: 'Développeur logiciel polyvalent',
-    lede: 'Je développe des applications et des solutions logicielles au croisement du mobile, des données et de la robotique.',
+    lede: 'Étudiant en génie logiciel à l’ÉTS et diplômé du DEC en techniques de l’informatique, je suis passionné par les systèmes embarqués et l’implémentation de l’IA. À l’ITMI, j’ai contribué à des applications mobiles, à des services backend et à des outils pour le robot Spot.',
     factsLabel: 'En bref',
     study: 'Étudiant en génie logiciel, ÉTS',
     languages: 'Français, anglais, espagnol',
@@ -117,6 +117,7 @@ const fr = {
     cvOnRequest: 'CV sur demande\u00a0: ouvrir le formulaire de contact',
     cvOnRequestShort: 'CV sur demande',
     linkedin: 'LinkedIn',
+    github: 'GitHub',
     contact: 'Contact',
     contactHint: 'Ouvrir le formulaire de contact',
     top: 'Haut de la page',
@@ -135,6 +136,7 @@ const fr = {
     copied: 'Adresse copiée',
     copyFailed: 'Copie impossible\u00a0: sélectionnez l’adresse manuellement.',
     linkedin: 'Profil LinkedIn',
+    github: 'Profil GitHub',
     cvSubject: 'Demande de CV',
     form: {
       title: 'Formulaire',
@@ -205,7 +207,7 @@ const en: UiStrings = {
   },
   hero: {
     role: 'Versatile software developer',
-    lede: 'I build applications and software solutions where mobile, data and robotics meet.',
+    lede: 'A software engineering student at ÉTS with a college diploma (DEC) in computer science, I am passionate about embedded systems and implementing AI. At ITMI, I contributed to mobile apps, backend services and tools for the Spot robot.',
     factsLabel: 'At a glance',
     study: 'Software engineering student, ÉTS',
     languages: 'French, English, Spanish',
@@ -298,6 +300,7 @@ const en: UiStrings = {
     cvOnRequest: 'Résumé on request: open the contact form',
     cvOnRequestShort: 'Résumé on request',
     linkedin: 'LinkedIn',
+    github: 'GitHub',
     contact: 'Contact',
     contactHint: 'Open the contact form',
     top: 'Back to top',
@@ -316,6 +319,7 @@ const en: UiStrings = {
     copied: 'Address copied',
     copyFailed: 'Could not copy: please select the address manually.',
     linkedin: 'LinkedIn profile',
+    github: 'GitHub profile',
     cvSubject: 'Résumé request',
     form: {
       title: 'Form',

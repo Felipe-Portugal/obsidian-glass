@@ -126,11 +126,17 @@ export function EducationWindow({ entry, source, onClose }: { entry: EducationEn
 
         <div className="tabs__stack">
           <Tabs.Content className="tabs__panel" value="projects" forceMount inert={tab !== 'projects'}>
-            <ul className="pw__list xw__points">
-              {pick(entry.projects).map((project) => (
-                <li key={project}>{project}</li>
-              ))}
-            </ul>
+            {/* Plusieurs thèmes (DEC) : un intertitre par groupe, pour parcourir sans tout lire. */}
+            {entry.groups.map((group, index) => (
+              <div key={group.label ? pick(group.label) : index} className="pw__tech-group">
+                {group.label && <h3 className="pw__tech-title">{pick(group.label)}</h3>}
+                <ul className="pw__list xw__points">
+                  {pick(group.items).map((project) => (
+                    <li key={project}>{project}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </Tabs.Content>
 
           <Tabs.Content className="tabs__panel" value="tech" forceMount inert={tab !== 'tech'}>

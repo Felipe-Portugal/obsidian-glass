@@ -99,13 +99,19 @@ export interface SkillGroup {
   items: readonly TechId[]
 }
 
+export interface CourseGroup {
+  /** Thème du groupe ; absent quand la formation n'en compte qu'un. */
+  label?: Localized
+  items: Localized<readonly string[]>
+}
+
 export interface EducationEntry {
   id: string
   degree: Localized
   school: Localized
   period: Localized
-  /** Projets et travaux de cours, repris du CV publié (public/cv). */
-  projects: Localized<readonly string[]>
+  /** Projets et travaux de cours, repris du CV publié (public/cv), regroupés par thème au besoin. */
+  groups: readonly CourseGroup[]
   /** Technologies nommées dans ces projets, et rien d'autre. */
   tech: readonly TechId[]
 }

@@ -131,9 +131,18 @@ export function Dock({ onContact }: Props) {
         </li>
         <li className="dock__link" inert={atEnd}>
           <Tip label={`${t.contact.linkedin} ${t.a11y.newTab}`}>
-            <a className="dock__item" href={profile.linkedin} target="_blank" rel="noopener noreferrer" {...lensProps}>
+            <a className="dock__item dock__item--brand" href={profile.linkedin} target="_blank" rel="noopener noreferrer" {...lensProps}>
               <BrandSvg icon="linkedin" className="dock__brand" />
               <span className="dock__label">{t.dock.linkedin}</span>
+              <span className="sr-only"> {t.a11y.newTab}</span>
+            </a>
+          </Tip>
+        </li>
+        <li className="dock__link" inert={atEnd}>
+          <Tip label={`${t.contact.github} ${t.a11y.newTab}`}>
+            <a className="dock__item dock__item--brand" href={profile.github} target="_blank" rel="noopener noreferrer" {...lensProps}>
+              <BrandSvg icon="github" className="dock__brand" />
+              <span className="dock__label">{t.dock.github}</span>
               <span className="sr-only"> {t.a11y.newTab}</span>
             </a>
           </Tip>
