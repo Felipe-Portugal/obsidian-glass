@@ -10,7 +10,7 @@ export interface Profile {
   /**
    * CV au format PDF, chemin relatif au dossier public/ (p. ex. « cv/Felipe_Portugal_CV_FR.pdf »).
    * `null` si aucun PDF n'est fourni : le dock propose alors « CV sur demande », qui ouvre le
-   * formulaire de contact. Le CV n'existe qu'en français : les deux langues pointent vers lui.
+   * formulaire de contact. Chaque langue ouvre son propre PDF (CV en français, résumé en anglais).
    */
   resume: Localized<string> | null
 }
@@ -21,5 +21,5 @@ export const profile: Profile = {
   linkedin: 'https://www.linkedin.com/in/felipe-portugal-151a75225/',
   github: 'https://github.com/Felipe-Portugal',
   location: 'Montréal, Québec',
-  resume: { fr: 'cv/Felipe_Portugal_CV_FR.pdf', en: 'cv/Felipe_Portugal_CV_FR.pdf' },
+  resume: { fr: 'cv/Felipe_Portugal_CV_FR.pdf', en: 'cv/Felipe_Portugal_Resume_EN.pdf' },
 }

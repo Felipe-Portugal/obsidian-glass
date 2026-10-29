@@ -76,6 +76,17 @@ describe('page', () => {
       expect(link.getAttribute('href')).toBe('/cv/Felipe_Portugal_CV_FR.pdf')
       expect(link.getAttribute('target')).toBe('_blank')
       expect(link.getAttribute('type')).toBe('application/pdf')
+      expect(link.getAttribute('hreflang')).toBe('fr')
+    }
+  })
+
+  it('ouvre le résumé anglais en PDF quand le site est en anglais', () => {
+    renderApp('en')
+    const links = screen.getAllByRole('link', { name: /résumé \(PDF\)|\(PDF\)/ })
+    expect(links.length).toBe(2)
+    for (const link of links) {
+      expect(link.getAttribute('href')).toBe('/cv/Felipe_Portugal_Resume_EN.pdf')
+      expect(link.getAttribute('hreflang')).toBe('en')
     }
   })
 
@@ -83,6 +94,15 @@ describe('page', () => {
     renderApp('fr')
     expect(screen.getAllByRole('link', { name: /^LinkedIn/ }).some((link) => link.getAttribute('href') === profile.linkedin)).toBe(true)
     expect(screen.getAllByRole('link', { name: /^GitHub/ }).some((link) => link.getAttribute('href') === profile.github)).toBe(true)
+  })
+})
+
+describe('parcours', () => {
+  it('montre sans clic le stage et l’emploi ITMI, chacun avec son titre et sa période', () => {
+    renderApp('fr')
+    const step = within(document.getElementById('parcours')!).getByRole('button', { name: /Stagiaire développeur/ })
+    expect(step.textContent).toMatch(/Stagiaire développeur en visualisation de données industrielles\s*Janv\. – mai 2025/)
+    expect(step.textContent).toMatch(/Assistant développeur en visualisation de données industrielles\s*Mai – sept\. 2025/)
   })
 })
 

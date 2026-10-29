@@ -14,7 +14,7 @@ interface Props {
  * Sur écran étroit, les actions autres que le formulaire ne gardent que leur icône ; leur libellé reste lu par les lecteurs d'écran.
  */
 export function Contact({ onOpen }: Props) {
-  const { pick, t } = useLanguage()
+  const { lang, pick, t } = useLanguage()
   const resume = profile.resume ? `${import.meta.env.BASE_URL}${pick(profile.resume)}` : null
   return (
     <section className="plate tile tile--contact" data-tone="contact" id="contact" aria-labelledby="contact-tile-title">
@@ -51,7 +51,7 @@ export function Contact({ onOpen }: Props) {
             <ArrowUpRight className="button__out" aria-hidden="true" size={16} strokeWidth={1.75} />
           </a>
           {resume ? (
-            <a className="button button--quiet" href={resume} target="_blank" rel="noopener" type="application/pdf" hrefLang="fr" aria-label={`${t.contactTile.cvOpen} ${t.a11y.cvPdf} ${t.a11y.newTab}`}>
+            <a className="button button--quiet" href={resume} target="_blank" rel="noopener" type="application/pdf" hrefLang={lang} aria-label={`${t.contactTile.cvOpen} ${t.a11y.cvPdf} ${t.a11y.newTab}`}>
               <FileText aria-hidden="true" size={16} strokeWidth={1.75} />
               <span className="button__label">{t.contactTile.cvOpen}</span>
             </a>

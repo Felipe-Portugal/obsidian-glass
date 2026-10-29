@@ -91,12 +91,12 @@ export const education: readonly EducationEntry[] = [
         label: { fr: 'Robotique et objets connectés', en: 'Robotics and connected devices' },
         items: {
           fr: [
-            'Plateforme robotique Spot connectée (2023, équipe de deux) : mission Autowalk guidée par la caméra thermique ; collecte d’audio, d’images et de données de capteurs ; conteneur Docker lancé par SSH sur Spot.',
+            'Plateforme robotique Spot connectée (2023, équipe de deux) : mission Autowalk enregistrée, avec orientation du robot vers la source de chaleur repérée par la caméra thermique ; collecte d’audio, d’images et de données de capteurs ; conteneur Docker lancé par SSH sur Spot.',
             'Système de surveillance sous Android (2024, individuel) : application Android en Java, Raspberry Pi en Python et Arduino ; cahier des charges, échéancier et validation des livrables avec le client.',
             'Objets connectés (2023–2024) : détection de mouvement avec Android, Raspberry Pi et MQTT (historique SQLite et vidéo), panneau de DEL programmables sur Arduino, laboratoires Bluetooth LE et LoRaWAN.',
           ],
           en: [
-            'Connected Spot robotics platform (2023, team of two): an Autowalk mission guided by the thermal camera; audio, image and sensor data collection; a Docker container launched over SSH on Spot.',
+            'Connected Spot robotics platform (2023, team of two): a recorded Autowalk mission, with the robot oriented toward the heat source spotted by the thermal camera; audio, image and sensor data collection; a Docker container launched over SSH on Spot.',
             'Android monitoring system (2024, individual): an Android app in Java, a Raspberry Pi in Python and an Arduino; requirements, schedule and deliverable validation with the client.',
             'Connected devices (2023–2024): motion detection with Android, Raspberry Pi and MQTT (SQLite history and video), a programmable LED panel on Arduino, Bluetooth LE and LoRaWAN labs.',
           ],

@@ -24,7 +24,7 @@ const fr = {
   },
   hero: {
     role: 'Stagiaire en développement logiciel et mobile',
-    lede: 'Étudiant en génie logiciel à l’ÉTS et diplômé du DEC en techniques de l’informatique. À l’ITMI, j’ai contribué à une application mobile React Native et à son API PHP, puis, pour le robot Spot, à la détection de manomètres avec PyTorch et à leur lecture par OCR. Je veux aller plus loin en systèmes embarqués et en IA appliquée.',
+    lede: 'Étudiant en génie logiciel à l’ÉTS et diplômé du DEC en techniques de l’informatique. À l’ITMI, j’ai contribué à une application mobile de gestion des stationnements déployée à l’interne et à un prototype qui lit les manomètres photographiés par le robot Spot. Je veux aller plus loin en systèmes embarqués et en IA appliquée.',
     factsLabel: 'En bref',
     study: 'Étudiant en génie logiciel, ÉTS',
     languages: 'Français, anglais, espagnol',
@@ -200,7 +200,7 @@ const en: UiStrings = {
   a11y: {
     skip: 'Skip to main content',
     newTab: '(new tab)',
-    cvPdf: '(PDF, in French)',
+    cvPdf: '(PDF)',
   },
   topbar: {
     language: 'Site language',
@@ -210,7 +210,7 @@ const en: UiStrings = {
   },
   hero: {
     role: 'Software and mobile development intern',
-    lede: 'Software engineering student at ÉTS with a college diploma (DEC) in computer science. At ITMI, I contributed to a React Native mobile app and its PHP API, then, for the Spot robot, to gauge detection with PyTorch and reading their values with OCR. I want to go further in embedded systems and applied AI.',
+    lede: 'Software engineering student at ÉTS with a college diploma (DEC) in computer science. At ITMI, I contributed to an internally deployed parking management mobile app and to a prototype that reads the gauges photographed by the Spot robot. I want to go further in embedded systems and applied AI.',
     factsLabel: 'At a glance',
     study: 'Software engineering student, ÉTS',
     languages: 'French, English, Spanish',
@@ -302,7 +302,7 @@ const en: UiStrings = {
   dock: {
     label: 'Shortcuts',
     cv: 'Résumé',
-    cvPdf: 'Open the résumé (PDF, in French)',
+    cvPdf: 'Open the résumé (PDF)',
     cvOnRequest: 'Résumé on request: open the contact form',
     cvOnRequestShort: 'Résumé on request',
     linkedin: 'LinkedIn',

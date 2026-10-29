@@ -470,6 +470,16 @@ main:focus {
   color: var(--text-2);
 }
 
+/* Étape à plusieurs titres officiels (stage puis emploi) : chaque titre avec sa période. */
+.path__role {
+  display: grid;
+  gap: 1px;
+}
+
+.path__role + .path__role {
+  margin-top: var(--space-1);
+}
+
 .path__period {
   font-size: var(--fs-xs);
   color: var(--text-3);

@@ -25,7 +25,7 @@ const LENS = { type: spring, stiffness: 560, damping: 42, mass: 0.7 }
  * page, la tuile de contact offre déjà les mêmes liens : le dock se replie sur le retour en haut.
  */
 export function Dock({ onContact }: Props) {
-  const { pick, t } = useLanguage()
+  const { lang, pick, t } = useLanguage()
   const glowRef = usePointerGlow<HTMLElement>()
   const refract = useRefraction<HTMLElement>({ bezel: 14, scale: 18, delay: 1200 })
   const lensRef = useRef<HTMLSpanElement>(null)
@@ -103,7 +103,7 @@ export function Dock({ onContact }: Props) {
                 target="_blank"
                 rel="noopener"
                 type="application/pdf"
-                hrefLang="fr"
+                hrefLang={lang}
                 aria-label={`${t.dock.cv} ${t.a11y.cvPdf} ${t.a11y.newTab}`}
                 {...lensProps}
               >

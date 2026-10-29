@@ -43,21 +43,19 @@ export function Timeline({ open, onOpen }: Props) {
         {steps.map((step, index) => {
           const newYear = steps[index - 1]?.year !== step.year
           const lane = t.timeline.lanes[step.kind]
-          let title = ''
+          // Chaque titre officiel garde sa période, du plus ancien au plus récent (p. ex. stage puis emploi).
+          let roles: { title: string; period: string }[] = []
           let sub = ''
-          const periods: string[] = []
           if (step.kind === 'experience') {
             const entry = experience.find((item) => item.id === step.id)
             if (!entry) return null
-            title = pick(entry.roles[0]?.title ?? { fr: '', en: '' })
+            roles = [...entry.roles].reverse().map((role) => ({ title: pick(role.title), period: pick(role.period) }))
             sub = t.experience.org
-            periods.push(...entry.roles.map((role) => pick(role.period)))
           } else {
             const entry = education.find((item) => item.id === step.id)
             if (!entry) return null
-            title = pick(entry.degree)
+            roles = [{ title: pick(entry.degree), period: pick(entry.period) }]
             sub = pick(entry.school)
-            periods.push(pick(entry.period))
           }
           const isOpen = open?.kind === step.kind && open.id === step.id
 
@@ -82,9 +80,23 @@ export function Timeline({ open, onOpen }: Props) {
                 onClick={(event) => onOpen(step.kind, step.id, event.currentTarget)}
               >
                 <span className="path__lane">{lane}</span>
-                <span className="path__title">{title}</span>
-                <span className="path__sub">{sub}</span>
-                <span className="path__period">{periods.join(' · ')}</span>
+                {roles.length > 1 ? (
+                  <>
+                    {roles.map((role) => (
+                      <span key={role.title} className="path__role">
+                        <span className="path__title">{role.title}</span>
+                        <span className="path__period">{role.period}</span>
+                      </span>
+                    ))}
+                    <span className="path__sub">{sub}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="path__title">{roles[0]?.title}</span>
+                    <span className="path__sub">{sub}</span>
+                    <span className="path__period">{roles[0]?.period}</span>
+                  </>
+                )}
                 <ChevronRight className="path__chevron" aria-hidden="true" size={18} strokeWidth={1.75} />
               </button>
             </li>
